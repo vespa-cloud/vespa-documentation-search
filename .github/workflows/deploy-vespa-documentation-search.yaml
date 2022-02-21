@@ -7,7 +7,7 @@
 name: Deploy vespa-documentation-search to Vespa Cloud
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}
