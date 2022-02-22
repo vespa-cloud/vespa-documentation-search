@@ -3,17 +3,28 @@
 ![Vespa Cloud logo](https://cloud.vespa.ai/assets/logos/vespa-cloud-logo-full-black.png)
 
 # Vespa Documentation Search
-Vespa Documentation Search is a Vespa Cloud instance for searching documents in
+Vespa Documentation Search is a Vespa Cloud instance for searching documents in:
 * [vespa.ai](https://vespa.ai/)
+  [![Vespa.ai Search Feed](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml)
+* [docs.vespa.ai](https://docs.vespa.ai/)
+  [![Vespa Documentation Search Feed](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml)
 * [cloud.vespa.ai](https://cloud.vespa.ai/)
+  [![Vespa Cloud Documentation Search Feed](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml)
 * [blog.vespa.ai](https://blog.vespa.ai/)
+  [![Vespa Blog Search Feed](https://github.com/vespa-engine/blog/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/blog/actions/workflows/feed.yml)
 * [Vespa Sample applications](https://github.com/vespa-engine/sample-apps)
+  [![Vespa Sample-Apps Search Feed](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml)
 * [pyvespa](https://pyvespa.readthedocs.io/en/latest/index.html)
+  [![pyvespa Search Feed](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml)
 
 This sample app is auto-deployed to Vespa Cloud,
-see [deploy-vespa-documentation-search.yaml](https://github.com/vespa-engine/sample-apps/blob/master/.github/workflows/deploy-vespa-documentation-search.yaml)
+see [deploy-vespa-documentation-search.yaml](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml)
 
 ![Vespa-Documentation-Search-Architecture](img/Vespa-Documentation-Search-Architecture.svg)
+
+Deployment status:
+* [![Deploy vespa-documentation-search to Vespa Cloud](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml/badge.svg)](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml)
+* [![Vespa Cloud Documentation Search Deployment](https://api.vespa-external.aws.oath.cloud/badge/v1/vespa-team/vespacloud-docsearch/default/)](https://console.vespa.oath.cloud/tenant/vespa-team/application/vespacloud-docsearch/prod/deployment)
 
 
 
@@ -162,15 +173,6 @@ work around by adding to this file and feed it:
       --file extra_suggestions.json \
       --certificate ../../../documentation/data-plane-public-key.pem --privateKey ../../../documentation/data-plane-private-key.pem \
       --endpoint https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud/
-
-## Status
-[![Deploy vespa-documentation-search to Vespa Cloud](https://github.com/vespa-engine/sample-apps/workflows/Deploy%20vespa-documentation-search%20to%20Vespa%20Cloud/badge.svg?branch=master)](https://github.com/vespa-engine/sample-apps/actions?query=workflow%3A%22Deploy+vespa-documentation-search+to+Vespa+Cloud%22)
-
-[![Vespa Cloud Documentation Search Deployment](https://api.vespa-external.aws.oath.cloud/badge/v1/vespa-team/vespacloud-docsearch/default/)](https://console.vespa.oath.cloud/tenant/vespa-team/application/vespacloud-docsearch/prod/deployment)
-
-[![Vespa Documentation Search Feed](https://github.com/vespa-engine/documentation/workflows/Vespa%20Documentation%20Search%20Feed/badge.svg?branch=master)](https://github.com/vespa-engine/documentation/actions?query=workflow%3A%22Vespa+Documentation+Search+Feed%22)
-
-[![Vespa Cloud Documentation Search Feed](https://github.com/vespa-engine/cloud/workflows/Vespa%20Cloud%20Documentation%20Search%20Feed/badge.svg?branch=master)](https://github.com/vespa-engine/cloud/actions?query=workflow%3A%22Vespa+Cloud+Documentation+Search+Feed%22)
 
 
 
