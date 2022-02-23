@@ -11,8 +11,8 @@ and feeds the suggestions to the `query` schema.
 
 ### Clone repository
 
-    $ git clone --depth 1 https://github.com/vespa-engine/sample-apps.git
-    $ cd sample-apps/vespa-cloud/vespa-documentation-search/access-log-lambda/
+    $ git clone --depth 1 https://github.com/vespa-cloud/vespa-documentation-search.git
+    $ cd vespa-documentation-search/access-log-lambda/
 
 
 ### Install dependencies
