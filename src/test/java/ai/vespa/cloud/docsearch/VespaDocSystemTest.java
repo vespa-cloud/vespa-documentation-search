@@ -20,6 +20,8 @@ public class VespaDocSystemTest {
     @Test
     public void testFeedSearchDelete(TestReporter report) throws Exception {
         VespaDocTester tester = new VespaDocTester(endpoint, report);
+        tester.removeAllTestDocs();
+
         tester.feedTestDocs();
 
         Set<DocumentId> ids = tester.getTestDocIDs();
@@ -43,6 +45,8 @@ public class VespaDocSystemTest {
     @Test
     public void testUpdate(TestReporter report) throws Exception {
         VespaDocTester tester = new VespaDocTester(endpoint, report);
+        tester.removeAllTestDocs();
+
         tester.updateTestDocs();
 
         Set<DocumentId> ids = tester.getTestDocIDs();
@@ -57,6 +61,8 @@ public class VespaDocSystemTest {
     @Test
     public void testInLinks(TestReporter report) throws Exception {
         VespaDocTester tester = new VespaDocTester(endpoint, report);
+        tester.removeAllTestDocs();
+
         tester.feedTestDocs();
         Set<DocumentId> ids = tester.getTestDocIDs();
         assertEquals(5, ids.size(), "5 test documents should be fed");

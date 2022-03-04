@@ -52,7 +52,7 @@ class VespaDocTester {
         assertEquals(200, response.statusCode(),
                      "Status code should be 200.");
         assertFalse(mapper.readTree(response.body()).has("continuation"),
-                    "All documents should bbe purged within a minute.");
+                    "All documents should be purged within a minute.");
 
         report.publishEntry("All documents removed");
     }

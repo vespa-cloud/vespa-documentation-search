@@ -21,6 +21,7 @@ public class VespaDocStagingSetup {
     @DisplayName("Feed and verify documents")
     public void feedAndVerify(TestReporter report) throws Exception {
         VespaDocTester tester = new VespaDocTester(endpoint, report);
+        tester.removeAllTestDocs();
         tester.feedTestDocs();
 
         Set<DocumentId> ids = tester.getTestDocIDs();
