@@ -70,6 +70,7 @@ public class VespaDocSystemTest {
         verifyInLinks(tester);
 
         tester.removeTestDocs(ids);
+        ids = tester.getTestDocIDs();
         assertEquals(0, ids.size(), "no test documents should remain");
 
         tester.updateTestDocs();
@@ -79,6 +80,7 @@ public class VespaDocSystemTest {
         verifyInLinks(tester);
 
         tester.removeTestDocs(ids);
+        ids = tester.getTestDocIDs();
         assertEquals(0, ids.size(), "no test documents should remain");
     }
 
