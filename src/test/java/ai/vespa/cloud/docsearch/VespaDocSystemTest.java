@@ -31,7 +31,7 @@ public class VespaDocSystemTest {
         String allQuery = "select * from sources * where sddocname contains \"doc\";";
         tester.verifyQueryResults(ids, allQuery, "5s"); // Use a high timeout for first query
 
-        String accessQuery = "select * from sources * where content contains \"access\";";
+        String accessQuery = "select * from sources * where content contains \"access\"";
         Set<DocumentId> expectedAccessHits = Set.of(DocumentId.of("id:open:doc::open/documentation/access-logging.html"),
                                                     DocumentId.of("id:open:doc::open/documentation/content/api-state-rest-api.html"),
                                                     DocumentId.of("id:open:doc::open/documentation/operations/admin-procedures.html"));
