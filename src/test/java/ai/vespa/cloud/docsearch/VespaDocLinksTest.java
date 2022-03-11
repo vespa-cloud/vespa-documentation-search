@@ -1,11 +1,8 @@
 // Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root.
 package ai.vespa.cloud.docsearch;
 
-import com.yahoo.docproc.CallStack;
-import com.yahoo.docproc.DocprocService;
 import com.yahoo.docproc.DocumentProcessor;
 import com.yahoo.docproc.Processing;
-import com.yahoo.docproc.jdisc.metric.NullMetric;
 import com.yahoo.document.DataType;
 import com.yahoo.document.Document;
 import com.yahoo.document.DocumentOperation;
@@ -36,15 +33,6 @@ import static ai.vespa.cloud.docsearch.OutLinksDocumentProcessor.removeLinkFragm
 
 
 public class VespaDocLinksTest {
-
-    private static DocprocService setupDocprocService(DocumentProcessor processor) {
-        CallStack stack = new CallStack("default", new NullMetric());
-        stack.addLast(processor);
-        DocprocService service = new DocprocService("default");
-        service.setCallStack(stack);
-        service.setInService(true);
-        return service;
-    }
 
     private static Processing getProcessing(DocumentOperation... operations) {
         Processing processing = new Processing();
@@ -101,20 +89,21 @@ public class VespaDocLinksTest {
         DocumentType docType = createDocType();
 
         DocumentUpdate update = new DocumentUpdate(docType, "id:open:doc::1");
-        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(PATH_FIELD_NAME),      new StringFieldValue("/documentation/access-logging.html")));
-        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(NAMESPACE_FIELD_NAME), new StringFieldValue("open")));
-        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(TITLE_FIELD_NAME),     new StringFieldValue("Access Logging")));
-        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(CONTENT_FIELD_NAME),   new StringFieldValue("Text here ...")));
+        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(PATH_FIELD_NAME),
+                new StringFieldValue("/documentation/access-logging.html")));
+        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(NAMESPACE_FIELD_NAME),
+                new StringFieldValue("open")));
+        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(TITLE_FIELD_NAME),
+                new StringFieldValue("Access Logging")));
+        update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(CONTENT_FIELD_NAME),
+                new StringFieldValue("Text here ...")));
 
         Array<StringFieldValue> inLinks = new Array<>(DataType.getArray(DataType.STRING));
         inLinks.add(new StringFieldValue("/documentation/operations/admin-procedures.html#fragment-to-be-removed"));
         inLinks.add(new StringFieldValue("/documentation/reference/advanced-indexing-language.html"));
         update.addFieldUpdate(FieldUpdate.createAssign(docType.getField(OUTLINKS_FIELD_NAME), inLinks));
 
-        Processing processing = getProcessing(update);
-        LocalDocumentAccess documentAccess = getDocumentAccess();
-        DocprocService service = setupDocprocService(new OutLinksDocumentProcessor(documentAccess));
-
-        service.getExecutor().process(processing);
+        DocumentProcessor processor = new OutLinksDocumentProcessor(getDocumentAccess());
+        processor.process(getProcessing(update));
     }
 }
