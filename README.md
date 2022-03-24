@@ -101,7 +101,7 @@ Vespa Documentation is stored in GitHub:
 Jekyll is used to serve the documentation, it rebuilds at each commit.
 
 A change also triggers GitHub Actions.
-The _Build_ step in the workflow uses the Jekyll Generator plugin to build a JSON feed, used in fhe _Feed_ step:
+The _Build_ step in the workflow uses the Jekyll Generator plugin to build a JSON feed, used in the _Feed_ step:
 * https://github.com/vespa-engine/documentation/blob/master/.github/workflows/feed.yml
 * https://github.com/vespa-engine/documentation/blob/master/_config.yml
 * https://github.com/vespa-engine/documentation/blob/master/_plugins/vespa_index_generator.rb
