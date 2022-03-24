@@ -13,19 +13,16 @@ import com.yahoo.document.update.ValueUpdate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
-import java.util.logging.Logger;
+import java.util.Set;
 
 public class QueryDocumentProcessor extends DocumentProcessor {
-    private static final Logger logger = Logger.getLogger(QueryDocumentProcessor.class.getName());
 
     private static final String TERM_DOCUMENT_TYPE  = "term";
-    private static final String filePath = "files/accepted_words.txt";
-    private final HashSet<String> acceptedWords;
-
+    private static final String acceptedWordsFile = "files/accepted_words.txt";
+    private final Set<String> acceptedWords;
 
     @Inject
     public QueryDocumentProcessor() {
@@ -34,27 +31,24 @@ public class QueryDocumentProcessor extends DocumentProcessor {
 
     @Override
     public Progress process(Processing processing) {
-        logger.info("In process");
         for (DocumentOperation op : processing.getDocumentOperations()) {
-            //if op is DocumentPut
             if (op instanceof DocumentPut) {
-                //gets the document
                 DocumentPut put = (DocumentPut) op;
                 Document document = put.getDocument();
                 if (document.getDataType().isA(TERM_DOCUMENT_TYPE)) {
-                    //checking if query contains only accepted words
-                    if (!containsOnlyAcceptedWords(document.getFieldValue("term"))) {
+                    if ( ! containsOnlyAcceptedWords(document.getFieldValue("term"))) {
                         processing.getDocumentOperations().clear();
                         return Progress.DONE;
                     }
                 }
-            } else if (op instanceof DocumentUpdate) {
+            }
+            else if (op instanceof DocumentUpdate) {
                 DocumentUpdate update = (DocumentUpdate) op;
                 if (update.getDocumentType().isA(TERM_DOCUMENT_TYPE)) {
                     FieldUpdate fieldUpdate = update.getFieldUpdate("term");
                     if (fieldUpdate != null) {
                         for (ValueUpdate<?> valueUpdate : fieldUpdate.getValueUpdates()) {
-                            if (!containsOnlyAcceptedWords(valueUpdate.getValue())) {
+                            if ( ! containsOnlyAcceptedWords(valueUpdate.getValue())) {
                                 processing.getDocumentOperations().clear();
                                 return Progress.DONE;
                             }
@@ -63,13 +57,11 @@ public class QueryDocumentProcessor extends DocumentProcessor {
                 }
             }
         }
-        logger.info("  found no illegal words");
         return Progress.DONE;
     }
 
     private Boolean containsOnlyAcceptedWords(FieldValue termValue){
-        logger.info("  Checking if all words are accepted");
-        if (!acceptedWords.isEmpty()){
+        if (!acceptedWords.isEmpty()) {
             String query = termValue.toString().toLowerCase();
             String[] terms = query.split("\\s+");
             for (String term : terms) {
@@ -81,32 +73,33 @@ public class QueryDocumentProcessor extends DocumentProcessor {
         return true;
     }
 
-    private HashSet<String> getAcceptedWords(){
-        logger.info("getting set of accepted words");
-        HashSet<String> acceptedWords = new HashSet<String>();
-        if (resourceExists()){
-            try{
-                ClassLoader cl = getClass().getClassLoader();
-                InputStream is = cl.getResourceAsStream(filePath);
-                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-                BufferedReader br = new BufferedReader(isr);
-                String term;
-                while ((term = br.readLine()) != null){
-                    acceptedWords.add(term);
-                }
-            }catch (IOException e){
-                e.printStackTrace();
+    private Set<String> getAcceptedWords() {
+        if ( ! resourceExists()) return Set.of();
+
+        Set<String> acceptedWords = new HashSet<>();
+        try (BufferedReader br = createReaderOf(acceptedWordsFile)) {
+            String term;
+            while ((term = br.readLine()) != null) {
+                acceptedWords.add(term);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return acceptedWords;
     }
 
+    private BufferedReader createReaderOf(String filePath) {
+        return new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filePath),
+                                                        StandardCharsets.UTF_8));
+    }
+
     private boolean resourceExists() {
-        return getClass().getClassLoader().getResource(QueryDocumentProcessor.filePath) != null;
+        return getClass().getClassLoader().getResource(QueryDocumentProcessor.acceptedWordsFile) != null;
     }
 
     @Override
     public void deconstruct() {
         super.deconstruct();
     }
+
 }

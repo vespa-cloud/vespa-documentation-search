@@ -31,7 +31,6 @@ import static ai.vespa.cloud.docsearch.OutLinksDocumentProcessor.canonicalizeLin
 import static ai.vespa.cloud.docsearch.OutLinksDocumentProcessor.getUniqueOutLinks;
 import static ai.vespa.cloud.docsearch.OutLinksDocumentProcessor.removeLinkFragment;
 
-
 public class VespaDocLinksTest {
 
     private static Processing getProcessing(DocumentOperation... operations) {
@@ -106,4 +105,5 @@ public class VespaDocLinksTest {
         DocumentProcessor processor = new OutLinksDocumentProcessor(getDocumentAccess());
         processor.process(getProcessing(update));
     }
+
 }
