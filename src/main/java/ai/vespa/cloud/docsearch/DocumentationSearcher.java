@@ -23,25 +23,17 @@ public class DocumentationSearcher extends Searcher {
         String userQuery = query.properties().getString("term");
         if (userQuery == null) return execution.search(query);
 
-        Result suggestionResult = getSuggestions(userQuery, execution);
-
+        Result suggestions = getSuggestions(userQuery, execution);
         Query docQuery = new Query();
         docQuery.getModel().setRestrict("doc");
         WeakAndItem weakAndItem = new WeakAndItem();
-        if (suggestionResult.getHitCount() > 0) {
-            docQuery.setHits(20);
-            for (String term: suggestedTerms(suggestionResult))
-                weakAndItem.addItem(new WordItem(term, true));
-        }
-        else {
-            docQuery.setHits(10);
-            for (String term: userQuery.split(" "))
-                weakAndItem.addItem(new WordItem(term, true));
-        }
+        for (String term: suggestions.getHitCount() > 0 ? suggestedTerms(suggestions) : userQuery.split(" "))
+            weakAndItem.addItem(new WordItem(term, true));
         docQuery.getModel().getQueryTree().setRoot(weakAndItem);
         docQuery.getRanking().setProfile("documentation");
-        Result documentResult = execution.search(docQuery);
-        return combineHits(documentResult, suggestionResult);
+        Result result = execution.search(docQuery);
+        result.hits().addAll(suggestions.hits().asList());
+        return result;
     }
 
     private Result getSuggestions(String userQuery, Execution execution) {
@@ -58,14 +50,8 @@ public class DocumentationSearcher extends Searcher {
     private String[] suggestedTerms(Result suggestionResult) {
         Hit topHit = suggestionResult.hits().get(0);
         if (topHit.fields().get("term") == null)
-            throw new RuntimeException("Suggestion result unexpectedly missing 'term' field");
+            throw new IllegalStateException("Suggestion result unexpectedly missing 'term' field");
         return topHit.getField("term").toString().split(" ");
-    }
-
-    private Result combineHits(Result result1, Result result2) {
-        for (Hit hit: result2.hits())
-            result1.hits().add(hit);
-        return result1;
     }
 
 }
