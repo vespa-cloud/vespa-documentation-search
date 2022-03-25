@@ -24,14 +24,13 @@ public class DocumentationSearcher extends Searcher {
         if (userQuery == null) return execution.search(query);
 
         Result suggestions = getSuggestions(userQuery, execution);
-        Query docQuery = new Query();
-        docQuery.getModel().setRestrict("doc");
+        query.getModel().setRestrict("doc");
         WeakAndItem weakAndItem = new WeakAndItem();
         for (String term: suggestions.getHitCount() > 0 ? suggestedTerms(suggestions) : userQuery.split(" "))
             weakAndItem.addItem(new WordItem(term, true));
-        docQuery.getModel().getQueryTree().setRoot(weakAndItem);
-        docQuery.getRanking().setProfile("documentation");
-        Result result = execution.search(docQuery);
+        query.getModel().getQueryTree().setRoot(weakAndItem);
+        query.getRanking().setProfile("documentation");
+        Result result = execution.search(query);
         result.hits().addAll(suggestions.hits().asList());
         return result;
     }
