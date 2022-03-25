@@ -61,10 +61,7 @@ public class DocumentationSearcherTest {
     private Result search(String userQuery, String expectedSuggestion, List<Hit> suggestions, List<Hit> documents) {
         var source = new DocumentSourceSearcher();
         source.addResult(suggestionsQuery(userQuery), suggestions);
-        if (expectedSuggestion == null)
-            source.addResult(documentsQuery(userQuery, 10), documents);
-        else
-            source.addResult(documentsQuery(expectedSuggestion, 20), documents);
+        source.addResult(documentsQuery(expectedSuggestion != null ? expectedSuggestion : userQuery), documents);
 
         Chain<Searcher> chain = new Chain<>(new DocumentationSearcher(), source);
         return new Execution(chain, Execution.Context.createContextStub())
@@ -81,9 +78,8 @@ public class DocumentationSearcherTest {
     }
 
     /** Creates the document query expected to be created by DocumentationSearcher for these arguments */
-    private Query documentsQuery(String userQuery, int hits) {
+    private Query documentsQuery(String userQuery) {
         Query query = new Query();
-        query.setHits(hits);
         query.getModel().setRestrict("doc");
         WeakAndItem weakAnd = new WeakAndItem();
         for (String token : userQuery.split(" "))
