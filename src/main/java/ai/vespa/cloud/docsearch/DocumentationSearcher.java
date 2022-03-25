@@ -10,6 +10,12 @@ import com.yahoo.search.Searcher;
 import com.yahoo.search.result.Hit;
 import com.yahoo.search.searchchain.Execution;
 
+/**
+ * Searches for suggestions, and returns a result containing both the suggestions
+ * and the documents matching the most relevant suggestion.
+ * This is activated by passing the property term, containing a (partially typed)
+ * user query string.
+ */
 public class DocumentationSearcher extends Searcher {
 
     @Override
