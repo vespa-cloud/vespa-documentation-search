@@ -3,4 +3,3 @@
 <query-profile-type id="links" inherits="native">
     <field name="ranking.features.query(links)" type="tensor&lt;float&gt;(links{})" />
 </query-profile-type>
-
