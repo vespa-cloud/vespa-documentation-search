@@ -35,14 +35,14 @@ Open API endpoints:
 
 Example requests:
 * https://doc-search.vespa.oath.cloud/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html
-* https://doc-search.vespa.oath.cloud/search/?yql=select+*+from+doc+where+userInput(@input)%3B&input=vespa+ranking+is+great
+* https://doc-search.vespa.oath.cloud/search/?yql=select+*+from+doc+where+userInput(@userinput)%3B&userinput=vespa+ranking+is+great
 
 <pre data-test="exec" data-test-assert-contains="namespace">
 $ curl "https://doc-search.vespa.oath.cloud/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html"
 </pre>
 <pre data-test="exec" data-test-assert-contains="the-great-search-engine-debate">
-$ curl --data-urlencode 'yql=select * from doc where userInput(@input)' \
-  --data-urlencode 'input=vespa ranking is great' \
+$ curl --data-urlencode 'yql=select * from doc where userInput(@userinput)' \
+  --data-urlencode 'userinput=vespa ranking is great' \
   https://doc-search.vespa.oath.cloud/search/
 </pre>
 
