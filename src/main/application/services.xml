@@ -31,6 +31,7 @@
         <documents>
             <document mode="index" type="doc"/>
             <document mode="index" type="term"/>
+            <document mode="index" type="purchase"/>
         </documents>
         <nodes count="2"/>
     </content>
