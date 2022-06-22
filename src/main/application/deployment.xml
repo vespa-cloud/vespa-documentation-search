@@ -1,4 +1,4 @@
-<deployment version="1.0">
+<deployment version="1.0" major-version="8">
     <upgrade policy="canary"/>
     <instance id="default">
 
