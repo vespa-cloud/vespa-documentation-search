@@ -47,12 +47,6 @@ schema doc {
             stemming: best
         }
 
-        field filename type string {
-            indexing: summary | index
-            index: enable-bm25
-            stemming: best
-        }
-
         # e.g. open, cloud
         field namespace type string {
             indexing: summary | attribute
@@ -77,7 +71,7 @@ schema doc {
     }
 
     fieldset default {
-        fields: title, content
+        fields: title, content, path
     }
 
     fieldset grams {
