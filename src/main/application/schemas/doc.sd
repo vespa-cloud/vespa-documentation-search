@@ -26,6 +26,8 @@ schema doc {
 
         field path type string {
             indexing: summary | index
+            index: enable-bm25
+            stemming: best
         }
 
         field title type string {
@@ -42,12 +44,6 @@ schema doc {
         }
 
         field headers type array<string> {
-            indexing: summary | index
-            index: enable-bm25
-            stemming: best
-        }
-
-        field filename type string {
             indexing: summary | index
             index: enable-bm25
             stemming: best
@@ -77,7 +73,7 @@ schema doc {
     }
 
     fieldset default {
-        fields: title, content
+        fields: title, content, headers, path
     }
 
     fieldset grams {
@@ -88,9 +84,16 @@ schema doc {
         rank-properties {
             $titleWeight: 2.0
             $contentsWeight: 1.0
+            $headerWeight: 1.0
+            $pathWeight: 1.0
         }
         first-phase {
-            expression: query(titleWeight) * bm25(title) + query(contentsWeight) * bm25(content)
+            expression {
+                query(titleWeight) * bm25(title) +
+                query(contentsWeight) * bm25(content) +
+                query(headerWeight) * bm25(headers) +
+                query(pathWeight) * bm25(path)
+            }
         }
         summary-features {
             attribute(namespace)
@@ -103,6 +106,8 @@ schema doc {
             fieldLength(content)
             bm25(title)
             bm25(content)
+            bm25(headers)
+            bm25(path)
         }
     }
 
