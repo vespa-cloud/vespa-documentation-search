@@ -90,6 +90,49 @@ Feed `open_index.json`:
 
 
 
+## Ranking
+The [ranking](src/main/application/schemas/doc.sd) is quite simplistic,
+and an introduction to using _query rank features_ and _summary features_:
+```
+    rank-profile documentation inherits default {
+        rank-properties {
+            query(titleWeight): 2.0
+            query(contentWeight): 1.0
+            query(headersWeight): 1.0
+            query(pathWeight): 1.0
+        }
+        first-phase {
+            expression {
+                query(titleWeight) * bm25(title) +
+                query(contentWeight) * bm25(content) +
+                query(headersWeight) * bm25(headers) +
+                query(pathWeight) * bm25(path)
+            }
+        }
+        summary-features {
+            query(titleWeight)
+            query(contentWeight)
+            query(headersWeight)
+            query(pathWeight)
+            fieldMatch(title)
+            fieldMatch(content)
+            fieldMatch(content).matches
+            fieldLength(title)
+            fieldLength(content)
+            bm25(title)
+            bm25(content)
+            bm25(headers)
+            bm25(path)
+        }
+    }
+```
+With this it is easy to experiment with ranking by sending rank-properties in the query
+and observing the values in summary-features, like:
+
+[doc-search.vespa.oath.cloud/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://doc-search.vespa.oath.cloud/search/?yql=select%20*%20from%20doc%20where%20userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa%20ranking%20is%20great)
+
+
+
 ## Document feed automation
 Vespa Documentation is stored in GitHub:
 * https://github.com/vespa-engine/documentation and https://github.com/vespa-engine/frontpage
