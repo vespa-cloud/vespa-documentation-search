@@ -83,7 +83,7 @@ schema doc {
     rank-profile documentation inherits default {
         rank-properties {
             query(titleWeight): 2.0
-            query(contentsWeight): 1.0
+            query(contentWeight): 1.0
             query(headersWeight): 1.0
             query(pathWeight): 1.0
         }
