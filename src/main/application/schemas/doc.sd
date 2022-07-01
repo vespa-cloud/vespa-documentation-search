@@ -82,23 +82,24 @@ schema doc {
 
     rank-profile documentation inherits default {
         rank-properties {
-            $titleWeight: 2.0
-            $contentsWeight: 1.0
-            $headerWeight: 1.0
-            $pathWeight: 1.0
+            query(titleWeight): 2.0
+            query(contentsWeight): 1.0
+            query(headersWeight): 1.0
+            query(pathWeight): 1.0
         }
         first-phase {
             expression {
                 query(titleWeight) * bm25(title) +
                 query(contentsWeight) * bm25(content) +
-                query(headerWeight) * bm25(headers) +
+                query(headersWeight) * bm25(headers) +
                 query(pathWeight) * bm25(path)
             }
         }
         summary-features {
-            attribute(namespace)
             query(titleWeight)
             query(contentsWeight)
+            query(headersWeight)
+            query(pathWeight)
             fieldMatch(title)
             fieldMatch(content)
             fieldMatch(content).matches
@@ -113,10 +114,10 @@ schema doc {
 
     rank-profile weighted_doc_rank inherits default {
         rank-properties {
-            $titleWeight: 20.0
-            $contentWeight: 10.0
-            $gramTitleWeight: 2.0
-            $gramContentWeight: 1.0
+            query(titleWeight): 20.0
+            query(contentWeight): 10.0
+            query(gramTitleWeight): 2.0
+            query(gramContentWeight): 1.0
         }
         first-phase {
             expression {
@@ -127,7 +128,6 @@ schema doc {
             }
         }
         summary-features {
-            attribute(namespace)
             nativeRank(title)
             nativeRank(content)
             nativeRank(gram_title)
