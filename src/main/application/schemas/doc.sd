@@ -90,14 +90,14 @@ schema doc {
         first-phase {
             expression {
                 query(titleWeight) * bm25(title) +
-                query(contentsWeight) * bm25(content) +
+                query(contentWeight) * bm25(content) +
                 query(headersWeight) * bm25(headers) +
                 query(pathWeight) * bm25(path)
             }
         }
         summary-features {
             query(titleWeight)
-            query(contentsWeight)
+            query(contentWeight)
             query(headersWeight)
             query(pathWeight)
             fieldMatch(title)
