@@ -14,7 +14,9 @@
             </chain>
         </search>
         <document-api/>
-        <nodes count="2" exclusive="true"/>
+        <nodes count="2" exclusive="true">
+            <resources vcpu="2" memory="8Gb" disk="10Gb" architecture="arm64" />
+        </nodes>        
     </container>
 
     <container id="playground" version="1.0">
