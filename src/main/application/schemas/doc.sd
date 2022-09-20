@@ -79,7 +79,7 @@ schema doc {
     }
 
     fieldset default {
-        fields: title, content, headers, path
+        fields: title, content, headers, path, keywords
     }
 
     fieldset grams {
