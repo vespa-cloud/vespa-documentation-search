@@ -100,13 +100,15 @@ and an introduction to using _query rank features_ and _summary features_:
             query(contentWeight): 1.0
             query(headersWeight): 1.0
             query(pathWeight): 1.0
+            query(keywordsWeight): 10.0
         }
         first-phase {
             expression {
                 query(titleWeight) * bm25(title) +
                 query(contentWeight) * bm25(content) +
                 query(headersWeight) * bm25(headers) +
-                query(pathWeight) * bm25(path)
+                query(pathWeight) * bm25(path) +
+                query(keywordsWeight) * bm25(keywords)
             }
         }
         summary-features {
@@ -123,6 +125,7 @@ and an introduction to using _query rank features_ and _summary features_:
             bm25(content)
             bm25(headers)
             bm25(path)
+            bm25(keywords)
         }
     }
 ```
@@ -130,6 +133,14 @@ With this it is easy to experiment with ranking by sending rank-properties in th
 and observing the values in summary-features, like:
 
 [doc-search.vespa.oath.cloud/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://doc-search.vespa.oath.cloud/search/?yql=select%20*%20from%20doc%20where%20userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa%20ranking%20is%20great)
+
+See [approximate-nn-hnsw.md](https://raw.githubusercontent.com/vespa-engine/documentation/master/en/approximate-nn-hnsw.md)
+for use of (comma separated) keywords set in the frontmatter to rank higher for those, e.g.
+
+    ---
+    title: "Approximate Nearest Neighbor Search using HNSW Index"
+    keywords: "ann, approximate nearest neighbor"
+    ---
 
 
 
