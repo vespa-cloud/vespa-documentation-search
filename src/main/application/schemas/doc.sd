@@ -92,13 +92,15 @@ schema doc {
             query(contentWeight): 1.0
             query(headersWeight): 1.0
             query(pathWeight): 1.0
+            query(keywordsWeight): 10.0
         }
         first-phase {
             expression {
                 query(titleWeight) * bm25(title) +
                 query(contentWeight) * bm25(content) +
                 query(headersWeight) * bm25(headers) +
-                query(pathWeight) * bm25(path)
+                query(pathWeight) * bm25(path) +
+                query(keywordsWeight) * bm25(keywords)
             }
         }
         summary-features {
