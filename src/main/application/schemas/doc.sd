@@ -117,6 +117,7 @@ schema doc {
             bm25(content)
             bm25(headers)
             bm25(path)
+            bm25(keywords)
         }
     }
 
