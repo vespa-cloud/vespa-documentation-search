@@ -7,7 +7,7 @@
             <delay minutes="10" />
             <test>aws-us-east-1c</test>
             <region>aws-ap-northeast-1a</region>
-            <!--region>gcp-us-central1-f</region-->
+            <region>gcp-us-central1-f</region>
         </prod>
 
         <endpoints>
