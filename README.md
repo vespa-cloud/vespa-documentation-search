@@ -216,7 +216,7 @@ to generate suggestions (generate ../../../documentation/open_index.json first):
     $ unzip vespa-feed-client-cli.zip
     $ ./vespa-feed-client-cli/vespa-feed-client \
       --file feed_terms.json \
-      --certificate ../../../documentation/data-plane-public-key.pem --privateKey ../../../documentation/data-plane-private-key.pem \
+      --certificate ../../../documentation/data-plane-public-key.pem --private-key ../../../documentation/data-plane-private-key.pem \
       --endpoint https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud/
 
 The above feeds single terms and phrases of 2, with stop-word removal from top100en.txt.
