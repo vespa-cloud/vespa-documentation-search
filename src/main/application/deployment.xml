@@ -6,6 +6,7 @@
             <region>aws-us-east-1c</region>
             <delay minutes="10" />
             <test>aws-us-east-1c</test>
+            <region>aws-eu-west-1a</region>
             <region>aws-ap-northeast-1a</region>
             <region>gcp-us-central1-f</region>
         </prod>
@@ -13,6 +14,9 @@
         <endpoints>
             <endpoint container-id="default">
                 <region>aws-us-east-1c</region>
+                <region>aws-eu-west-1a</region>
+                <region>aws-ap-northeast-1a</region>
+                <region>gcp-us-central1-f</region>
             </endpoint>
         </endpoints>
 
