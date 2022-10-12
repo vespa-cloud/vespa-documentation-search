@@ -18,6 +18,12 @@
                 <region>aws-ap-northeast-1a</region>
                 <region>gcp-us-central1-f</region>
             </endpoint>
+            <endpoint container-id="playground">
+                <region>aws-us-east-1c</region>
+                <region>aws-eu-west-1a</region>
+                <region>aws-ap-northeast-1a</region>
+                <region>gcp-us-central1-f</region>
+            </endpoint>
         </endpoints>
 
     </instance>
