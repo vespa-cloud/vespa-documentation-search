@@ -95,12 +95,12 @@ The [ranking](src/main/application/schemas/doc.sd) is quite simplistic,
 and an introduction to using _query rank features_ and _summary features_:
 ```
     rank-profile documentation inherits default {
-        rank-properties {
-            query(titleWeight): 2.0
-            query(contentWeight): 1.0
-            query(headersWeight): 1.0
-            query(pathWeight): 1.0
-            query(keywordsWeight): 10.0
+        inputs {
+            query(titleWeight) double: 2.0
+            query(headersWeight) double: 1.0
+            query(contentWeight) double: 1.0
+            query(keywordsWeight) double: 10.0
+            query(pathWeight) double: 1.0
         }
         first-phase {
             expression {

@@ -86,21 +86,28 @@ schema doc {
         fields: gram_title, gram_content
     }
 
+    rank-profile default inherits default {
+        inputs {
+            query(q_term_count) double: 0.0
+            query(links) tensor<float>(links{})
+        }
+    }
+
     rank-profile documentation inherits default {
-        rank-properties {
-            query(titleWeight): 2.0
-            query(contentWeight): 1.0
-            query(headersWeight): 1.0
-            query(pathWeight): 1.0
-            query(keywordsWeight): 10.0
+        inputs {
+            query(titleWeight) double: 2.0
+            query(headersWeight) double: 1.0
+            query(contentWeight) double: 1.0
+            query(keywordsWeight) double: 10.0
+            query(pathWeight) double: 1.0
         }
         first-phase {
             expression {
                 query(titleWeight) * bm25(title) +
-                query(contentWeight) * bm25(content) +
                 query(headersWeight) * bm25(headers) +
-                query(pathWeight) * bm25(path) +
+                query(contentWeight) * bm25(content) +
                 query(keywordsWeight) * bm25(keywords)
+                query(pathWeight) * bm25(path) +
             }
         }
         summary-features {
