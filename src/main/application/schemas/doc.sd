@@ -215,10 +215,7 @@ schema doc {
         }
     }
 
-    rank-profile inlink_similarity {
-        inputs {
-            query(links) tensor<float>(links{})
-        }
+    rank-profile inlink_similarity inherits default {
         first-phase {
             expression: sum(tensorFromWeightedSet(attribute(inlinks), links) * query(links))
         }
