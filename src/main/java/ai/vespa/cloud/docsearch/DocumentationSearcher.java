@@ -12,7 +12,7 @@ import com.yahoo.search.searchchain.Execution;
 
 /**
  * Searches for suggestions, and returns a result containing both the suggestions
- * and the documents matching the most relevant suggestion.
+ * and the documents matching the most relevant suggestion. Return up to 5 suggestions and up to 10 document results.
  * This is activated by passing the property term, containing a (partially typed)
  * user query string.
  */
@@ -31,16 +31,17 @@ public class DocumentationSearcher extends Searcher {
         query.getModel().getQueryTree().setRoot(weakAndItem);
         query.getRanking().setProfile("documentation");
         Result result = execution.search(query);
+        result.getQuery().setHits(15);
         result.hits().addAll(suggestions.hits().asList());
         return result;
     }
 
     private Result getSuggestions(String userQuery, Execution execution) {
         Query query = new Query();
+        query.setHits(5);
         query.getModel().setRestrict("term");
         query.getModel().getQueryTree().setRoot(new PrefixItem(userQuery, "default"));
         query.getRanking().setProfile("term_rank");
-        query.setHits(10);
         Result suggestionResult = execution.search(query);
         execution.fill(suggestionResult);
         return suggestionResult;
