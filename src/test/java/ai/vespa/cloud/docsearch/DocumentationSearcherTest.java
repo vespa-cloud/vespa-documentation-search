@@ -71,6 +71,7 @@ public class DocumentationSearcherTest {
     /** Creates the suggestion query expected to be created by DocumentationSearcher for these arguments */
     private Query suggestionsQuery(String userQuery) {
         Query query = new Query();
+        query.setHits(5);
         query.getModel().setRestrict("term");
         query.getModel().getQueryTree().setRoot(new PrefixItem(userQuery, "default"));
         query.getRanking().setProfile("term_rank");
