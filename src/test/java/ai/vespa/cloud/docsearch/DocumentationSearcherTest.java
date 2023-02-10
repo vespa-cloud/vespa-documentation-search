@@ -71,7 +71,7 @@ public class DocumentationSearcherTest {
     /** Creates the suggestion query expected to be created by DocumentationSearcher for these arguments */
     private Query suggestionsQuery(String userQuery) {
         Query query = new Query();
-        query.setHits(5);
+        query.setHits(10);
         query.getModel().setRestrict("term");
         query.getModel().getQueryTree().setRoot(new PrefixItem(userQuery, "default"));
         query.getRanking().setProfile("term_rank");
@@ -93,24 +93,30 @@ public class DocumentationSearcherTest {
     /** A searcher which returns memorized results for particular queries */
     private static class DocumentSourceSearcher extends Searcher {
 
-        private final Map<Query, Result> results = new HashMap<>();
+        private final Map<String, Result> results = new HashMap<>();
 
         public DocumentSourceSearcher addResult(Query query, List<Hit> hits) {
             Result result = new Result(query);
             result.hits().addAll(hits);
-            results.put(query, result);
+            results.put(key(query), result);
             return this;
+        }
+
+        private String key(Query query) {
+            String key = query.getModel().getQueryString() + ":" +
+                    query.getModel().getRestrict();
+            return key;
         }
 
         @Override
         public Result search(Query query, Execution execution) {
-            var result = results.get(query);
+            var result = results.get(key(query));
             if (result == null) {
                 throw new IllegalArgumentException("No memorized result for\n" + query.toDetailString() +
                                                    "\nMemorized queries:\n" +
                                                    results.keySet()
                                                           .stream()
-                                                          .map(Query::toDetailString)
+                                                          .map(String::toString)
                                                           .collect(Collectors.joining("\n")));
             }
             return result;

@@ -5,21 +5,19 @@ schema doc {
     }
     
     field gram_title type string {
-        indexing: input title | index | summary
+        indexing: input title | index
         match {
             gram
             gram-size: 3
         }
-        summary: dynamic
     }
 
     field gram_content type string {
-        indexing: input content | index | summary
+        indexing: input content | index
         match {
             gram
             gram-size: 3
         }
-        summary: dynamic
     }
 
     document doc {
@@ -110,7 +108,7 @@ schema doc {
                 + query(pathWeight) * bm25(path)
             }
         }
-        summary-features {
+        match-features {
             query(titleWeight)
             query(contentWeight)
             query(headersWeight)

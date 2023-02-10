@@ -28,7 +28,13 @@ schema term {
             attribute: fast-search
         }
         
-    } 
+    }
+
+    document-summary suggestion {
+        summary term type string {
+            source: term
+        }
+    }
 
     fieldset default {
         fields: term, terms
