@@ -2,4 +2,5 @@
 
 <query-profile id="default">
  <field name="presentation.timing">true</field>
+ <field name="model.language">en</field>
 </query-profile>
