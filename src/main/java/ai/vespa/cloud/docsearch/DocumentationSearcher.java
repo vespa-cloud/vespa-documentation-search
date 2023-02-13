@@ -1,6 +1,11 @@
 // Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root.
 package ai.vespa.cloud.docsearch;
 
+import com.yahoo.component.annotation.Inject;
+import com.yahoo.language.Language;
+import com.yahoo.language.Linguistics;
+import com.yahoo.language.process.StemMode;
+import com.yahoo.language.process.Token;
 import com.yahoo.prelude.query.PrefixItem;
 import com.yahoo.prelude.query.WeakAndItem;
 import com.yahoo.prelude.query.WordItem;
@@ -13,6 +18,9 @@ import com.yahoo.search.Searcher;
 import com.yahoo.search.result.Hit;
 import com.yahoo.search.searchchain.Execution;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Searches for suggestions, and returns a result containing both the suggestions
  * and the documents matching the most relevant suggestion. Return up to 10 suggestions and up to 10 document results.
@@ -22,18 +30,24 @@ import com.yahoo.search.searchchain.Execution;
  */
 public class DocumentationSearcher extends Searcher {
 
-    private static final String SUGGESTION_SUMMARY = "suggestion";
+    private static final String SUGGESTION_SUMMARY = "default";
     private static final String SUGGESTION_RANK_PROFILE = "term_rank";
+
+    private Linguistics linguistics;
+    @Inject
+    public DocumentationSearcher(Linguistics linguistics) {
+        this.linguistics = linguistics;
+    }
 
     @Override
     public Result search(Query query, Execution execution) {
         String userQuery = query.properties().getString("term");
         if (userQuery == null) return execution.search(query);
-
-        Result suggestions = getSuggestions(userQuery, execution, query);
+        List<String> tokens = tokenize(userQuery);
+        Result suggestions = getSuggestions(userQuery, tokens, execution, query);
         query.getModel().setRestrict("doc");
         WeakAndItem weakAndItem = new WeakAndItem();
-        for (String term: suggestions.getHitCount() > 0 ? suggestedTerms(suggestions) : userQuery.split(" "))
+        for (String term: suggestions.getHitCount() > 0 ? suggestedTerms(suggestions) : tokens)
             weakAndItem.addItem(new WordItem(term, true));
         query.getModel().getQueryTree().setRoot(weakAndItem);
         query.getRanking().setProfile("documentation");
@@ -43,15 +57,27 @@ public class DocumentationSearcher extends Searcher {
         return result;
     }
 
-    private Result getSuggestions(String userQuery, Execution execution, Query originalQuery) {
+    private List<String> tokenize(String userQuery) {
+        List<String> result = new ArrayList<>(6);
+        Iterable<Token> tokens = this.linguistics.getTokenizer().
+                tokenize(userQuery, Language.fromLanguageTag("en"), StemMode.NONE,false);
+        for(Token t: tokens) {
+            result.add(t.getTokenString());
+        }
+        return result;
+    }
+
+    private Result getSuggestions(String userQuery, List<String> tokens, Execution execution, Query originalQuery) {
         Query query = new Query();
         query.getPresentation().setSummary(SUGGESTION_SUMMARY);
         originalQuery.attachContext(query);
         query.setHits(10);
         query.getModel().setRestrict("term");
         query.getRanking().setProfile(SUGGESTION_RANK_PROFILE);
-
-        Item suggestionQuery = buildSuggestionQueryTree(userQuery);
+        if(tokens.size() == 1) {
+            query.getRanking().getFeatures().put("query(matchWeight)", 0.2);
+        }
+        Item suggestionQuery = buildSuggestionQueryTree(userQuery, tokens);
         query.getModel().getQueryTree().setRoot(suggestionQuery);
 
         Result suggestionResult = execution.search(query);
@@ -59,27 +85,35 @@ public class DocumentationSearcher extends Searcher {
         return suggestionResult;
     }
 
-    private Item buildSuggestionQueryTree(String userQuery) {
+    private Item buildSuggestionQueryTree(String userQuery, List<String> tokens) {
         PrefixItem prefix = new PrefixItem(userQuery, "default");
-        int maxDistance = 1;
-        int length = userQuery.length();
-        // Allow higher distance for longer queries
-        if(length > 6)
-            maxDistance = 2;
-        else if(length > 12)
-            maxDistance = 3;
-        FuzzyItem fuzzyItem = new FuzzyItem("terms",
-                true, userQuery, maxDistance,2);
+        OrItem relaxedMatching = new OrItem();
+        for(String t: tokens) {
+            int length = t.length();
+            if(length <= 3) {
+             WordItem word = new WordItem(t, "tokens", true);
+             relaxedMatching.addItem(word);
+            } else {
+                int maxDistance = 1;
+                if (length > 6)
+                    maxDistance = 2;
+                FuzzyItem fuzzyItem = new FuzzyItem("tokens",
+                        true, t, maxDistance, 2);
+                relaxedMatching.addItem(fuzzyItem);
+            }
+        }
+        if(relaxedMatching.getItemCount() == 0)
+            return prefix;
         OrItem orItem = new OrItem();
         orItem.addItem(prefix);
-        orItem.addItem(fuzzyItem);
+        orItem.addItem(relaxedMatching);
         return orItem;
     }
 
-    private String[] suggestedTerms(Result suggestionResult) {
+    private List<String> suggestedTerms(Result suggestionResult) {
         Hit topHit = suggestionResult.hits().get(0);
         if (topHit.getField("term") == null)
             throw new IllegalStateException("Suggestion result unexpectedly missing 'term' field");
-        return topHit.getField("term").toString().split(" ");
+        return tokenize(topHit.getField("term").toString());
     }
 }

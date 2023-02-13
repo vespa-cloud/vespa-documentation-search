@@ -2,17 +2,27 @@ schema term {
 
     document term {
 
+        field namespace type string {
+            indexing: summary
+        }
+
+        field hash type int {
+            indexing: summary
+        }
+
         field term type string {
             indexing: summary | attribute
             attribute: fast-search 
-        } 
-
-        field query_count type int {
-            indexing: summary | attribute
         }
 
-        field query_hits type int {
+        field terms type array<string> {
             indexing: summary | attribute
+            attribute: fast-search
+        }
+
+        field tokens type array<string> {
+            indexing: summary | attribute
+            attribute: fast-search
         }
 
         field corpus_count type int {
@@ -23,10 +33,7 @@ schema term {
             indexing: summary | attribute
         }
 
-        field terms type array<string> {
-            indexing: summary | attribute
-            attribute: fast-search
-        }
+
         
     }
 
@@ -41,11 +48,30 @@ schema term {
     }
 
     rank-profile term_rank inherits default {
+        inputs {
+            query(matchWeight) : 1.0
+        }
+        function matchScore() {
+            expression: (2*attributeMatch(term) + attributeMatch(tokens) + attributeMatch(terms))/4.
+        }
+        function popularityScore() {
+            expression: sigmoid(attribute(document_count))
+        }
         first-phase {
             expression {
-              10*max(0, attribute(query_count))
-              + max(0, attribute(corpus_count))
+                query(matchWeight)*matchScore + (1 - query(matchWeight))*popularityScore
             }
+        }
+        match-features {
+            attributeMatch(tokens).completeness
+            attributeMatch(tokens).queryCompleteness
+            attribute(corpus_count)
+            attributeMatch(term)
+            attributeMatch(tokens)
+            attributeMatch(terms)
+            query(matchWeight)
+            matchScore
+            popularityScore
         }
     }
 
