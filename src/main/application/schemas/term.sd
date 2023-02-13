@@ -6,10 +6,6 @@ schema term {
             indexing: summary 
         } 
 
-        field namespace type string {
-            indexing: summary
-        }
-
         field hash type int {
             indexing: summary
         }
