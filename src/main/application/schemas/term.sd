@@ -1,6 +1,10 @@
 schema term {
 
     document term {
+    
+        field namespace type string {
+            indexing: summary 
+        } 
 
         field term type string {
             indexing: summary | attribute
