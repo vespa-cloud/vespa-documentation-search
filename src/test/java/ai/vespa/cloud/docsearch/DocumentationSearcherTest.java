@@ -1,6 +1,7 @@
 package ai.vespa.cloud.docsearch;
 
 import com.yahoo.component.chain.Chain;
+import com.yahoo.language.simple.SimpleLinguistics;
 import com.yahoo.prelude.query.PrefixItem;
 import com.yahoo.prelude.query.WeakAndItem;
 import com.yahoo.prelude.query.WordItem;
@@ -63,7 +64,7 @@ public class DocumentationSearcherTest {
         source.addResult(suggestionsQuery(userQuery), suggestions);
         source.addResult(documentsQuery(expectedSuggestion != null ? expectedSuggestion : userQuery), documents);
 
-        Chain<Searcher> chain = new Chain<>(new DocumentationSearcher(), source);
+        Chain<Searcher> chain = new Chain<>(new DocumentationSearcher(new SimpleLinguistics()), source);
         return new Execution(chain, Execution.Context.createContextStub())
                 .search(new Query("?term=" + userQuery));
     }
