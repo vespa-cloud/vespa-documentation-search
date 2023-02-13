@@ -20,7 +20,7 @@
                 <allow with='aws-private-link' arn='arn:aws:iam::182951675883:root' />
                 <allow with='aws-private-link' arn='arn:aws:iam::420194040740:root' />
             </endpoint>
-            <endpoint id="playground" container-id="default">
+            <endpoint id="playground" container-id="playground">
                 <region>aws-us-east-1c</region>
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
