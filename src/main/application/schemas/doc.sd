@@ -4,6 +4,8 @@ schema doc {
         indexing: "en" | set_language
     }
     
+    field html type string {}
+    
     field gram_title type string {
         indexing: input title | index
         match {
