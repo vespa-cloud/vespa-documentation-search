@@ -4,8 +4,6 @@ schema doc {
         indexing: "en" | set_language
     }
     
-    field html type string {}
-    
     field gram_title type string {
         indexing: input title | index
         match {
@@ -59,6 +57,8 @@ schema doc {
         field namespace type string {
             indexing: summary | attribute
         }
+        
+        field html type string {}
 
         field outlinks type array<string> {
             indexing: summary | index
