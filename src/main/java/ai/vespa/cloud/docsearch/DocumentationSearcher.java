@@ -12,6 +12,7 @@ import com.yahoo.prelude.query.WordItem;
 import com.yahoo.prelude.query.FuzzyItem;
 import com.yahoo.prelude.query.OrItem;
 import com.yahoo.prelude.query.Item;
+import com.yahoo.processing.request.CompoundName;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
 import com.yahoo.search.Searcher;
@@ -30,8 +31,11 @@ import java.util.List;
  */
 public class DocumentationSearcher extends Searcher {
 
-    private static final String SUGGESTION_SUMMARY = "default";
+    private static final String SUGGESTION_SUMMARY = "suggestion";
     private static final String SUGGESTION_RANK_PROFILE = "term_rank";
+
+    private static final CompoundName SUGGEST_ONLY = new CompoundName("suggestions-only");
+    private static final CompoundName SOURCE = new CompoundName("index-source");
 
     private Linguistics linguistics;
     @Inject
@@ -45,7 +49,10 @@ public class DocumentationSearcher extends Searcher {
         if (userQuery == null) return execution.search(query);
         List<String> tokens = tokenize(userQuery);
         Result suggestions = getSuggestions(userQuery, tokens, execution, query);
-        query.getModel().setRestrict("doc");
+        if(query.properties().getBoolean(SUGGEST_ONLY,false))
+            return suggestions;
+        String index = query.properties().getString(SOURCE, "doc");
+        query.getModel().setRestrict(index);
         WeakAndItem weakAndItem = new WeakAndItem();
         for (String term: suggestions.getHitCount() > 0 ? suggestedTerms(suggestions) : tokens)
             weakAndItem.addItem(new WordItem(term, true));
@@ -62,7 +69,8 @@ public class DocumentationSearcher extends Searcher {
         Iterable<Token> tokens = this.linguistics.getTokenizer().
                 tokenize(userQuery, Language.fromLanguageTag("en"), StemMode.NONE,false);
         for(Token t: tokens) {
-            result.add(t.getTokenString());
+            if (t.isIndexable())
+                result.add(t.getTokenString());
         }
         return result;
     }
@@ -74,12 +82,11 @@ public class DocumentationSearcher extends Searcher {
         query.setHits(10);
         query.getModel().setRestrict("term");
         query.getRanking().setProfile(SUGGESTION_RANK_PROFILE);
-        if(tokens.size() == 1) {
-            query.getRanking().getFeatures().put("query(matchWeight)", 0.2);
-        }
+
         Item suggestionQuery = buildSuggestionQueryTree(userQuery, tokens);
         query.getModel().getQueryTree().setRoot(suggestionQuery);
-
+        if(tokens.size() == 1)
+            query.getRanking().getFeatures().put("query(matchWeight)", 0.2);
         Result suggestionResult = execution.search(query);
         execution.fill(suggestionResult, SUGGESTION_SUMMARY);
         return suggestionResult;

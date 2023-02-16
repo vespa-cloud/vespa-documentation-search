@@ -3,7 +3,7 @@ schema doc {
     field language type string {
         indexing: "en" | set_language
     }
-    
+
     field gram_title type string {
         indexing: input title | index
         match {
@@ -59,6 +59,8 @@ schema doc {
         }
         
         field html type string {}
+
+         field html type string {}
 
         field outlinks type array<string> {
             indexing: summary | index

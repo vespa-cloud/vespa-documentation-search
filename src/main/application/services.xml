@@ -31,13 +31,14 @@
         <config name="vespa.config.search.summary.juniperrc">
             <length>1024</length> <!-- default 256 -->
             <min_length>512</min_length> <!-- default 128 -->
-            <surround_max>256</surround_max> <!-- default 128 -->
-            <max_matches>4</max_matches> <!-- default 3 -->
-            <winsize>384</winsize> <!-- default 200 -->
+            <surround_max>512</surround_max> <!-- default 128 -->
+            <max_matches>2</max_matches> <!-- default 3 -->
+            <winsize>512</winsize> <!-- default 200 -->
         </config>
         <redundancy>2</redundancy>
         <documents>
             <document mode="index" type="doc"/>
+            <document mode="index" type="paragraph"/>
             <document mode="index" type="term"/>
             <document mode="index" type="purchase"/>
         </documents>
