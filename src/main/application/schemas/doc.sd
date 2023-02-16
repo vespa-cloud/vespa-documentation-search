@@ -60,8 +60,6 @@ schema doc {
         
         field html type string {}
 
-         field html type string {}
-
         field outlinks type array<string> {
             indexing: summary | index
         }
