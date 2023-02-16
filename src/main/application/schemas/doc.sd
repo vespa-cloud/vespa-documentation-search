@@ -57,6 +57,8 @@ schema doc {
         field namespace type string {
             indexing: summary | attribute
         }
+        
+        field html type string {}
 
          field html type string {}
 
