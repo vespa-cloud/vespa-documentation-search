@@ -1,0 +1,96 @@
+schema paragraph {
+
+    field language type string {
+        indexing: "en" | set_language
+    }
+    
+    field gram_title type string {
+        indexing: input title | index
+        match {
+            gram
+            gram-size: 3
+        }
+    }
+
+    field gram_content type string {
+        indexing: input content | index
+        match {
+            gram
+            gram-size: 3
+        }
+    }
+
+    document paragraph {
+
+        field path type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
+        field doc_id type string {
+            indexing: summary | attribute
+        }
+
+        field title type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
+        field content type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
+        # e.g. open, cloud
+        field namespace type string {
+            indexing: summary | attribute
+        }
+
+        field last_updated type int {
+            indexing: summary | attribute
+        }
+    }
+
+    document-summary short-summary {
+        from-disk
+        summary title type string {}
+        summary content type string {}
+        summary path type string {}
+        summary doc_id type string {}
+    }
+
+    fieldset default {
+        fields: title, content, path 
+    }
+
+    fieldset grams {
+        fields: gram_title, gram_content
+    }
+
+    rank-profile documentation inherits default {
+        inputs {
+            query(titleWeight) double: 2.0
+            query(contentWeight) double: 2.0
+            query(pathWeight) double: 1.0
+        }
+        first-phase {
+            expression {
+                query(titleWeight) * bm25(title)
+                + query(contentWeight) * bm25(content)
+                + query(pathWeight) * bm25(path)
+            }
+        }
+        match-features {
+            query(titleWeight)
+            query(contentWeight)
+            query(pathWeight)
+            bm25(title)
+            nativeRank(title)
+            bm25(content)
+            bm25(path)
+        }
+    }
+}
