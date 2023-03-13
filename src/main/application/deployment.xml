@@ -21,9 +21,6 @@
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
             </endpoint>
-            <endpoint type="private" container-id="default">
-                <allow with="gcp-service-connect" project="resonant-triode-319212" />
-            </endpoint>
         </endpoints>
 
     </instance>
