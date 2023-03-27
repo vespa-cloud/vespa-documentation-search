@@ -8,6 +8,7 @@
             <test>aws-us-east-1c</test>
             <region>aws-eu-west-1a</region>
             <region>gcp-us-central1-f</region>
+            <region>gcp-europe-west3-b</region>
         </prod>
 
         <endpoints>
