@@ -27,6 +27,10 @@ schema paragraph {
             index: enable-bm25
             stemming: best
         }
+        
+         field base_uri type string {
+            indexing: summary
+        }
 
         field doc_id type string {
             indexing: summary | attribute
