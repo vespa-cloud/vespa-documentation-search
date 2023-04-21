@@ -47,6 +47,10 @@ schema paragraph {
             index: enable-bm25
             stemming: best
         }
+        
+        field content_tokens type int {
+            indexing: summary
+        }
 
         # e.g. open, cloud
         field namespace type string {
