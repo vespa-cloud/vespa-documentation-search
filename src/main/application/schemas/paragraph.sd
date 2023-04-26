@@ -62,6 +62,13 @@ schema paragraph {
         }
     }
 
+    field embedding type tensor<float>(x[384]) {
+        indexing: (input title || "") . " " . (input content || "") | embed | attribute
+        attribute {
+            distance-metric: angular
+        }
+    }
+
     document-summary short-summary {
         from-disk
         summary title type string {}
@@ -76,6 +83,33 @@ schema paragraph {
 
     fieldset grams {
         fields: gram_title, gram_content
+    }
+
+    rank-profile default inherits default {
+        inputs {
+            query(embedding) tensor<float>(x[384])
+        }
+    }
+
+    rank-profile semantic inherits default {
+        inputs {
+            query(q) tensor<float>(x[384])
+        }
+        first-phase {
+            expression: cos(distance(field,embedding))
+        }
+    }
+
+    rank-profile hybrid inherits semantic {
+
+        function semantic() {
+            expression: cos(distance(field, embedding))
+        }
+
+        first-phase {
+            expression: semantic + (0.4*nativeRank(title) + 0.6*nativeRank(content))
+        }
+        match-features: semantic nativeRank(title) nativeRank(content)
     }
 
     rank-profile documentation inherits default {
