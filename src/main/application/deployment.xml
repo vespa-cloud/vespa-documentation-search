@@ -24,14 +24,5 @@
         </endpoints>
 
     </instance>
-
-    <instance id="enclave">
-
-        <prod cloud-account="764584233882">
-            <region>aws-us-east-1c</region>
-        </prod>
-
-    </instance>
-
 </deployment>
 
