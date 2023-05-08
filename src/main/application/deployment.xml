@@ -1,37 +1,41 @@
 <deployment version="1.0" major-version="8">
     <upgrade policy="canary"/>
-    <instance id="default">
 
-        <prod>
-            <region>aws-us-east-1c</region>
-            <delay minutes="10" />
-            <test>aws-us-east-1c</test>
-            <region>aws-eu-west-1a</region>
-            <region>gcp-us-central1-f</region>
-        </prod>
+    <parallel>
 
-        <endpoints>
-            <endpoint container-id="default">
+        <instance id="default">
+
+            <prod>
                 <region>aws-us-east-1c</region>
+                <delay minutes="10" />
+                <test>aws-us-east-1c</test>
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
-            </endpoint>
-            <endpoint id="playground" container-id="playground">
+            </prod>
+
+            <endpoints>
+                <endpoint container-id="default">
+                    <region>aws-us-east-1c</region>
+                    <region>aws-eu-west-1a</region>
+                    <region>gcp-us-central1-f</region>
+                </endpoint>
+                <endpoint id="playground" container-id="playground">
+                    <region>aws-us-east-1c</region>
+                    <region>aws-eu-west-1a</region>
+                    <region>gcp-us-central1-f</region>
+                </endpoint>
+            </endpoints>
+
+        </instance>
+
+        <instance id="enclave">
+
+            <prod cloud-account="764584233882">
                 <region>aws-us-east-1c</region>
-                <region>aws-eu-west-1a</region>
-                <region>gcp-us-central1-f</region>
-            </endpoint>
-        </endpoints>
+            </prod>
 
-    </instance>
+        </instance>
 
-    <instance id="enclave">
-
-        <prod cloud-account="764584233882">
-            <region>aws-us-east-1c</region>
-        </prod>
-
-    </instance>
-
+    </parallel>
 </deployment>
 
