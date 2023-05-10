@@ -3,7 +3,9 @@ schema term {
     document term {
     
         field namespace type string {
-            indexing: summary 
+            indexing: attribute|summary
+            attribute: fast-search
+            rank: filter
         } 
 
         field hash type int {
