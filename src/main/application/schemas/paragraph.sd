@@ -48,6 +48,12 @@ schema paragraph {
             stemming: best
         }
         
+        field questions type array<string> {
+            indexing: summary | index | attribute #Attribute for grouping
+            index: enable-bm25
+            stemming: best
+        }
+        
         field content_tokens type int {
             indexing: summary
         }
@@ -78,7 +84,7 @@ schema paragraph {
     }
 
     fieldset default {
-        fields: title, content, path 
+        fields: title, content, path, questions 
     }
 
     fieldset grams {
