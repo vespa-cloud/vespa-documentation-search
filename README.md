@@ -204,32 +204,6 @@ Creating a System Test is also a great way to develop a Vespa application:
 <!-- ToDo: link to a Vespa Cloud Developer Guide once completed -->
 
 
-
-## Generate and feed search suggestions
-Use the script in [search-suggestions](https://github.com/vespa-engine/sample-apps/tree/master/incremental-search/search-suggestions/)
-to generate suggestions (generate ../../../documentation/open_index.json first):
-
-    $ python3 ../../incremental-search/search-suggestions/count_terms.py \
-      ../../../documentation/open_index.json feed_terms.json 2 ../../incremental-search/search-suggestions/top100en.txt
-    $ curl -L -o vespa-feed-client-cli.zip \
-      https://search.maven.org/remotecontent?filepath=com/yahoo/vespa/vespa-feed-client-cli/7.527.20/vespa-feed-client-cli-7.527.20-zip.zip
-    $ unzip vespa-feed-client-cli.zip
-    $ ./vespa-feed-client-cli/vespa-feed-client \
-      --file feed_terms.json \
-      --certificate ../../../documentation/data-plane-public-key.pem --private-key ../../../documentation/data-plane-private-key.pem \
-      --endpoint https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud/
-
-The above feeds single terms and phrases of 2, with stop-word removal from top100en.txt.
-Suggestions with 3 terms creates a lot of noise -
-work around by adding to this file and feed it:
-
-    $ ./vespa-feed-client-cli/vespa-feed-client \
-      --file extra_suggestions.json \
-      --certificate ../../../documentation/data-plane-public-key.pem --privateKey ../../../documentation/data-plane-private-key.pem \
-      --endpoint https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud/
-
-
-
 ## Feed grouping examples
 ```
 cat << EOF | vespa-feed-client \
