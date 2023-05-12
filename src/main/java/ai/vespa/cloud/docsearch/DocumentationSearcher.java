@@ -6,12 +6,7 @@ import com.yahoo.language.Language;
 import com.yahoo.language.Linguistics;
 import com.yahoo.language.process.StemMode;
 import com.yahoo.language.process.Token;
-import com.yahoo.prelude.query.PrefixItem;
-import com.yahoo.prelude.query.WeakAndItem;
-import com.yahoo.prelude.query.WordItem;
-import com.yahoo.prelude.query.FuzzyItem;
-import com.yahoo.prelude.query.OrItem;
-import com.yahoo.prelude.query.Item;
+import com.yahoo.prelude.query.*;
 import com.yahoo.processing.request.CompoundName;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
@@ -47,10 +42,12 @@ public class DocumentationSearcher extends Searcher {
     public Result search(Query query, Execution execution) {
         String userQuery = query.properties().getString("term");
         if (userQuery == null) return execution.search(query);
+
         List<String> tokens = tokenize(userQuery);
         Result suggestions = getSuggestions(userQuery, tokens, execution, query);
         if(query.properties().getBoolean(SUGGEST_ONLY,false))
             return suggestions;
+
         String index = query.properties().getString(SOURCE, "doc");
         query.getModel().setRestrict(index);
         WeakAndItem weakAndItem = new WeakAndItem();
@@ -76,15 +73,19 @@ public class DocumentationSearcher extends Searcher {
     }
 
     private Result getSuggestions(String userQuery, List<String> tokens, Execution execution, Query originalQuery) {
-        Query query = new Query();
+        Query query = originalQuery.clone();
         query.getPresentation().setSummary(SUGGESTION_SUMMARY);
-        originalQuery.attachContext(query);
         query.setHits(10);
         query.getModel().setRestrict("term");
         query.getRanking().setProfile(SUGGESTION_RANK_PROFILE);
 
         Item suggestionQuery = buildSuggestionQueryTree(userQuery, tokens);
-        query.getModel().getQueryTree().setRoot(suggestionQuery);
+
+        Item root = query.getModel().getQueryTree().getRoot();
+        AndItem andItem = new AndItem();
+        andItem.addItem(root);
+        andItem.addItem(suggestionQuery);
+        query.getModel().getQueryTree().setRoot(andItem);
         if(tokens.size() == 1)
             query.getRanking().getFeatures().put("query(matchWeight)", 0.2);
         Result suggestionResult = execution.search(query);
@@ -96,10 +97,12 @@ public class DocumentationSearcher extends Searcher {
         PrefixItem prefix = new PrefixItem(userQuery, "default");
         OrItem relaxedMatching = new OrItem();
         for(String t: tokens) {
+            if (Question.isStopWord(t))
+                continue;
             int length = t.length();
             if(length <= 3) {
-             WordItem word = new WordItem(t, "tokens", true);
-             relaxedMatching.addItem(word);
+                WordItem word = new WordItem(t, "tokens", true);
+                relaxedMatching.addItem(word);
             } else {
                 int maxDistance = 1;
                 if (length > 6)
@@ -109,12 +112,19 @@ public class DocumentationSearcher extends Searcher {
                 relaxedMatching.addItem(fuzzyItem);
             }
         }
-        if(relaxedMatching.getItemCount() == 0)
-            return prefix;
+        WordItem boost = new WordItem("vespa", "tokens", true);
+        RankItem vespa = new RankItem();
+        if(relaxedMatching.getItemCount() == 0) {
+            vespa.addItem(prefix);
+            vespa.addItem(boost);
+            return vespa;
+        }
         OrItem orItem = new OrItem();
         orItem.addItem(prefix);
         orItem.addItem(relaxedMatching);
-        return orItem;
+        vespa.addItem(orItem);
+        vespa.addItem(boost);
+        return vespa;
     }
 
     private List<String> suggestedTerms(Result suggestionResult) {

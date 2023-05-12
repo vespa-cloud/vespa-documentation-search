@@ -43,6 +43,9 @@ schema term {
         summary term type string {
             source: term
         }
+        summary namespace type string {
+            source: namespace
+        }
     }
 
     fieldset default {
