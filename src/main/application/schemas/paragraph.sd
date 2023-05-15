@@ -107,15 +107,21 @@ schema paragraph {
     }
 
     rank-profile hybrid inherits semantic {
-
+        inputs {
+            query(q) tensor<float>(x[384])
+            query(sw) double: 0.2
+        }
         function semantic() {
             expression: cos(distance(field, embedding))
         }
-
-        first-phase {
-            expression: semantic + (0.4*nativeRank(title) + 0.6*nativeRank(content))
+        function keywords() {
+            expression: nativeRank(title) + nativeRank(content) + nativeRank(path) + elementSimilarity(questions)
         }
-        match-features: semantic nativeRank(title) nativeRank(content)
+        first-phase {
+            expression: query(sw)*semantic + (1 - query(sw))*keywords
+        }
+        match-features: semantic nativeRank(title) nativeRank(content) nativeRank(path) elementSimilarity(questions)
+        summary-features: semantic nativeRank(title) nativeRank(content) nativeRank(path) elementSimilarity(questions)
     }
 
     rank-profile documentation inherits default {
