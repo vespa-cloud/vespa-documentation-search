@@ -111,9 +111,7 @@ public class DocumentationSearcher extends Searcher {
                 WordItem word = new WordItem(t, "tokens", true);
                 relaxedMatching.addItem(word);
             } else {
-                int maxDistance = 1;
-                if (length > 6)
-                    maxDistance = 2;
+                int maxDistance = 1
                 FuzzyItem fuzzyItem = new FuzzyItem("tokens",
                         true, t, maxDistance, 2);
                 relaxedMatching.addItem(fuzzyItem);
