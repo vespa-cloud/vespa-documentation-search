@@ -17,6 +17,14 @@ schema term {
             attribute: fast-search 
         }
 
+        field type type string {
+            indexing: summary | attribute
+        }
+
+        field url type string {
+            indexing: summary | attribute
+        }
+
         field terms type array<string> {
             indexing: summary | attribute
             attribute: fast-search
@@ -45,6 +53,12 @@ schema term {
         }
         summary namespace type string {
             source: namespace
+        }
+        summary url type string {
+            source: url
+        }
+        summary type type string {
+            source: type
         }
     }
 
