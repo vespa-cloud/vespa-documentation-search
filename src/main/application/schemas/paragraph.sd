@@ -49,7 +49,7 @@ schema paragraph {
         }
         
         field questions type array<string> {
-            indexing: summary | index | attribute #Attribute for grouping
+            indexing: summary | index | attribute # Attribute for grouping
             index: enable-bm25
             stemming: best
         }
@@ -66,6 +66,11 @@ schema paragraph {
         field last_updated type int {
             indexing: summary | attribute
         }
+    }
+
+    field questions_exact type array<string> {
+        indexing: input questions | index
+        match:word
     }
 
     field embedding type tensor<float>(x[384]) {
@@ -115,13 +120,12 @@ schema paragraph {
             expression: cos(distance(field, embedding))
         }
         function keywords() {
-            expression: nativeRank(title) + nativeRank(content) + nativeRank(path) + elementSimilarity(questions)
+            expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
         }
         first-phase {
             expression: query(sw)*semantic + (1 - query(sw))*keywords
         }
-        match-features: semantic nativeRank(title) nativeRank(content) nativeRank(path) elementSimilarity(questions)
-        summary-features: semantic nativeRank(title) nativeRank(content) nativeRank(path) elementSimilarity(questions)
+        match-features: keywords semantic nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
     }
 
     rank-profile documentation inherits default {
