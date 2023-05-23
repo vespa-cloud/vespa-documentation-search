@@ -115,12 +115,13 @@ schema paragraph {
         inputs {
             query(q) tensor<float>(x[384])
             query(sw) double: 0.2
+            query(ew) double: 0.2
         }
         function semantic() {
             expression: cos(distance(field, embedding))
         }
         function keywords() {
-            expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
+            expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + query(ew)*elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
         }
         first-phase {
             expression: query(sw)*semantic + (1 - query(sw))*keywords
