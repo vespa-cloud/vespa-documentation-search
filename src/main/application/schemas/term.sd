@@ -42,9 +42,6 @@ schema term {
         field document_count type int {
             indexing: summary | attribute
         }
-
-
-        
     }
 
     document-summary suggestion {
@@ -66,9 +63,20 @@ schema term {
         fields: term, terms
     }
 
+    field embedding type tensor<float>(x[384]) {
+        indexing: "query: " .  input term | embed | attribute
+        attribute {
+            distance-metric: angular
+        }
+    }
+
     rank-profile term_rank inherits default {
         inputs {
             query(matchWeight) : 1.0
+            query(q) tensor<float>(x[384])
+        }
+        function semantic() {
+            expression: max(0, cos(distance(field, embedding)))
         }
         function matchScore() {
             expression: (2*attributeMatch(term) + attributeMatch(tokens) + attributeMatch(terms))/4.
@@ -78,7 +86,7 @@ schema term {
         }
         first-phase {
             expression {
-                query(matchWeight)*matchScore + (1 - query(matchWeight))*popularityScore
+                query(matchWeight)*matchScore + (1 - query(matchWeight))*popularityScore + semantic
             }
         }
         match-features {
@@ -90,6 +98,7 @@ schema term {
             attributeMatch(terms)
             query(matchWeight)
             matchScore
+            semantic
             popularityScore
         }
     }

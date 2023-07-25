@@ -1,0 +1,8 @@
+<!-- Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root. -->
+<query-profile id="suggest">
+ <field name="searchChain">suggest</field>
+ <field name="hits">6</field>
+ <field name="collapse.summary">suggestion</field>
+ <field name="collapsefield">term</field>
+ <field name="presentation.timing">true</field>
+</query-profile>

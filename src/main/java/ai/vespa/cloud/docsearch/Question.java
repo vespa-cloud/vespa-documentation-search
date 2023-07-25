@@ -1,6 +1,13 @@
 package ai.vespa.cloud.docsearch;
 
+import com.yahoo.language.Language;
+import com.yahoo.language.Linguistics;
+import com.yahoo.language.process.StemMode;
+import com.yahoo.language.process.Token;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Question {
@@ -53,4 +60,15 @@ public class Question {
         add("me");
         add("my");
     }};
+
+    public static List<String> tokenize(String userQuery, Linguistics linguistics) {
+        List<String> result = new ArrayList<>(6);
+        Iterable<Token> tokens = linguistics.getTokenizer().
+                tokenize(userQuery, Language.fromLanguageTag("en"), StemMode.NONE,false);
+        for(Token t: tokens) {
+            if (t.isIndexable())
+                result.add(t.getTokenString());
+        }
+        return result;
+    }
 }
