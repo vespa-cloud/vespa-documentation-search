@@ -1,4 +1,3 @@
 <validation-overrides>
-    <allow until="2023-03-30">zone-endpoint-change</allow>
-    <allow until="2023-05-03">deployment-removal</allow>
+    <allow until="2023-07-30">indexing-change</allow>
 </validation-overrides>
