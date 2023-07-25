@@ -2,9 +2,9 @@
 <services version="1.0" xmlns:deploy="vespa">
 
     <container id="default" version="1.0">
-        <component id="minilm" type="bert-embedder">
-            <transformer-model model-id="minilm-l6-v2"/>
-            <tokenizer-vocab model-id="bert-base-uncased"/>
+        <component id="embedder" type="hugging-face-embedder">
+            <transformer-model path="model/model.onnx"/>
+            <tokenizer-model path="model/tokenizer.json"/>
         </component>
         <document-processing>
             <chain id="default">
@@ -15,13 +15,20 @@
             <chain id="default" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.DocumentationSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+            <chain id="suggest" inherits="vespa">
+                <searcher id="ai.vespa.cloud.docsearch.SuggestionSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+            <chain id="llmsearch" inherits="vespa">
+                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
         </search>
         <document-api/>
         <nodes count="2" exclusive="true">
-            <resources vcpu="2" memory="8Gb" disk="10Gb" />
-            <resources vcpu="2" memory="8Gb" disk="10Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="2" memory="8Gb" disk="32Gb" />
+            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>        
     </container>
+
 
     <container id="playground" version="1.0">
         <handler id="ai.vespa.cloud.playground.TensorPlaygroundHandler" bundle="vespacloud-docsearch">

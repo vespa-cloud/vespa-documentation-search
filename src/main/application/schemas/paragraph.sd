@@ -3,22 +3,6 @@ schema paragraph {
     field language type string {
         indexing: "en" | set_language
     }
-    
-    field gram_title type string {
-        indexing: input title | index
-        match {
-            gram
-            gram-size: 3
-        }
-    }
-
-    field gram_content type string {
-        indexing: input content | index
-        match {
-            gram
-            gram-size: 3
-        }
-    }
 
     document paragraph {
 
@@ -70,11 +54,11 @@ schema paragraph {
 
     field questions_exact type array<string> {
         indexing: input questions | index
-        match:word
+        match: word
     }
 
     field embedding type tensor<float>(x[384]) {
-        indexing: (input title || "") . " " . (input content || "") | embed | attribute
+        indexing: "passage: " . (input title || "") . " " . (input content || "") | embed | attribute
         attribute {
             distance-metric: angular
         }
@@ -89,17 +73,7 @@ schema paragraph {
     }
 
     fieldset default {
-        fields: title, content, path, questions 
-    }
-
-    fieldset grams {
-        fields: gram_title, gram_content
-    }
-
-    rank-profile default inherits default {
-        inputs {
-            query(embedding) tensor<float>(x[384])
-        }
+        fields: title, content, path, questions
     }
 
     rank-profile semantic inherits default {
@@ -127,29 +101,5 @@ schema paragraph {
             expression: query(sw)*semantic + (1 - query(sw))*keywords
         }
         match-features: keywords semantic nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
-    }
-
-    rank-profile documentation inherits default {
-        inputs {
-            query(titleWeight) double: 2.0
-            query(contentWeight) double: 2.0
-            query(pathWeight) double: 1.0
-        }
-        first-phase {
-            expression {
-                query(titleWeight) * bm25(title)
-                + query(contentWeight) * bm25(content)
-                + query(pathWeight) * bm25(path)
-            }
-        }
-        match-features {
-            query(titleWeight)
-            query(contentWeight)
-            query(pathWeight)
-            bm25(title)
-            nativeRank(title)
-            bm25(content)
-            bm25(path)
-        }
     }
 }
