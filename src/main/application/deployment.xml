@@ -5,6 +5,9 @@
 
         <instance id="default">
 
+            <test />
+            <staging />
+
             <prod>
                 <region>aws-us-east-1c</region>
                 <delay minutes="10" />
@@ -29,6 +32,9 @@
         </instance>
 
         <instance id="enclave">
+
+            <test />
+            <staging />
 
             <prod cloud-account="764584233882">
                 <region>aws-us-east-1c</region>
