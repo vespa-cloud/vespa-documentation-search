@@ -31,12 +31,12 @@
 
         </instance>
 
-        <instance id="enclave">
+        <instance id="enclave" cloud-account="764584233882">
 
             <test />
             <staging />
 
-            <prod cloud-account="764584233882">
+            <prod>
                 <region>aws-us-east-1c</region>
             </prod>
 
