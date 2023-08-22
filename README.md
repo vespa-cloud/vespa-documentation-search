@@ -29,6 +29,7 @@ Deployment status:
 
 
 ## Query API
+<!-- ToDo: consider new names in endpoints -->
 Open API endpoints:
 * https://doc-search.vespa.oath.cloud/document/v1/
 * https://doc-search.vespa.oath.cloud/search/
@@ -160,12 +161,16 @@ The _Build_ step in the workflow uses the Jekyll Generator plugin to build a JSO
 * https://github.com/vespa-engine/documentation/blob/master/_config.yml
 * https://github.com/vespa-engine/documentation/blob/master/_plugins/vespa_index_generator.rb
 
-
-
-### Security
 Vespa Cloud secures endpoints using mTLS. Secrets can be stored in GitHub Settings for a repository.
 Here, the private key secret is accessed in the GitHub Actions workflow that feeds to Vespa Cloud:
 [feed.yml](https://github.com/vespa-engine/documentation/blob/master/.github/workflows/feed.yml)
+
+
+
+## Document processing
+The documents are split into paragraphs for multi-vector ranking, see example in
+[feed-split.py](https://github.com/vespa-engine/documentation/blob/master/feed-split.py).
+<!-- ToDo: link to blogpost when published -->
 
 
 
@@ -206,9 +211,7 @@ Creating a System Test is also a great way to develop a Vespa application:
 
 ## Feed grouping examples
 ```
-cat << EOF | vespa-feed-client \
-  --certificate data-plane-public-cert.pem --private-key data-plane-private-key.pem \
-  --stdin --endpoint https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud
+cat << EOF | vespa feed -t https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud -
 {"fields": {"customer": "Smith","date": 1157526000,"item": "Intake valve","price": "1000","tax": "0.24"},"put": "id:purchase:purchase::0"}
 {"fields": {"customer": "Smith","date": 1157616000,"item": "Rocker arm","price": "1000","tax": "0.12"},"put": "id:purchase:purchase::1"}
 {"fields": {"customer": "Smith","date": 1157619600,"item": "Spring","price": "2000","tax": "0.24"},"put": "id:purchase:purchase::2"}
