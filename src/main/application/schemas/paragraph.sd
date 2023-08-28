@@ -64,6 +64,17 @@ schema paragraph {
         }
     }
 
+    field question_embedding type tensor<float>(q{}, x[384]) {
+         indexing {
+            input questions |
+                for_each { "query: " . _ } | embed | attribute
+         }
+
+         attribute {
+            distance-metric: angular
+         }
+    }
+
     document-summary short-summary {
         from-disk
         summary title type string {}
@@ -88,18 +99,22 @@ schema paragraph {
     rank-profile hybrid inherits semantic {
         inputs {
             query(q) tensor<float>(x[384])
-            query(sw) double: 0.2
+            query(sw) double: 0.6
             query(ew) double: 0.2
         }
+
         function semantic() {
             expression: cos(distance(field, embedding))
+        }
+        function semantic_question() {
+            expression: max(cos(distance(field, question_embedding)), 0)
         }
         function keywords() {
             expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + query(ew)*elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
         }
         first-phase {
-            expression: query(sw)*semantic + (1 - query(sw))*keywords
+            expression: query(sw)*(semantic_question + semantic) + (1 - query(sw))*keywords
         }
-        match-features: keywords semantic nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
+        match-features: keywords semantic semantic_question nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
     }
 }
