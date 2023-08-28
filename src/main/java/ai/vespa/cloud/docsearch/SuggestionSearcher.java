@@ -3,24 +3,26 @@ package ai.vespa.cloud.docsearch;
 
 import com.yahoo.component.annotation.Inject;
 import com.yahoo.component.provider.ComponentRegistry;
-import com.yahoo.language.Language;
+
 import com.yahoo.language.Linguistics;
 import com.yahoo.language.process.Embedder;
-import com.yahoo.language.process.StemMode;
-import com.yahoo.language.process.Token;
-import com.yahoo.prelude.query.*;
-import com.yahoo.processing.request.CompoundName;
+import com.yahoo.prelude.query.Item;
+import com.yahoo.prelude.query.FuzzyItem;
+import com.yahoo.prelude.query.AndItem;
+import com.yahoo.prelude.query.OrItem;
+import com.yahoo.prelude.query.WordItem;
+import com.yahoo.prelude.query.PrefixItem;
+import com.yahoo.prelude.query.NullItem;
+import com.yahoo.prelude.query.NearestNeighborItem;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
 import com.yahoo.search.Searcher;
-import com.yahoo.search.result.Hit;
 import com.yahoo.search.searchchain.Execution;
 import com.yahoo.tensor.Tensor;
 import com.yahoo.tensor.TensorType;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import static ai.vespa.cloud.docsearch.LLMSearcher.filter;
 /**
  * Powers search suggestion api for search.vespa.ai
  */
@@ -52,7 +54,15 @@ public class SuggestionSearcher extends Searcher {
         query.getModel().setRestrict("term");
         query.getRanking().setProfile(SUGGESTION_RANK_PROFILE);
         Item suggestionQuery = buildSuggestionQueryTree(queryString, tokens, query);
-        query.getModel().getQueryTree().setRoot(suggestionQuery);
+        Item filterItem = filter(query);
+        if(filterItem instanceof NullItem) {
+            query.getModel().getQueryTree().setRoot(suggestionQuery);
+        }else {
+            AndItem andItem = new AndItem();
+            andItem.addItem(filterItem);
+            andItem.addItem(suggestionQuery);
+            query.getModel().getQueryTree().setRoot(andItem);
+        }
         return execution.search(query);
     }
     private Item buildSuggestionQueryTree(String userQuery, List<String> tokens, Query query) {
