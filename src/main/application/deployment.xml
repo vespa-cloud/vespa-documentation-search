@@ -31,13 +31,14 @@
 
         </instance>
 
-        <instance id="enclave" cloud-account="764584233882">
+        <instance id="enclave" cloud-account="aws:764584233882,gcp:gcp-vespa-external-enclave">
 
             <test />
             <staging />
 
             <prod>
                 <region>aws-us-east-1c</region>
+                <region>gcp-us-central1-f</region>
             </prod>
 
         </instance>
