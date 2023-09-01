@@ -40,6 +40,8 @@ jobs:
         curl -fsSL https://github.com/vespa-engine/vespa/releases/download/v${VESPA_CLI_VERSION}/vespa-cli_${VESPA_CLI_VERSION}_linux_amd64.tar.gz | \
           tar -zxf - -C opt
         find opt
+        ln -fs ./opt/*/bin/vespa
+        ls -l
     
     # Find Vespa version of current production deployment
     - name: Find compile version
@@ -55,6 +57,8 @@ jobs:
     - name: Deploy to Vespa Cloud
       working-directory: .
       run: |
+        ./opt/*/bin/vespa config set target cloud
+        ./opt/*/bin/vespa config set application vespa-team.vespacloud-docseaarch
         export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
         ./opt/*/bin/vespa prod deploy \
           --source-url "$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
