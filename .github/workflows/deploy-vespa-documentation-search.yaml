@@ -29,6 +29,16 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
+
+    # Get latest Vespa CLI
+    - name: Get Vespa CLI
+      working-directory: .
+      run: |
+        apt update && apt -y install curl
+        mkdir -p opt
+        VESPA_CLI_VERSION=$(curl -fsSL https://api.github.com/repos/vespa-engine/vespa/releases/latest | grep -Po '"tag_name": "v\K.*?(?=")')
+        curl -fsSL https://github.com/vespa-engine/vespa/releases/download/v${VESPA_CLI_VERSION}/vespa-cli_${VESPA_CLI_VERSION}_linux_amd64.tar.gz | \
+          tar -zxf - -C opt
     
     # Find Vespa version of current production deployment
     - name: Find compile version
@@ -40,14 +50,22 @@ jobs:
       working-directory: .
       run: mvn -B package -Dvespa.compile.version="$(cat target/vespa.compile.version)"
     
-    # Deploy to Vespa Cloud
-    - name: Deploy with Maven
+    # Deploy to Vespa Cloud using Vespa CLI
+    - name: Deploy to Vespa Cloud
       working-directory: .
       run: |
-        mvn -B vespa:submit \
-           -Drepository="$(git config --get remote.origin.url)" \
-           -Dbranch="$(git rev-parse --abbrev-ref HEAD)" \
-           -Dcommit="$(git rev-parse HEAD)" \
-           -DauthorEmail="$(git log -1 --format=%aE)" \
-           -DsourceUrl="$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)" \
-           -DapiKey="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+        export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+        ./opt/vespa prod deploy \
+          --source-url "$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
+
+    # Deploy to Vespa Cloud using mvn vespa:submit
+    #- name: Deploy with Maven
+    #  working-directory: .
+    #  run: |
+    #    mvn -B vespa:submit \
+    #       -Drepository="$(git config --get remote.origin.url)" \
+    #       -Dbranch="$(git rev-parse --abbrev-ref HEAD)" \
+    #       -Dcommit="$(git rev-parse HEAD)" \
+    #       -DauthorEmail="$(git log -1 --format=%aE)" \
+    #       -DsourceUrl="$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)" \
+    #       -DapiKey="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
