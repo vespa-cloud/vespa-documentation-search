@@ -193,7 +193,7 @@ schema doc {
     rank-profile inlinks_twophase inherits inlinks_age {
         first-phase {
             keep-rank-count       : 50
-            rank-score-drop-limit : 10.0
+            rank-score-drop-limit : 2.0
             expression            : num_inlinks
         }
         second-phase {
