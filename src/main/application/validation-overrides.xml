@@ -1,4 +1,3 @@
 <validation-overrides>
     <allow until="2023-07-30">indexing-change</allow>
-    <allow until="2023-09-10">deployment-removal</allow>
 </validation-overrides>
