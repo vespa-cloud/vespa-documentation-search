@@ -51,17 +51,15 @@ jobs:
       working-directory: .
       run: mvn -B package -Dvespa.compile.version="$(cat target/vespa.compile.version)"
     
-    # Deploy to Vespa Cloud
-    - name: Deploy with Maven
+    # Deploy to Vespa Cloud using Vespa CLI
+    - name: Deploy to Vespa Cloud
       working-directory: .
       run: |
-        mvn -B vespa:submit \
-          -Drepository="$(git config --get remote.origin.url)" \
-          -Dbranch="$(git rev-parse --abbrev-ref HEAD)" \
-          -Dcommit="$(git rev-parse HEAD)" \
-          -DauthorEmail="$(git log -1 --format=%aE)" \
-          -DsourceUrl="$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)" \
-          -DapiKey="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+        ./vespa config set target cloud
+        ./vespa config set application vespa-team.vespacloud-docsearch
+        export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+        ./vespa prod deploy \
+          --source-url "$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
 
     # Refer to https://github.com/vespa-cloud/cord-19-search/blob/main/.github/workflows/deploy-vespa-cord-19-search.yaml
     # for an example using mvn vespa:submit
