@@ -50,6 +50,10 @@ schema paragraph {
         field last_updated type int {
             indexing: summary | attribute
         }
+
+        field selfhosted type bool {
+            indexing: summary | attribute
+        }
     }
 
     field questions_exact type array<string> {
