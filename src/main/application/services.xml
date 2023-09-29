@@ -50,7 +50,7 @@
             <max_matches>2</max_matches> <!-- default 3 -->
             <winsize>512</winsize> <!-- default 200 -->
         </config>
-        <redundancy>2</redundancy>
+        <min-redundancy>2</min-redundancy>
         <documents>
             <document mode="index" type="doc"/>
             <document mode="index" type="paragraph"/>
