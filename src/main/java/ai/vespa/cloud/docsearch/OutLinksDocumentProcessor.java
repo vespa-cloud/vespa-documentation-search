@@ -56,7 +56,6 @@ public class OutLinksDocumentProcessor extends DocumentProcessor {
                 Document document = put.getDocument();
                 if (document.getDataType().isA(DOC_DOCUMENT_TYPE)) {
                     String myPath = document.getFieldValue(PATH_FIELD_NAME).toString();
-
                     Set<String> docsLinkedFromMe = canonicalizeLinks(Path.of(myPath),
                             onlyFileLinks(removeLinkFragment(getUniqueOutLinks(document))));
 
@@ -128,10 +127,18 @@ public class OutLinksDocumentProcessor extends DocumentProcessor {
     }
 
     protected static Set<String> canonicalizeLinks(Path docPath, Set<String> links) {
+        if(docPath == null) return Collections.emptySet();
         // Rewrite links to absolute path
         // Path is like /documentation/operations/admin-procedures.html
+
         return links.stream()
-                .map(l -> docPath.getParent().resolve(l).normalize().toString())
+                .map(link -> {
+                    Path parent = docPath.getParent();
+                    if (parent != null) {
+                        return parent.resolve(link).normalize().toString();
+                    }
+                    return link; // If 'parent' is null, return the original link
+                })
                 .collect(Collectors.toSet());
     }
 
