@@ -45,7 +45,7 @@ public class ProtonExpressionEvaluator {
 
             return result;
 
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             return error(e.getMessage());
         }
     }
