@@ -139,3 +139,4 @@ public class DocumentationSearcher extends Searcher {
         return tokenize(topHit.getField("term").toString());
     }
 }
+
