@@ -1,0 +1,15 @@
+<!-- Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root. -->
+<query-profile id="llmsearch">
+ <field name="searchChain">llmsearch2</field>
+ <field name="model.restrict">paragraph</field>
+ <field name="ranking.profile">hybrid</field>
+ <field name="input.query(sw)">0.2</field>
+ <field name="input.query(ew)">0.0</field>
+ <field name="hits">15</field>
+ <field name="model.locale">en-us</field>
+ <field name="collapse.summary">short-summary</field>
+ <field name="collapsefield">doc_id</field>
+ <field name="collapsesize">3</field>
+ <field name="presentation.timing">true</field>
+ <field name="format">sse</field>
+</query-profile>

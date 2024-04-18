@@ -2,6 +2,11 @@
 <services version="1.0" xmlns:deploy="vespa">
 
     <container id="default" version="1.0">
+        <component id="openai" class="ai.vespa.llm.clients.OpenAI">
+            <config name="ai.vespa.llm.clients.llm-client">
+                <!-- <apiKeySecretName>...</apiKeySecretName> -->
+            </config>
+        </component>
         <component id="embedder" type="hugging-face-embedder">
             <transformer-model path="model/model.onnx"/>
             <tokenizer-model path="model/tokenizer.json"/>
@@ -21,6 +26,17 @@
             <chain id="llmsearch" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+
+            <!-- temporary for testing -->
+            <chain id="llmsearch2" inherits="vespa">
+                <searcher id="ai.vespa.search.llm.RAGSearcher">
+                    <config name="ai.vespa.search.llm.llm-searcher">
+                        <providerId>openai</providerId>
+                    </config>
+                </searcher>
+                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+
         </search>
         <document-api/>
         <nodes count="2" exclusive="true">
