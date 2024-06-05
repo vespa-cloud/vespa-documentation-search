@@ -2,10 +2,8 @@
 <query-profile id="llmsearch">
  <field name="searchChain">llmsearch</field>
  <field name="model.restrict">paragraph</field>
- <field name="ranking.profile">hybrid</field>
- <field name="input.query(sw)">0.2</field>
- <field name="input.query(ew)">0.0</field>
- <field name="hits">15</field>
+ <field name="ranking.profile">hybrid2</field>
+ <field name="hits">12</field>
  <field name="model.locale">en-us</field>
  <field name="collapse.summary">short-summary</field>
  <field name="collapsefield">doc_id</field>
