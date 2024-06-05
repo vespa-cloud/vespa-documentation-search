@@ -39,7 +39,7 @@ VESPA_12	onnx-intra-threads	/en/reference/schema-reference.html#onnx-model	2
 VESPA_12	onnx-intra-threads	/en/stateless-model-evaluation.html#onnx-inference-options	2
 VESPA_12	onnx-intra-threads	/en/onnx.html#importing-onnx-model-files	0
 VESPA_12	onnx-intra-threads	/en/reference/embedding-reference.html#embedder-onnx-reference-config	2
-VESPA_13	how to normalize bm25 	/en/reference/bm25.html#"	1
+VESPA_13	how to normalize bm25 	/en/reference/bm25.html#	1
 VESPA_13	how to normalize bm25 	/en/reference/bm25.html#ranking-function	1
 VESPA_13	how to normalize bm25 	/en/reference/schema-reference.html#normalizing	0
 VESPA_14	configure java gc parameters	/en/reference/default-set-metrics-reference.html#jdisc_gc_ms	0
