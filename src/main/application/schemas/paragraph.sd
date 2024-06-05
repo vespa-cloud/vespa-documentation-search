@@ -81,14 +81,20 @@ schema paragraph {
 
     document-summary short-summary {
         from-disk
-        summary title type string {}
-        summary content type string {}
-        summary path type string {}
-        summary doc_id type string {}
+        summary title {}
+        summary content {}
+        summary path {}
+        summary doc_id {}
     }
 
     fieldset default {
         fields: title, content, path, questions
+    }
+
+    rank-profile bm25 {
+        first-phase {
+            expression: bm25(title) + bm25(content) + bm25(path)
+        }
     }
 
     rank-profile semantic inherits default {
@@ -121,4 +127,75 @@ schema paragraph {
         }
         match-features: keywords semantic semantic_question nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
     }
+
+     rank-profile hybrid2 {
+        inputs {
+            query(q) tensor<float>(x[384])
+            query(semantic_weight) double: 0.6
+        }
+        function scale(val) {
+            expression: 2*atan(val/4)/(3.14159)
+        }
+
+        function scaled_bm25_content() {
+            expression: scale(bm25(content))
+        }
+
+        function scaled_bm25_title() {
+            expression: scale(bm25(title))
+        }
+
+        function scaled_bm25_path() {
+            expression: scale(bm25(path))
+        }
+
+        function combined_bm25() {
+            expression: 0.3*scale(bm25(title)) + 0.6*scale(bm25(content)) + 0.1*scale(bm25(path))
+        }
+
+         function semantic_content() {
+            expression: cos(distance(field, embedding))
+         }
+
+         function semantic_question() {
+            expression: max(cos(distance(field, question_embedding)),0)
+         }
+
+         function semantic_combined() {
+            expression: 0.5*semantic_content + 0.5*semantic_question
+         }
+
+         function keywords() {
+            expression: ( 0.8*combined_bm25  + 0.1*elementCompleteness(questions).completeness) + 0.1*elementCompleteness(questions_exact).completeness
+         }
+
+         first-phase {
+            expression {
+                query(semantic_weight)*semantic_combined + (1 - query(semantic_weight))*keywords
+            }
+            rank-score-drop-limit: 0.0
+         }
+         match-features {
+            queryTermCount
+            keywords
+            bm25(title)
+            scaled_bm25_title
+            bm25(content)
+            scaled_bm25_content
+            bm25(path)
+            scaled_bm25_path
+            combined_bm25
+            semantic_question
+            semantic_content
+            semantic_combined
+            elementCompleteness(questions).completeness
+            elementCompleteness(questions_exact).completeness
+         }
+     }
+
+     rank-profile hybrid3 inherits hybrid2 {
+        global-phase {
+            expression: reciprocal_rank(semantic_combined) + reciprocal_rank(keywords)
+        }
+     }
 }

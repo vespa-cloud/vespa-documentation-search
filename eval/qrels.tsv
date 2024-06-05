@@ -1,0 +1,90 @@
+VESPA_1	perf record proton	/en/performance/profiling.html#cpu-profiling-using-perf	2
+VESPA_1	perf record proton	en/proton.html#proton-maintenance-jobs	0
+VESPA_1	perf record proton	/en/proton.html#	0
+VESPA_1	perf record proton	/en/performance/profiling.html#container-privileges	1
+VESPA_2	how to configure ranking?	/en/getting-started-ranking.html#	2
+VESPA_2	how to configure ranking?	/en/ranking.html#	2
+VESPA_2	how to configure ranking?	/en/reference/ranking-expressions.html	2
+VESPA_3	what is global phase ranking?	/en/reference/schema-reference.html#global-phase	2
+VESPA_3	what is global phase ranking?	/en/phased-ranking.html#	2
+VESPA_3	what is global phase ranking?	/en/phased-ranking.html#using-a-global-phase-expression	2
+VESPA_3	what is global phase ranking?	/en/reference/query-api-reference.html#ranking.globalphase.rerankcount	2
+VESPA_3	what is global phase ranking?	/en/reranking-in-searcher.html#	2
+VESPA_4	how to write a searcher?	/en/searcher-development.html#testing-a-searcher	0
+VESPA_4	how to write a searcher?	/en/searcher-development.html#	1
+VESPA_4	how to write a searcher?	en/searcher-development.html#searchers	2
+VESPA_4	how to write a searcher?	en/searcher-development.html#writing-a-searcher	2
+VESPA_4	how to write a searcher?	/en/content/consistency.html#write-durability-and-consistency	0
+VESPA_5	gguf	/en/llms-local.html#valid-llm-models	2
+VESPA_6	is there a max field length?	/en/reference/schema-reference.html#max-length	2
+VESPA_6	is there a max field length?	/en/schemas.html#field-size	2
+VESPA_6	is there a max field length?	/en/reference/schema-reference.html#max-occurrences	1
+VESPA_6	is there a max field length?	/en/reference/bm25.html#ranking-function	1
+VESPA_7	yql grammar 	/en/reference/query-language-reference.html#grammar	2
+VESPA_7	yql grammar 	/en/reference/query-language-reference.html#userinput	1
+VESPA_7	yql grammar 	/en/reference/query-language-reference.html#defaultindex	1
+VESPA_8	tensor ebnf 	/en/reference/tensor.html#general-literal-form	2
+VESPA_9	what is fast-search	/en/attributes.html#fast-search	2
+VESPA_9	what is fast-search	/en/performance/practical-search-performance-guide.html#searching-attribute-fields-using-fast-search	2
+VESPA_9	what is fast-search	/en/performance/feature-tuning.html#when-to-use-fast-search-for-attribute-fields	2
+VESPA_9	what is fast-search	/en/attributes.html#index-structures	2
+VESPA_10	default match mode for string 	/en/vespa8-release-notes.html#strict-mode-enabled-by-default	0
+VESPA_10	default match mode for string 	/en/schemas.html#match	1
+VESPA_10	default match mode for string 	/en/performance/feature-tuning.html#indexing-uuids	1
+VESPA_10	default match mode for string 	/en/reference/schema-reference.html#match	2
+VESPA_11	what is min-redundancy?	/en/reference/services-content.html#min-redundancy	2
+VESPA_11	what is min-redundancy?	/en/performance/sizing-examples.html#flat-distribution	1
+VESPA_11	what is min-redundancy?	/en/reference/ranking-expressions.html#min-t	0
+VESPA_12	onnx-intra-threads	/en/reference/schema-reference.html#onnx-model	2
+VESPA_12	onnx-intra-threads	/en/stateless-model-evaluation.html#onnx-inference-options	2
+VESPA_12	onnx-intra-threads	/en/onnx.html#importing-onnx-model-files	0
+VESPA_12	onnx-intra-threads	/en/reference/embedding-reference.html#embedder-onnx-reference-config	2
+VESPA_13	how to normalize bm25 	/en/reference/bm25.html#	1
+VESPA_13	how to normalize bm25 	/en/reference/bm25.html#ranking-function	1
+VESPA_13	how to normalize bm25 	/en/reference/schema-reference.html#normalizing	0
+VESPA_14	configure java gc parameters	/en/reference/default-set-metrics-reference.html#jdisc_gc_ms	0
+VESPA_14	configure java gc parameters	/en/reference/services-container.html#nodes.jvm-gc-options	2
+VESPA_14	configure java gc parameters	/en/reference/services-admin.html#logserver.jvm-gc-options	2
+VESPA_14	configure java gc parameters	/en/reference/distributor-metrics-reference.html#vds_idealstate_max_observed_time_since_last_gc_sec	0
+VESPA_15	innerproduct metric	/en/reference/schema-reference.html#prenormalized-angular	2
+VESPA_16	colbert max q length	/en/embedding.html#colbert-embedder	1
+VESPA_16	colbert max q length	/en/reference/embedding-reference.html#colbert-embedder	2
+VESPA_17	colbert maxsimilarity	/en/embedding.html#colbert-ranking	2
+VESPA_18	what is services.xml	/en/reference/services.html#	2
+VESPA_18	what is services.xml	/en/application-packages.html#services.xml	2
+VESPA_18	what is services.xml	/en/tutorials/text-search.html#services-specification	2
+VESPA_19	what is vespa	/en/features.html#what-is-vespa	2
+VESPA_20	how to set vespa deploy target	/en/reference/vespa-cli/vespa_config_set.html#set-the-target-to-vespa-cloud	2
+VESPA_20	how to set vespa deploy target	/en/operations-selfhosted/vespa-cmdline-tools.html#vespa-deploy	0
+VESPA_21	getting started with vespa	/en/getting-started.html#	2
+VESPA_21	getting started with vespa	/en/performance/valgrind.html#start-vespa-using-valgrind	0
+VESPA_21	getting started with vespa	/en/operations-selfhosted/configuration-server.html#start-sequence	0
+VESPA_21	getting started with vespa	/en/operations-selfhosted/vespa-cmdline-tools.html#vespa-start-configserver	0
+VESPA_21	getting started with vespa	/en/operations-selfhosted/vespa-cmdline-tools.html#vespa-start-services	0
+VESPA_21	getting started with vespa	/en/operations-selfhosted/docker-containers.html#start-vespa-container-with-vespa-user	0
+VESPA_21	getting started with vespa	/en/vespa-quick-start-java.html#next-steps	1
+VESPA_21	getting started with vespa	en/vespa-quick-start.html#	2
+VESPA_22	k8 vespa	/en/features.html#what-is-vespa	0
+VESPA_22	k8 vespa	/en/operations-selfhosted/using-kubernetes-with-vespa.html#	2
+VESPA_22	k8 vespa	/en/operations-selfhosted/using-kubernetes-with-vespa.html#singlenode-quickstart-with-minikube	1
+VESPA_22	k8 vespa	/en/getting-started.html#	1
+VESPA_23	mixtral context length	/en/reference/schema-reference.html#max-token-length	0
+VESPA_23	mixtral context length	/en/llms-local.html#valid-llm-models	1
+VESPA_23	mixtral context length	/en/llms-local.html#local-llm-configuration	2
+VESPA_24	xgbost trees	/en/xgboost.html#ranking-with-xgboost-models	2
+VESPA_24	xgbost trees	/en/xgboost.html#xgboost-models	2
+VESPA_24	xgbost trees	/en/lightgbm.html#	1
+VESPA_24	xgbost trees	/en/annotations.html#manipulating-a-span-tree	0
+VESPA_25	how to tune post filter thresholds	/en/reference/schema-reference.html#post-filter-threshold	2
+VESPA_25	how to tune post filter thresholds	/en/nearest-neighbor-search-guide.html#controlling-filter-behavior	2
+VESPA_25	how to tune post filter thresholds	/en/approximate-nn-hnsw.html#combining-approximate-nearest-neighbor-search-with-filters	1
+VESPA_25	how to tune post filter thresholds	/en/tutorials/news-5-recommendation.html#filtering	1
+VESPA_25	how to tune post filter thresholds	/en/reference/query-api-reference.html#ranking.matching.postfilterthreshold	2
+VESPA_25	how to tune post filter thresholds	/en/reference/schema-reference.html#approximate-threshold	1
+VESPA_25	how to tune post filter thresholds	/en/reference/services-content.html#tuning	0
+VESPA_25	how to use more threads per query	/en/performance/practical-search-performance-guide.html#multithreaded-search-and-ranking	2
+VESPA_26	how to use more threads per query	/en/performance/sizing-search.html#reduce-latency-with-multi-threaded-per-search-execution	2
+VESPA_26	how to use more threads per query	/en/reference/schema-reference.html#num-threads-per-search	2
+VESPA_26	how to use more threads per query	/en/performance/sizing-search.html#	1
+VESPA_26	how to use more threads per query	/en/reference/query-api-reference.html#ranking.matching.numthreadspersearch	2
+VESPA_26	how to use more threads per query	/en/reference/query-api-reference.html#ranking.matching	1

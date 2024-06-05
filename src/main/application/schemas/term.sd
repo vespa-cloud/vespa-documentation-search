@@ -45,18 +45,10 @@ schema term {
     }
 
     document-summary suggestion {
-        summary term type string {
-            source: term
-        }
-        summary namespace type string {
-            source: namespace
-        }
-        summary url type string {
-            source: url
-        }
-        summary type type string {
-            source: type
-        }
+        summary term {}
+        summary namespace {}
+        summary url {}
+        summary type {}
     }
 
     fieldset default {
