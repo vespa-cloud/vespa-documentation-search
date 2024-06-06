@@ -63,6 +63,28 @@ def main():
         aggregate = aggregates[profile]
         metrics_output = ', '.join([f"{metric}: {aggregate[metric]:.4f}" for metric in metrics])
         print(f"{profile}: {metrics_output}")
+    import matplotlib.pyplot as plt
+    profile_names = [profile for profile in sorted_profiles]
+    first_metric_values = [aggregates[profile][metrics[0]] for profile in sorted_profiles]
+
+
+    metric = metrics[0]
+    max_value = max(first_metric_values)
+    colors = ['skyblue' if value != max_value else 'orange' for value in first_metric_values]
+    plt.figure(figsize=(10, 5))
+    bars = plt.bar(profile_names, first_metric_values, color=colors)
+    # Add value labels to each bar
+    for bar in bars:
+      yval = bar.get_height()
+      plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.4f}', ha='center', va='bottom')
+
+    plt.xlabel('rank-profile')
+    plt.ylabel(metric)
+    plt.title(f'{metric} for different rank-profiles', fontweight="bold")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    print("Saving plot to ranking_metrics.png")
+    plt.savefig('ranking_metrics.png')
 
 if __name__ == "__main__":
     main()
