@@ -29,6 +29,9 @@ semantic: nDCG@12: 0.5800, R@12: 0.7245, Judged@12: 0.1667
 ```
 Judged gives us the percentage of judged documents in the top 12 results. We want to increase this number to increase the confidence in the ranking metrics.
 
+The script also generates a ranking metrics plot.
+![img](ranking_metrics.png)
+
 
 
 
