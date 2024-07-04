@@ -4,7 +4,7 @@
 # VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY is an organization secret -
 # this is used to deploy applications to Vespa Cloud
 
-name: Deploy vespa-documentation-search to Vespa Cloud using pyvespa
+name: (Pyvespa) Deploy vespa-documentation-search to Vespa Cloud
 on:
   workflow_dispatch:
 
@@ -37,7 +37,7 @@ jobs:
           python-version: "3.9"
       # Install dependencies
       - name: Install dependencies
-        run: pip install pyvespa vespacli
+        run: pip install pyvespa>=0.45.0 vespacli
       # Deploy to Vespa Cloud using pyvespa
       - name: Deploy to prod
         working-directory: .
