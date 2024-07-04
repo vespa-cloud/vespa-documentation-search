@@ -1,0 +1,52 @@
+# Copyright Vespa.ai. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root.
+
+# See https://cloud.vespa.ai/en/automated-deployments for details
+# VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY is an organization secret -
+# this is used to deploy applications to Vespa Cloud
+
+name: Deploy vespa-documentation-search to Vespa Cloud using pyvespa
+on:
+  workflow_dispatch:
+
+env:
+  VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Vespa uses Java 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      # Find Vespa version of current production deployment
+      - name: Find compile version
+        working-directory: .
+        run: mvn -B clean vespa:compileVersion -DapiKey="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+      # Build the application package and the tester bundle
+      - name: Build with Maven
+        working-directory: .
+        run: mvn -B package -Dvespa.compile.version="$(cat target/vespa.compile.version)"
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
+      # Install dependencies
+      - name: Install dependencies
+        run: pip install pyvespa vespacli
+      # Deploy to Vespa Cloud using pyvespa
+      - name: Deploy to prod
+        working-directory: .
+        run: |
+          python -m vespa.utils.deploy_prod \
+          --tenant vespa-team  \
+          --application vespacloud-docsearch \
+          --api-key "${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}" \
+          --application-root target/application/ \
+          --max-wait 3600 \
+          --source-url "$(git config --get remote.origin.url | sed 's+git@\(.\):\(.\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
