@@ -35,8 +35,7 @@ jobs:
         run: |
           apt update && apt -y install curl
           mkdir -p opt
-          # TODO(mpolden): Switch back to latest when CLI version 8.359+ is released
-          VESPA_CLI_VERSION=8.357.16
+          VESPA_CLI_VERSION=$(curl -fsSL https://api.github.com/repos/vespa-engine/vespa/releases/latest | grep -Po '"tag_name": "v\K.*?(?=")')
           curl -fsSL https://github.com/vespa-engine/vespa/releases/download/v${VESPA_CLI_VERSION}/vespa-cli_${VESPA_CLI_VERSION}_linux_amd64.tar.gz | \
             tar -zxf - -C opt
           ln -fs ./opt/*/bin/vespa
