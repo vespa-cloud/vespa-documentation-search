@@ -1,0 +1,6 @@
+<query-profile id="thread">
+    <field name="searchChain">thread</field>
+    <field name="presentation.timing">true</field>
+    <field name="model.language">en</field>
+</query-profile>
+   

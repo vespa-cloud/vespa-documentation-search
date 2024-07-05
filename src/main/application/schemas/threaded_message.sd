@@ -1,0 +1,41 @@
+schema threaded_message {
+
+    document threaded_message {
+        field threaded_message_id type string {
+            indexing: summary | attribute| index
+        }
+
+        field thread_ref type reference<thread> {
+            indexing: summary | attribute
+        }
+
+        field text type string {
+            indexing: summary | attribute | index
+        }
+
+        field user_id type string {
+            indexing: summary | attribute
+        }
+
+        field edited type bool {
+            indexing: summary
+        }
+    }
+
+    fieldset default {
+        fields: threaded_message_id, text
+    }
+
+    fieldset thread_id {
+        fields: thread_id
+    }
+
+    import field thread_ref.thread_id as thread_id {}
+    import field thread_ref.user_id as parent_user_id {}
+
+    rank-profile default {
+        first-phase {
+            expression: nativeRank
+        }
+    }
+}

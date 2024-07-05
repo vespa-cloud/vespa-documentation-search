@@ -1,0 +1,19 @@
+schema thread {
+    document thread {
+        field thread_id type string {
+            indexing: summary | attribute
+        }
+
+        field channel_id type string {
+            indexing: summary | attribute
+        }
+
+        field user_id type string {
+            indexing: summary | attribute
+        }
+    }
+
+    fieldset default {
+        fields: thread_id, channel_id
+    }
+}
