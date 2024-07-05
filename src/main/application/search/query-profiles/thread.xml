@@ -2,5 +2,5 @@
     <field name="searchChain">thread</field>
     <field name="presentation.timing">true</field>
     <field name="model.language">en</field>
+    <field name="ranking.profile">hybrid2</field>
 </query-profile>
-   

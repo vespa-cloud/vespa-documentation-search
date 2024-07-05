@@ -30,8 +30,9 @@ public class ThreadSearcher extends Searcher {
 
     @Override
     public Result search(Query query, Execution execution) {
-        Result firstHit = getFirst(query, execution);
-        if (firstHit.getTotalHitCount() <= 0) return firstHit;
+        Result firstHit = getFirst(query, execution, 12);
+        return firstHit;
+        /*if (firstHit.getTotalHitCount() <= 0) return firstHit;
 
         execution.fill(firstHit);
 
@@ -40,10 +41,10 @@ public class ThreadSearcher extends Searcher {
 
         Query threadQuery = new Query();
         threadQuery.getModel().getQueryTree().setRoot(new com.yahoo.prelude.query.WordItem(threadRef, "thread_ref"));
-        return execution.search(threadQuery);
+        return execution.search(threadQuery);*/
     }
 
-    Result getFirst(Query query, Execution execution) {
+    Result getFirst(Query query, Execution execution, int hits) {
         String queryString = query.getModel().getQueryString();
         if (queryString == null || queryString.isBlank())
             return new Result(query);
@@ -51,7 +52,7 @@ public class ThreadSearcher extends Searcher {
         Embedder.Context context = new Embedder.Context("query");
         Tensor embedding = embedder.embed("query: " + queryString, context, tensorType);
         buildQuery(embedding, queryString, query);
-        query.setHits(1);
+        query.setHits(hits);
         return execution.search(query);
     }
 
@@ -62,18 +63,13 @@ public class ThreadSearcher extends Searcher {
                 weakAndItem.addItem(new WordItem(term, true));
         }
 
-        /*NearestNeighborItem paragraphQuery = new NearestNeighborItem("embedding", "q");
+        NearestNeighborItem paragraphQuery = new NearestNeighborItem("text_embedding", "q");
         paragraphQuery.setTargetNumHits(100);
-        query.getRanking().getFeatures().put("query(q)", embedding);
-
-        NearestNeighborItem questionQuery = new NearestNeighborItem("question_embedding", "q");
-        questionQuery.setTargetNumHits(100);
         query.getRanking().getFeatures().put("query(q)", embedding);
 
         OrItem hybrid = new OrItem();
         hybrid.addItem(weakAndItem);
         hybrid.addItem(paragraphQuery);
-        hybrid.addItem(questionQuery);*/
 
         WordItem exact = new WordItem(queryStr, "text", true);
         RankItem rankItem = new RankItem();
