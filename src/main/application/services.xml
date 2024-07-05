@@ -26,6 +26,10 @@
             <chain id="llmsearch" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+            <chain id="llmsearchslack" inherits="vespa">
+                <searcher id="ai.vespa.cloud.docsearch.LLMForSlackSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+
 
             <chain id="ragsearch" inherits="vespa">
                 <searcher id="ai.vespa.search.llm.RAGSearcher">
@@ -34,7 +38,7 @@
                         <promptTemplate>files/prompt.txt</promptTemplate>
                     </config>
                 </searcher>
-                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
+                <searcher id="ai.vespa.cloud.docsearch.LLMForSlackSearcher" bundle="vespacloud-docsearch"/>
             </chain>
 
         </search>

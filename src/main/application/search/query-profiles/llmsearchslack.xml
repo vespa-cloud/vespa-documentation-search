@@ -1,0 +1,12 @@
+<!-- Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root. -->
+<query-profile id="llmsearchslack">
+ <field name="searchChain">llmsearchslack</field>
+ <field name="model.restrict">paragraph</field>
+ <field name="ranking.profile">hybrid2</field>
+ <field name="hits">12</field>
+ <field name="model.locale">en-us</field>
+ <field name="collapse.summary">short-summary</field>
+ <field name="collapsefield">doc_id</field>
+ <field name="collapsesize">3</field>
+ <field name="presentation.timing">true</field>
+</query-profile>
