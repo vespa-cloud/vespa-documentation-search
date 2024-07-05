@@ -7,6 +7,9 @@
 name: (Pyvespa) Deploy vespa-documentation-search to Vespa Cloud
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}

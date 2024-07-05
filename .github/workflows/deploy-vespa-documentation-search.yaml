@@ -6,11 +6,11 @@
 
 name: Deploy vespa-documentation-search to Vespa Cloud
 on:
-  # push: Disable to trigger pyvespa deployment instead
-  #   branches: [ main ]
-  schedule:
-    # 5:40 UTC daily
-    - cron: "40 5 * * *"
+  push:
+    branches: []
+  # schedule:
+  #   # 5:40 UTC daily
+  #   - cron: "40 5 * * *"
 
 env:
   VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}
