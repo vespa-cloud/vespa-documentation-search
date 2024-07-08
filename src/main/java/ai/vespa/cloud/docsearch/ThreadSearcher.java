@@ -29,8 +29,8 @@ public class ThreadSearcher extends Searcher {
     @Override
     public Result search(Query query, Execution execution) {
         Result firstHit = getFirst(query, execution, 1);
-        return firstHit;
-        //return searchForThread(firstHit, query, execution);
+        //return firstHit;
+        return searchForThread(firstHit, query, execution);
     }
 
     private Result searchForThread(Result firstHit, Query query, Execution execution) {
