@@ -4,5 +4,4 @@
     <field name="model.language">en</field>
     <field name="ranking.profile">hybrid2thread</field>
     <field name="model.restrict">threaded_message</field>
-    <field name="queryId">0</field>
 </query-profile>

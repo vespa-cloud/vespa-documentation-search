@@ -29,8 +29,8 @@ public class ThreadSearcher extends Searcher {
     @Override
     public Result search(Query query, Execution execution) {
         Result firstHit = getFirst(query, execution, 1);
-        //return firstHit;
-        return searchForThread(firstHit, query, execution);
+        return firstHit;
+        //return searchForThread(firstHit, query, execution);
     }
 
     private Result searchForThread(Result firstHit, Query query, Execution execution) {
@@ -87,10 +87,10 @@ public class ThreadSearcher extends Searcher {
 
         AndItem finalQuery = new AndItem();
         finalQuery.addItem(rankItem);
-        var queryId = query.properties().get("queryId");
-        if (queryId != null) {
+        var threadId = query.properties().get("threadId");
+        if (threadId != null) {
             NotItem notItem = new NotItem();
-            notItem.addNegativeItem(new WordItem((String) queryId, "threaded_message_id", true));
+            notItem.addNegativeItem(new WordItem((String) threadId, "thread_ref", true));
             finalQuery.addItem(notItem);
         }
 

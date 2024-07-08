@@ -76,7 +76,6 @@ schema threaded_message {
 
         match-features {
             scaled_bm25_text
-            bm25(text)
             semantic_text
         }
     }
