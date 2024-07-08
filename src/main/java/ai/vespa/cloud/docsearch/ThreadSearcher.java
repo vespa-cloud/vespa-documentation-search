@@ -13,8 +13,6 @@ import com.yahoo.search.result.Hit;
 import com.yahoo.tensor.Tensor;
 import com.yahoo.tensor.TensorType;
 
-import java.util.List;
-
 public class ThreadSearcher extends Searcher {
 
     private final Linguistics linguistics;
@@ -85,10 +83,18 @@ public class ThreadSearcher extends Searcher {
         RankItem rankItem = new RankItem();
         rankItem.addItem(hybrid);
 
-        // If exact matching is required, it can be added as another item in the RankItem
         WordItem exact = new WordItem(queryStr, "text", true);
         rankItem.addItem(exact);
 
-        query.getModel().getQueryTree().setRoot(rankItem);
+        AndItem finalQuery = new AndItem();
+        finalQuery.addItem(rankItem);
+        var queryId = query.properties().get("queryId");
+        if (queryId != null) {
+            NotItem notItem = new NotItem();
+            notItem.addNegativeItem(new WordItem((String) queryId, "threaded_message_id", true));
+            finalQuery.addItem(notItem);
+        }
+
+        query.getModel().getQueryTree().setRoot(finalQuery);
     }
 }
