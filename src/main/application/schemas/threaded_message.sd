@@ -1,8 +1,12 @@
 schema threaded_message {
 
+    field language type string {
+        indexing: "en" | set_language
+    }
+
     document threaded_message {
         field threaded_message_id type string {
-            indexing: summary | attribute| index
+            indexing: summary | attribute | index
         }
 
         field thread_ref type reference<thread> {
@@ -12,6 +16,7 @@ schema threaded_message {
         field text type string {
             indexing: summary | attribute | index
             index: enable-bm25
+            stemming: best
         }
 
         field user_id type string {
@@ -23,61 +28,56 @@ schema threaded_message {
         }
     }
 
-
-  field text_embedding type tensor<float>(x[384]) {
-       indexing: "phrase: " . (input text || "") | embed | attribute
-       attribute {
-           distance-metric: angular
-       }
-   }
-
+    field text_embedding type tensor<float>(x[384]) {
+        indexing: input text | embed embedder | attribute | index
+        attribute {
+            distance-metric: angular
+        }
+    }
 
     fieldset default {
         fields: text
     }
 
     fieldset thread_id {
-        fields: thread_id
+        fields: threaded_message_id
     }
 
     import field thread_ref.thread_id as thread_id {}
     import field thread_ref.user_id as parent_user_id {}
 
-
     document-summary short-summary {
-        from-disk
         summary text {}
         summary thread_ref {}
     }
 
-     rank-profile hybrid2thread {
+    rank-profile hybrid2thread {
         inputs {
             query(q) tensor<float>(x[384])
             query(semantic_weight) double: 0.6
         }
+
         function scale(val) {
-            expression: 2*atan(val/4)/(3.14159)
+            expression: 2 * atan(val / 4) / 3.14159
         }
 
-         function semantic_combined() {
-            expression:max(cos(distance(field, text_embedding)),0)
-         }
+       function semantic_text() {
+           expression: cos(distance(field, text_embedding))
+       }
 
-         function keywords() {
+        function scaled_bm25_text() {
             expression: scale(bm25(text))
-         }
+        }
 
-         first-phase {
-            expression {
-                query(semantic_weight)*semantic_combined + (1 - query(semantic_weight))*keywords
-            }
+        first-phase {
+            expression: query(semantic_weight) * semantic_text + (1 - query(semantic_weight)) * scaled_bm25_text
             rank-score-drop-limit: 0.0
-         }
-         match-features {
-            queryTermCount
-            keywords
+        }
+
+        match-features {
+            scaled_bm25_text
             bm25(text)
-            semantic_combined
-         }
-     }
+            semantic_text
+        }
+    }
 }

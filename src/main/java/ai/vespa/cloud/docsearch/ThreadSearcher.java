@@ -17,10 +17,10 @@ import java.util.List;
 
 public class ThreadSearcher extends Searcher {
 
-    private Linguistics linguistics;
-    private Embedder embedder;
+    private final Linguistics linguistics;
+    private final Embedder embedder;
 
-    private TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
+    private final TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
 
     @Inject
     public ThreadSearcher(Linguistics linguistics, ComponentRegistry<Embedder> embedders) {
@@ -30,51 +30,65 @@ public class ThreadSearcher extends Searcher {
 
     @Override
     public Result search(Query query, Execution execution) {
+        // Get the initial result to check if there are any hits
         Result firstHit = getFirst(query, execution, 12);
-        return firstHit;
-        /*if (firstHit.getTotalHitCount() <= 0) return firstHit;
+        //return firstHit;
+        return searchForThread(firstHit, query, execution);
+    }
+
+    private Result searchForThread(Result firstHit, Query query, Execution execution) {
+        if (firstHit.getTotalHitCount() <= 0) return firstHit;
+
+        // Uncomment and modify this part if you need to use a thread reference
 
         execution.fill(firstHit);
-
         Hit topHit = firstHit.hits().get(0);
         String threadRef = (String) topHit.getField("thread_ref");
 
         Query threadQuery = new Query();
         threadQuery.getModel().getQueryTree().setRoot(new com.yahoo.prelude.query.WordItem(threadRef, "thread_ref"));
-        return execution.search(threadQuery);*/
+        return execution.search(threadQuery);
     }
 
-    Result getFirst(Query query, Execution execution, int hits) {
+    private Result getFirst(Query query, Execution execution, int hits) {
         String queryString = query.getModel().getQueryString();
-        if (queryString == null || queryString.isBlank())
+        if (queryString == null || queryString.isBlank()) {
             return new Result(query);
+        }
         queryString = queryString.trim();
+
         Embedder.Context context = new Embedder.Context("query");
         Tensor embedding = embedder.embed("query: " + queryString, context, tensorType);
+
         buildQuery(embedding, queryString, query);
         query.setHits(hits);
+
         return execution.search(query);
     }
 
     private void buildQuery(Tensor embedding, String queryStr, Query query) {
         WeakAndItem weakAndItem = new WeakAndItem(100);
         for (String term : Question.tokenize(queryStr, linguistics)) {
-            if (!Question.isStopWord(term))
+            if (!Question.isStopWord(term)) {
                 weakAndItem.addItem(new WordItem(term, true));
+            }
         }
 
-        NearestNeighborItem paragraphQuery = new NearestNeighborItem("text_embedding", "q");
-        paragraphQuery.setTargetNumHits(100);
+        NearestNeighborItem nearestNeighborItem = new NearestNeighborItem("text_embedding", "q");
+        nearestNeighborItem.setTargetNumHits(100);
         query.getRanking().getFeatures().put("query(q)", embedding);
 
         OrItem hybrid = new OrItem();
         hybrid.addItem(weakAndItem);
-        hybrid.addItem(paragraphQuery);
+        hybrid.addItem(nearestNeighborItem);
 
-        WordItem exact = new WordItem(queryStr, "text", true);
         RankItem rankItem = new RankItem();
+        rankItem.addItem(hybrid);
 
+        // If exact matching is required, it can be added as another item in the RankItem
+        WordItem exact = new WordItem(queryStr, "text", true);
         rankItem.addItem(exact);
+
         query.getModel().getQueryTree().setRoot(rankItem);
     }
 }
