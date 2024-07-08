@@ -14,8 +14,6 @@ schema threaded_message {
             index: enable-bm25
         }
 
-
-
         field user_id type string {
             indexing: summary | attribute
         }
@@ -35,7 +33,7 @@ schema threaded_message {
 
 
     fieldset default {
-        fields: threaded_message_id, text
+        fields: text
     }
 
     fieldset thread_id {
@@ -49,48 +47,10 @@ schema threaded_message {
     document-summary short-summary {
         from-disk
         summary text {}
+        summary thread_ref {}
     }
 
-    fieldset default {
-        fields: text
-    }
-
-    rank-profile bm25 {
-        first-phase {
-            expression: bm25(text)
-        }
-    }
-
-    rank-profile semantic inherits default {
-        inputs {
-            query(q) tensor<float>(x[384])
-        }
-        first-phase {
-            expression: cos(distance(field,text_embedding))
-        }
-    }
-
-    rank-profile hybrid inherits semantic {
-        inputs {
-            query(q) tensor<float>(x[384])
-            query(sw) double: 0.6
-            query(ew) double: 0.2
-        }
-
-        function semantic() {
-            expression: cos(distance(field, text_embedding))
-        }
-
-        function keywords() {
-            expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + query(ew)*elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
-        }
-        first-phase {
-            expression: query(sw)*(semantic_question + semantic) + (1 - query(sw))*keywords
-        }
-        match-features: keywords semantic semantic_question nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
-    }
-
-     rank-profile hybrid2 {
+     rank-profile hybrid2thread {
         inputs {
             query(q) tensor<float>(x[384])
             query(semantic_weight) double: 0.6
@@ -99,36 +59,12 @@ schema threaded_message {
             expression: 2*atan(val/4)/(3.14159)
         }
 
-        function scaled_bm25_content() {
-            expression: scale(bm25(content))
-        }
-
-        function scaled_bm25_title() {
-            expression: scale(bm25(title))
-        }
-
-        function scaled_bm25_path() {
-            expression: scale(bm25(path))
-        }
-
-        function combined_bm25() {
-            expression: 0.3*scale(bm25(title)) + 0.6*scale(bm25(content)) + 0.1*scale(bm25(path))
-        }
-
-         function semantic_content() {
-            expression: cos(distance(field, embedding))
-         }
-
-         function semantic_question() {
-            expression: max(cos(distance(field, question_embedding)),0)
-         }
-
          function semantic_combined() {
-            expression: 0.5*semantic_content + 0.5*semantic_question
+            expression:max(cos(distance(field, text_embedding)),0)
          }
 
          function keywords() {
-            expression: ( 0.8*combined_bm25  + 0.1*elementCompleteness(questions).completeness) + 0.1*elementCompleteness(questions_exact).completeness
+            expression: scale(bm25(text))
          }
 
          first-phase {
@@ -140,24 +76,8 @@ schema threaded_message {
          match-features {
             queryTermCount
             keywords
-            bm25(title)
-            scaled_bm25_title
-            bm25(content)
-            scaled_bm25_content
-            bm25(path)
-            scaled_bm25_path
-            combined_bm25
-            semantic_question
-            semantic_content
+            bm25(text)
             semantic_combined
-            elementCompleteness(questions).completeness
-            elementCompleteness(questions_exact).completeness
          }
      }
-
-     rank-profile hybrid3 inherits hybrid2 {
-        global-phase {
-            expression: reciprocal_rank(semantic_combined) + reciprocal_rank(keywords)
-        }
-
 }
