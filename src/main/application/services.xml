@@ -29,10 +29,13 @@
             <chain id="llmsearchslack" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.LLMForSlackSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+            <chain id="threadedmessage" inherits="vespa">
+                <searcher id="ai.vespa.cloud.docsearch.ThreadedMessageSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+
             <chain id="thread" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
-
 
             <chain id="ragsearch" inherits="vespa">
                 <searcher id="ai.vespa.search.llm.RAGSearcher">

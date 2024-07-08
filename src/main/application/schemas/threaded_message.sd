@@ -74,10 +74,6 @@ schema threaded_message {
             rank-score-drop-limit: 0.0
         }
 
-        second-phase {
-            expression: random
-        }
-
         match-features {
             scaled_bm25_text
             semantic_text
