@@ -28,8 +28,7 @@ public class ThreadSearcher extends Searcher {
 
     @Override
     public Result search(Query query, Execution execution) {
-        // Get the initial result to check if there are any hits
-        Result firstHit = getFirst(query, execution, 12);
+        Result firstHit = getFirst(query, execution, 1);
         //return firstHit;
         return searchForThread(firstHit, query, execution);
     }
