@@ -39,6 +39,8 @@ public class ThreadSearcher extends Searcher {
 
         RootGroup resultGroup = request.getResultGroup(result);
 
+        if (resultGroup == null) return result;
+
         Result newResult = new Result(query);
 
         for (Hit h : resultGroup.getGroupList("thread_id")) {
