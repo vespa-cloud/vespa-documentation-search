@@ -51,7 +51,7 @@ schema threaded_message {
         summary thread_ref {}
     }
 
-    rank-profile hybrid2thread {
+    rank-profile hybrid2 {
         inputs {
             query(q) tensor<float>(x[384])
             query(semantic_weight) double: 0.6

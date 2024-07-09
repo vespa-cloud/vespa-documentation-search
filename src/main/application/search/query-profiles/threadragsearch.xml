@@ -2,7 +2,7 @@
 <query-profile id="threadragsearch">
  <field name="searchChain">threadragsearch</field>
  <field name="model.restrict">threaded_message</field>
- <field name="ranking.profile">hybrid2thread</field>
+ <field name="ranking.profile">hybrid2</field>
  <field name="hits">12</field>
  <field name="model.locale">en-us</field>
  <field name="collapse.summary">short-summary</field>
