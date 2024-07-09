@@ -48,12 +48,11 @@
                 <searcher id="ai.vespa.search.llm.RAGSearcher">
                     <config name="ai.vespa.search.llm.llm-searcher">
                         <providerId>openai</providerId>
-                        <promptTemplate>files/prompt.txt</promptTemplate>
+                        <promptTemplate>files/prompt_thread.txt</promptTemplate>
                     </config>
                 </searcher>
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
-
         </search>
         <document-api/>
         <nodes count="2" exclusive="true">
