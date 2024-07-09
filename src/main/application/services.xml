@@ -26,13 +26,10 @@
             <chain id="llmsearch" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
-            <chain id="llmsearchslack" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.LLMForSlackSearcher" bundle="vespacloud-docsearch"/>
-            </chain>
+
             <chain id="threadedmessage" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadedMessageSearcher" bundle="vespacloud-docsearch"/>
             </chain>
-
             <chain id="thread" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
@@ -44,7 +41,17 @@
                         <promptTemplate>files/prompt.txt</promptTemplate>
                     </config>
                 </searcher>
-                <searcher id="ai.vespa.cloud.docsearch.LLMForSlackSearcher" bundle="vespacloud-docsearch"/>
+                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+
+            <chain id="threadragsearch" inherits="vespa">
+                <searcher id="ai.vespa.search.llm.RAGSearcher">
+                    <config name="ai.vespa.search.llm.llm-searcher">
+                        <providerId>openai</providerId>
+                        <promptTemplate>files/prompt.txt</promptTemplate>
+                    </config>
+                </searcher>
+                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
 
         </search>
