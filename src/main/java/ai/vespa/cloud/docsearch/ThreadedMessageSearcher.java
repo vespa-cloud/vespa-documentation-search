@@ -5,6 +5,7 @@ import com.yahoo.component.provider.ComponentRegistry;
 import com.yahoo.language.Linguistics;
 import com.yahoo.language.process.Embedder;
 import com.yahoo.prelude.query.*;
+import com.yahoo.search.query.Model;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
 import com.yahoo.search.Searcher;
@@ -37,6 +38,11 @@ public class ThreadedMessageSearcher extends Searcher {
         Tensor embedding = embedder.embed("query: " + queryString, context, tensorType);
 
         buildQuery(embedding, queryString, query);
+
+        Model model = query.getModel();
+        Item root = model.getQueryTree().getRoot();
+        root = new WordItem("threaded_message", "doc_type");
+        model.getQueryTree().setRoot(root);
         return execution.search(query);
     }
 

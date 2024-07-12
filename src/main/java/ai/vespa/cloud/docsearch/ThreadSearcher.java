@@ -11,6 +11,7 @@ import com.yahoo.search.grouping.result.GroupList;
 import com.yahoo.search.grouping.result.RootGroup;
 import com.yahoo.search.result.Hit;
 import com.yahoo.search.searchchain.Execution;
+import java.util.ArrayList;
 
 public class ThreadSearcher extends Searcher {
 
@@ -47,12 +48,17 @@ public class ThreadSearcher extends Searcher {
         for (Hit h : groupList) {
             var thread = (Group) h;
             Hit hit = new Hit(thread.getGroupId().toString().substring("group:string:".length()));
+            var docIds = new ArrayList<String>();
+            var conversation = new ArrayList<String>();
             for (Hit h2 : thread.getGroupList("threaded_message_id")) {
                 var message_id = (Group) h2;
                 for (Hit h3 : message_id.getGroupList("text")) {
-                    hit.setField(message_id.getDisplayId().substring("group:string:".length()), h3.getDisplayId().substring("group:string:".length()));
+                    conversation.add(h3.getDisplayId().substring("group:string:".length()));
                 }
+                docIds.add("id:slack-p:threaded_message::" + message_id.getDisplayId().substring("group:string:".length()));
             }
+            hit.setField("conversation", conversation);
+            hit.setField("docids", docIds);
             if (hit.fields().values().size() > 1) {
                 newResult.hits().add(hit);
             }

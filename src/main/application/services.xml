@@ -34,7 +34,7 @@
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
             <chain id="combinedllmsearch" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
+                <searcher id="ai.vespa.cloud.docsearch.CombinedSearcher" bundle="vespacloud-docsearch"/>
             </chain>
 
 
@@ -66,6 +66,8 @@
                     </config>
                 </searcher>
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
+                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
+
             </chain>
         </search>
         <document-api/>
