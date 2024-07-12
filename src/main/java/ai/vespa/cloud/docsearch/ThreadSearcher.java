@@ -38,12 +38,13 @@ public class ThreadSearcher extends Searcher {
         execution.fill(result);
 
         RootGroup resultGroup = request.getResultGroup(result);
-
         if (resultGroup == null) return result;
 
-        Result newResult = new Result(query);
+        var groupList = resultGroup.getGroupList("thread_id");
+        if (groupList == null) return result;
 
-        for (Hit h : resultGroup.getGroupList("thread_id")) {
+        Result newResult = new Result(query);
+        for (Hit h : groupList) {
             var thread = (Group) h;
             Hit hit = new Hit(thread.getGroupId().toString().substring("group:string:".length()));
             for (Hit h2 : thread.getGroupList("threaded_message_id")) {
