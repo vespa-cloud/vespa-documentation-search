@@ -33,6 +33,10 @@
             <chain id="thread" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+            <chain id="combinedllmsearch" inherits="vespa">
+                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
+            </chain>
+
 
             <chain id="ragsearch" inherits="vespa">
                 <searcher id="ai.vespa.search.llm.RAGSearcher">
