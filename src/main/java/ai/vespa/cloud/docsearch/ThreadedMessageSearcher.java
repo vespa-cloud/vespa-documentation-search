@@ -5,7 +5,6 @@ import com.yahoo.component.provider.ComponentRegistry;
 import com.yahoo.language.Linguistics;
 import com.yahoo.language.process.Embedder;
 import com.yahoo.prelude.query.*;
-import com.yahoo.search.query.Model;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
 import com.yahoo.search.Searcher;
