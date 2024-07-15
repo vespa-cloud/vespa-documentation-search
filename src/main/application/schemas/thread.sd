@@ -10,13 +10,7 @@ schema thread {
 
         field user_id type string {
             indexing: summary | attribute
-        }
-
-        struct message {
-            field text type string {}
-            field message_id type string {}
-            field user_id type string {}
-        }
+        } 
     }
 
     fieldset default {
