@@ -51,17 +51,6 @@
                 </searcher>
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
-
-            <chain id="threadragsearch" inherits="vespa">
-                <searcher id="ai.vespa.search.llm.RAGSearcher">
-                    <config name="ai.vespa.search.llm.llm-searcher">
-                        <providerId>openai</providerId>
-                        <promptTemplate>files/prompt_thread.txt</promptTemplate>
-                    </config>
-                </searcher>
-                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
-            </chain>
-
             <chain id="combinedragsearch" inherits="vespa">
                 <searcher id="ai.vespa.search.llm.RAGSearcher">
                     <config name="ai.vespa.search.llm.llm-searcher">
