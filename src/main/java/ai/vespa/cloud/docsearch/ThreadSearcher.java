@@ -1,7 +1,6 @@
 package ai.vespa.cloud.docsearch;
 
 import com.yahoo.component.annotation.Inject;
-import com.yahoo.processing.request.ErrorMessage;
 import com.yahoo.search.Query;
 import com.yahoo.search.Result;
 import com.yahoo.search.Searcher;
@@ -10,12 +9,9 @@ import com.yahoo.search.grouping.request.*;
 import com.yahoo.search.grouping.result.Group;
 import com.yahoo.search.grouping.result.GroupList;
 import com.yahoo.search.grouping.result.HitList;
-import com.yahoo.search.grouping.result.RootGroup;
-import com.yahoo.search.grouping.request.RelevanceValue;
 import com.yahoo.search.result.Hit;
 import com.yahoo.search.result.HitGroup;
 import com.yahoo.search.searchchain.Execution;
-import java.util.ArrayList;
 
 public class ThreadSearcher extends Searcher {
 
