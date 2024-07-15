@@ -114,7 +114,7 @@
         </documents>
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
-        </nodes>
+        </nodes>      
     </content>
 
 </services>
