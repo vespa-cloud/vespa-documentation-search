@@ -33,8 +33,12 @@
             <chain id="thread" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
             </chain>
+
             <chain id="combinedllmsearch" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.CombinedSearcher" bundle="vespacloud-docsearch"/>
+                <federation id="combination">
+                    <source idref="thread"/>
+                    <source idref="llmsearch" /> 
+                </federation>
             </chain>
 
 
@@ -65,9 +69,10 @@
                         <promptTemplate>files/prompt_combined.txt</promptTemplate>
                     </config>
                 </searcher>
-                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
-                <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
-
+                <federation id="combinedragsearchsource">
+                    <source idref="thread"/>
+                    <source idref="llmsearch" /> 
+                </federation>
             </chain>
         </search>
         <document-api/>

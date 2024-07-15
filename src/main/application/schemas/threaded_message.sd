@@ -62,7 +62,7 @@ schema threaded_message {
     rank-profile hybrid2 {
         inputs {
             query(q) tensor<float>(x[384])
-            query(semantic_weight) double: 0.6
+            query(semantic_weight) double: 0.7
         }
 
         function scale(val) {
@@ -78,7 +78,7 @@ schema threaded_message {
         }
 
         function normalized_difference(p,n) {
-            expression: if(p==0&&n==0, 0, (p-n)/(p+n))
+            expression: 0.5 * if(p==0&&n==0, 0, (p-n)/(p+n)) + 0.5 # from 0 to 1 and 0.5 if there are no feedback yet.
         }
 
         function normalized_difference_feedback() {
@@ -86,7 +86,7 @@ schema threaded_message {
         }
 
         first-phase {
-            expression: 0.3333 * query(semantic_weight) * semantic_text + 0.3333 * (1 - query(semantic_weight)) * scaled_bm25_text + 0.3333 * normalized_difference_feedback
+            expression: (query(semantic_weight) * semantic_text + (1 - query(semantic_weight)) * scaled_bm25_text) * 0.9 + 0.1 * normalized_difference_feedback
             rank-score-drop-limit: 0.0
         }
 

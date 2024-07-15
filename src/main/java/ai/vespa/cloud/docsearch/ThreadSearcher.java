@@ -24,46 +24,47 @@ public class ThreadSearcher extends Searcher {
 
     @Override
     public Result search(Query query, Execution execution) {
-        GroupingRequest request = GroupingRequest.newInstance(query);
-        request.setRootOperation(
-                new AllOperation().setGroupBy(new AttributeValue("thread_id"))
-                        .addChild(new EachOperation()
-                                .addChild(
-                                        new AllOperation()
-                                                .setGroupBy(new AttributeValue("threaded_message_id"))
-                                                .addOrderBy(new MaxAggregator(new AttributeValue("threaded_message_id")))
-                                                .addChild(new EachOperation()
-                                                        .addChild(new AllOperation()
-                                                                .setGroupBy(new AttributeValue("text")).addChild(new EachOperation().addOutput(new CountAggregator())))))));
+        // GroupingRequest request = GroupingRequest.newInstance(query);
+        // request.setRootOperation(
+        //         new AllOperation().setGroupBy(new AttributeValue("thread_id"))
+        //                 .addChild(new EachOperation()
+        //                         .addChild(
+        //                                 new AllOperation()
+        //                                         .setGroupBy(new AttributeValue("threaded_message_id"))
+        //                                         .addOrderBy(new MaxAggregator(new AttributeValue("threaded_message_id")))
+        //                                         .addChild(new EachOperation()
+        //                                                 .addChild(new AllOperation()
+        //                                                         .setGroupBy(new AttributeValue("text")).addChild(new EachOperation().addOutput(new CountAggregator())))))));
         Result result = threadedMessageSearcher.search(query, execution);
         execution.fill(result);
-
-        RootGroup resultGroup = request.getResultGroup(result);
-        if (resultGroup == null) return result;
-
-        var groupList = resultGroup.getGroupList("thread_id");
-        if (groupList == null) return result;
-
-        Result newResult = new Result(query);
-        for (Hit h : groupList) {
-            var thread = (Group) h;
-            Hit hit = new Hit(thread.getGroupId().toString().substring("group:string:".length()));
-            var docIds = new ArrayList<String>();
-            var conversation = new ArrayList<String>();
-            for (Hit h2 : thread.getGroupList("threaded_message_id")) {
-                var message_id = (Group) h2;
-                for (Hit h3 : message_id.getGroupList("text")) {
-                    conversation.add(h3.getDisplayId().substring("group:string:".length()));
-                }
-                docIds.add("id:slack-p:threaded_message::" + message_id.getDisplayId().substring("group:string:".length()));
-            }
-            hit.setField("conversation", conversation);
-            hit.setField("docids", docIds);
-            if (hit.fields().values().size() > 1) {
-                newResult.hits().add(hit);
-            }
-        }
-
-        return newResult;
+        return result;
+        //
+        // RootGroup resultGroup = request.getResultGroup(result);
+        // if (resultGroup == null) return result;
+        //
+        // var groupList = resultGroup.getGroupList("thread_id");
+        // if (groupList == null) return result;
+        //
+        // Result newResult = new Result(query);
+        // for (Hit h : groupList) {
+        //     var thread = (Group) h;
+        //     Hit hit = new Hit(thread.getGroupId().toString().substring("group:string:".length()));
+        //     var docIds = new ArrayList<String>();
+        //     var conversation = new ArrayList<String>();
+        //     for (Hit h2 : thread.getGroupList("threaded_message_id")) {
+        //         var message_id = (Group) h2;
+        //         for (Hit h3 : message_id.getGroupList("text")) {
+        //             conversation.add(h3.getDisplayId().substring("group:string:".length()));
+        //         }
+        //         docIds.add("id:slack-p:threaded_message::" + message_id.getDisplayId().substring("group:string:".length()));
+        //     }
+        //     hit.setField("conversation", conversation);
+        //     hit.setField("docids", docIds);
+        //     if (hit.fields().values().size() > 1) {
+        //         newResult.hits().add(hit);
+        //     }
+        // }
+        //
+        // return newResult;
     }
 }

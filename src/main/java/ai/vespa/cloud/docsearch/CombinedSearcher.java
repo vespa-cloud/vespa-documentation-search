@@ -16,15 +16,25 @@ import java.util.ArrayList;
 public class CombinedSearcher extends Searcher {
 
     private final ThreadSearcher threadSearcher;
+    private final LLMSearcher llmSearcher;
 
     @Inject
-    public CombinedSearcher(ThreadSearcher threadSearcher) {
+    public CombinedSearcher(ThreadSearcher threadSearcher, LLMSearcher llmSearcher) {
         this.threadSearcher = threadSearcher;
+        this.llmSearcher = llmSearcher;
     }
 
     @Override
     public Result search(Query query, Execution execution) {
+        Result paragraphResult = llmSearcher.search(query, execution);
         Result result = threadSearcher.search(query, execution);
+        for (Hit hit : result.hits()) {
+            hit.setField("hello", paragraphResult.hits().size());
+        }
+
+        for (Hit hit : paragraphResult.hits()) {
+            result.hits().add(hit);
+        }
         return result;
     }
 }

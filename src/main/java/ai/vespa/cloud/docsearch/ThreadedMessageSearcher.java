@@ -28,6 +28,7 @@ public class ThreadedMessageSearcher extends Searcher {
 
     @Override
     public Result search(Query query, Execution execution) {
+        var root = query.getModel().getQueryTree().getRoot();
         String queryString = query.getModel().getQueryString();
         if (queryString == null || queryString.isBlank()) {
             return new Result(query);
@@ -38,12 +39,9 @@ public class ThreadedMessageSearcher extends Searcher {
         Tensor embedding = embedder.embed("query: " + queryString, context, tensorType);
 
         buildQuery(embedding, queryString, query);
-
-        Model model = query.getModel();
-        Item root = model.getQueryTree().getRoot();
-        root = new WordItem("threaded_message", "doc_type");
-        model.getQueryTree().setRoot(root);
-        return execution.search(query);
+        Result r =  execution.search(query);
+        query.getModel().getQueryTree().setRoot(root);
+        return r;
     }
 
     private void buildQuery(Tensor embedding, String queryStr, Query query) {
@@ -68,6 +66,10 @@ public class ThreadedMessageSearcher extends Searcher {
         WordItem exact = new WordItem(queryStr, "text", true);
         rankItem.addItem(exact);
 
-        query.getModel().getQueryTree().setRoot(rankItem);
+        AndItem root = new AndItem();
+        root.addItem(rankItem);
+        root.addItem(new WordItem("threaded_message", "sddocname", true));
+
+        query.getModel().getQueryTree().setRoot(root);
     }
 }
