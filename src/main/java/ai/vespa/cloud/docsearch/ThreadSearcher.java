@@ -29,15 +29,16 @@ public class ThreadSearcher extends Searcher {
                 .addChild(new EachOperation().addChild(new EachOperation()
                         .addOutput(new SummaryValue()))));
         Result result = threadedMessageSearcher.search(query, execution);
+        execution.fill(result);
         Group root = request.getResultGroup(result);
-        GroupList thread_id = root.getGroupList("thread_id");
+        GroupList threadIdGroupList = root.getGroupList("thread_id");
 
         Result newResult = new Result(query);
-        for (Hit hit : thread_id) {
-            HitGroup hitGroup = new HitGroup(getThreadId(hit), hit.getRelevance());
-            for (Hit hit2 : (HitGroup) hit) {
-                for (Hit hit3 : (HitList) hit2) {
-                    hitGroup.add(hit3);
+        for (Hit group : threadIdGroupList) {
+            HitGroup hitGroup = new HitGroup(getThreadId((Group)group), group.getRelevance());
+            for (Hit hitList : (HitGroup) group) {
+                for (Hit hit : (HitList) hitList) {
+                    hitGroup.add(hit);
                 }
             }
             newResult.hits().add(hitGroup);
@@ -45,10 +46,10 @@ public class ThreadSearcher extends Searcher {
         return newResult;
     }
 
-    private String getThreadId(Hit hit) {
-        for (Hit hit2 : (HitGroup) hit) {
-            for (Hit hit3 : (HitList) hit2) {
-                return (String) hit3.getField("thread_ref");
+    private String getThreadId(Group group) {
+        for (Hit hitList : (HitGroup) group) {
+            for (Hit hit : (HitList) hitList) {
+                return (String) hit.getField("thread_ref");
             }
         }
         return null;
