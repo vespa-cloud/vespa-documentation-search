@@ -65,10 +65,6 @@ public class SlackMessageSearcher extends Searcher {
         WordItem exact = new WordItem(queryStr, "text", true);
         rankItem.addItem(exact);
 
-        AndItem root = new AndItem();
-        root.addItem(rankItem);
-        root.addItem(new WordItem("slack_message", "sddocname", true));
-
-        query.getModel().getQueryTree().setRoot(root);
+        query.getModel().getQueryTree().setRoot(rankItem);
     }
 }
