@@ -15,11 +15,11 @@ import com.yahoo.search.searchchain.Execution;
 
 public class ThreadSearcher extends Searcher {
 
-    private final ThreadedMessageSearcher threadedMessageSearcher;
+    private final SlackMessageSearcher slackMessageSearcher;
 
     @Inject
-    public ThreadSearcher(ThreadedMessageSearcher threadedMessageSearcher) {
-        this.threadedMessageSearcher = threadedMessageSearcher;
+    public ThreadSearcher(SlackMessageSearcher slackMessageSearcher) {
+        this.slackMessageSearcher = slackMessageSearcher;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ThreadSearcher extends Searcher {
         request.setRootOperation(new AllOperation().setGroupBy(new AttributeValue("thread_id"))
                 .addChild(new EachOperation().addChild(new EachOperation()
                         .addOutput(new SummaryValue()))));
-        Result result = threadedMessageSearcher.search(query, execution);
+        Result result = slackMessageSearcher.search(query, execution);
         execution.fill(result);
         Group root = request.getResultGroup(result);
         GroupList threadIdGroupList = root.getGroupList("thread_id");

@@ -12,7 +12,7 @@ import com.yahoo.search.searchchain.Execution;
 import com.yahoo.tensor.Tensor;
 import com.yahoo.tensor.TensorType;
 
-public class ThreadedMessageSearcher extends Searcher {
+public class SlackMessageSearcher extends Searcher {
 
     private final Linguistics linguistics;
     private final Embedder embedder;
@@ -20,7 +20,7 @@ public class ThreadedMessageSearcher extends Searcher {
     private final TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
 
     @Inject
-    public ThreadedMessageSearcher(Linguistics linguistics, ComponentRegistry<Embedder> embedders) {
+    public SlackMessageSearcher(Linguistics linguistics, ComponentRegistry<Embedder> embedders) {
         this.linguistics = linguistics;
         this.embedder = embedders.getComponent("embedder");
     }

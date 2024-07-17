@@ -28,7 +28,7 @@
             </chain>
 
             <chain id="slackmessage" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.ThreadedMessageSearcher" bundle="vespacloud-docsearch"/>
+                <searcher id="ai.vespa.cloud.docsearch.SlackMessageSearcher" bundle="vespacloud-docsearch"/>
             </chain>
             <chain id="thread" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
