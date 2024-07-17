@@ -3,4 +3,3 @@ target/
 *.iml
 *.pem
 open_index.json
-paragraph_index.json
