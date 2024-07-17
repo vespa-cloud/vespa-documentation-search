@@ -67,7 +67,7 @@ public class ThreadedMessageSearcher extends Searcher {
 
         AndItem root = new AndItem();
         root.addItem(rankItem);
-        root.addItem(new WordItem("threaded_message", "sddocname", true));
+        root.addItem(new WordItem("slack_message", "sddocname", true));
 
         query.getModel().getQueryTree().setRoot(root);
     }

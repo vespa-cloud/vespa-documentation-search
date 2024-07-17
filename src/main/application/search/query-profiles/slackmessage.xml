@@ -1,7 +1,7 @@
-<query-profile id="threadedmessage">
-    <field name="searchChain">threadedmessage</field>
+<query-profile id="slackmessage">
+    <field name="searchChain">slackmessage</field>
     <field name="presentation.timing">true</field>
     <field name="model.language">en</field>
     <field name="ranking.profile">hybrid2</field>
-    <field name="model.restrict">threaded_message</field>
+    <field name="model.restrict">slack_message</field>
 </query-profile>

@@ -1,30 +1,22 @@
-schema threaded_message {
+schema slack_message {
 
     field language type string {
         indexing: "en" | set_language
     }
 
-    document threaded_message {
-        field threaded_message_id type string {
+    document slack_message {
+
+        field message_id type string {
             indexing: summary | attribute | index
         }
 
-        field thread_ref type reference<thread> {
+        field thread_id type string {
             indexing: summary | attribute
         }
 
         field text type string {
             indexing: summary | attribute | index
-            index: enable-bm25
             stemming: best
-        }
-
-        field user_id type string {
-            indexing: summary | attribute
-        }
-
-        field edited type bool {
-            indexing: summary
         }
 
         field feedback_positive type int {
@@ -34,6 +26,7 @@ schema threaded_message {
         field feedback_negative type int {
             indexing: summary | attribute
         }
+    
     }
 
     field text_embedding type tensor<float>(x[384]) {
@@ -44,19 +37,12 @@ schema threaded_message {
     }
 
     fieldset default {
-        fields: text
+        fields: text, thread_id
     }
-
-    fieldset thread_id {
-        fields: threaded_message_id
-    }
-
-    import field thread_ref.thread_id as thread_id {}
-    import field thread_ref.user_id as parent_user_id {}
 
     document-summary short-summary {
         summary text {}
-        summary thread_ref {}
+        summary thread_id {}
     }
 
     rank-profile hybrid2 {

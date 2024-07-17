@@ -27,7 +27,7 @@
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
 
-            <chain id="threadedmessage" inherits="vespa">
+            <chain id="slackmessage" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.ThreadedMessageSearcher" bundle="vespacloud-docsearch"/>
             </chain>
             <chain id="thread" inherits="vespa">
@@ -98,8 +98,7 @@
             <document mode="index" type="paragraph"/>
             <document mode="index" type="term"/>
             <document mode="index" type="purchase"/>
-            <document mode="index" type="thread" global="true"/>
-            <document mode="index" type="threaded_message"/>
+            <document mode="index" type="slack_message"/>
         </documents>
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />

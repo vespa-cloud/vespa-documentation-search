@@ -49,7 +49,7 @@ public class ThreadSearcher extends Searcher {
     private String getThreadId(Group group) {
         for (Hit hitList : (HitGroup) group) {
             for (Hit hit : (HitList) hitList) {
-                return (String) hit.getField("thread_ref");
+                return (String) hit.getField("thread_id");
             }
         }
         return null;
