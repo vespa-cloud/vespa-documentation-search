@@ -11,7 +11,8 @@ schema slack_message {
         }
 
         field thread_id type string {
-            indexing: summary | attribute
+            indexing: summary | attribute | index
+            stemming: best
         }
 
         field text type string {
