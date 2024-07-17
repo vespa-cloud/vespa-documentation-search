@@ -74,7 +74,7 @@
         </nodes>
     </container>
 
-    <!--container id="playground" version="1.0">
+    <container id="playground" version="1.0">
         <handler id="ai.vespa.cloud.playground.TensorPlaygroundHandler" bundle="vespacloud-docsearch">
             <binding>http://*/playground/*</binding>
         </handler>
@@ -82,7 +82,7 @@
             <resources vcpu="2" memory="8Gb" disk="32Gb" />
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
-    </container-->
+    </container>
     
     <content id="documentation" version="1.0">
         <config name="vespa.config.search.summary.juniperrc">
