@@ -8,15 +8,16 @@ schema slack_message {
 
         field message_id type string {
             indexing: summary | attribute | index
+            match: word
         }
 
         field thread_id type string {
             indexing: summary | attribute | index
-            stemming: best
+            match: word
         }
 
         field text type string {
-            indexing: summary | attribute | index
+            indexing: summary | index
             stemming: best
         }
 
