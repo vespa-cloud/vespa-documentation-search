@@ -103,7 +103,7 @@
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
-        <nodes count="50" deploy:instance="enclave" deploy:environment="prod" deploy:region="aws-eu-west-1a">
+        <nodes count="100" deploy:instance="enclave" deploy:environment="prod" deploy:region="aws-eu-west-1a">
             <resources vcpu="1" memory="8Gb" disk="32Gb" />
         </nodes>
     </content>
