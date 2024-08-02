@@ -82,6 +82,9 @@
             <resources vcpu="2" memory="8Gb" disk="32Gb" />
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
+        <nodes count="50" deploy:instance="enclave" deploy:environment="prod" deploy:region="aws-us-east-1c">
+            <resources vcpu="1" memory="8Gb" disk="32Gb" />
+        </nodes>
     </container>
     
     <content id="documentation" version="1.0">
