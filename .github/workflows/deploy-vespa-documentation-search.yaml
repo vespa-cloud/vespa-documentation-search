@@ -7,10 +7,8 @@
 name: Deploy vespa-documentation-search to Vespa Cloud
 on:
   push:
-    branches: []
-  # schedule:
-  #   # 5:40 UTC daily
-  #   - cron: "40 5 * * *"
+    branches:
+      - main
 
 env:
   VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}
@@ -31,28 +29,18 @@ jobs:
 
       # Get latest Vespa CLI
       - name: Get Vespa CLI
-        working-directory: .
-        run: |
-          apt update && apt -y install curl
-          mkdir -p opt
-          VESPA_CLI_VERSION=$(curl -fsSL https://api.github.com/repos/vespa-engine/vespa/releases/latest | grep -Po '"tag_name": "v\K.*?(?=")')
-          curl -fsSL https://github.com/vespa-engine/vespa/releases/download/v${VESPA_CLI_VERSION}/vespa-cli_${VESPA_CLI_VERSION}_linux_amd64.tar.gz | \
-            tar -zxf - -C opt
-          ln -fs ./opt/*/bin/vespa
+        uses: vespa-engine/setup-vespa-cli@1.x
 
       # Find Vespa version of current production deployment
       - name: Find compile version
-        working-directory: .
         run: mvn -B clean vespa:compileVersion -DapiKey="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
 
       # Build the application package and the tester bundle
       - name: Build with Maven
-        working-directory: .
         run: mvn -B package -Dvespa.compile.version="$(cat target/vespa.compile.version)"
 
       # Deploy to Vespa Cloud using Vespa CLI
       - name: Deploy to Vespa Cloud
-        working-directory: .
         run: |
           ./vespa config set target cloud
           ./vespa config set application vespa-team.vespacloud-docsearch
