@@ -39,7 +39,7 @@ schema slack_message {
     }
 
     fieldset default {
-        fields: text, thread_id
+        fields: text
     }
 
     document-summary short-summary {
