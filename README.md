@@ -28,7 +28,7 @@ see [deploy-vespa-documentation-search.yaml](https://github.com/vespa-cloud/vesp
 
 Deployment status:
 * [![Deploy vespa-documentation-search to Vespa Cloud](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml/badge.svg)](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml)
-* [![Vespa Cloud Documentation Search Deployment](https://api-ctl.vespa-cloud.com/badge/v1/vespa-team/vespacloud-docsearch/default/)](https://console.vespa.oath.cloud/tenant/vespa-team/application/vespacloud-docsearch/prod/deployment)
+* [![Vespa Cloud Documentation Search Deployment](https://api-ctl.vespa-cloud.com/badge/v1/vespa-team/vespacloud-docsearch/default/)](https://console.vespa-cloud.com/tenant/vespa-team/application/vespacloud-docsearch/prod/deployment)
 
 
 
