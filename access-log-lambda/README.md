@@ -48,7 +48,7 @@ Create a lambda function named **access-log-lambda**
 
 ### Update role permissions
 Give the lambda functions role the permissions **AmazonS3ReadOnlyAccess** and **AmazonSSMReadOnlyAccess**.
-Also see https://console.vespa.oath.cloud/tenant/vespa-team/archive for more policies.
+Also see https://console.vespa-cloud.com/tenant/vespa-team/archive for more policies.
 
 
 ### Setup trigger
