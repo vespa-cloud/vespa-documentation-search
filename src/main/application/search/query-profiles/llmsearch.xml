@@ -1,7 +1,7 @@
 <!-- Copyright Yahoo. Licensed under the terms of the Apache 2.0 license. See LICENSE in the project root. -->
 <query-profile id="llmsearch">
  <field name="searchChain">llmsearch</field>
- <field name="model.restrict">paragraph</field>
+ <field name="model.restrict">paragraph,code_snippet</field>
  <field name="ranking.profile">hybrid2</field>
  <field name="hits">12</field>
  <field name="model.locale">en-us</field>

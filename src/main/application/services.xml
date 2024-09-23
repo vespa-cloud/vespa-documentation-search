@@ -37,7 +37,7 @@
             <chain id="combinedllmsearch" inherits="vespa">
                 <federation id="combination">
                     <source idref="thread"/>
-                    <source idref="llmsearch" /> 
+                    <source idref="llmsearch" />
                 </federation>
             </chain>
 
@@ -60,7 +60,7 @@
                 </searcher>
                 <federation id="combinedragsearchsource">
                     <source idref="thread"/>
-                    <source idref="llmsearch" /> 
+                    <source idref="llmsearch" />
                 </federation>
             </chain>
         </search>
@@ -83,7 +83,7 @@
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
     </container>
-    
+
     <content id="documentation" version="1.0">
         <config name="vespa.config.search.summary.juniperrc">
             <length>1024</length> <!-- default 256 -->
@@ -99,6 +99,7 @@
             <document mode="index" type="term"/>
             <document mode="index" type="purchase"/>
             <document mode="index" type="slack_message"/>
+            <document mode="index" type="code_snippet"/>
         </documents>
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
