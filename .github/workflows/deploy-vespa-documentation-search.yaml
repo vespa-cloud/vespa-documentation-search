@@ -29,7 +29,7 @@ jobs:
 
       # Get latest Vespa CLI
       - name: Get Vespa CLI
-        uses: vespa-engine/setup-vespa-cli@1.x
+        uses: vespa-engine/setup-vespa-cli-action@releases/v1
 
       # Find Vespa version of current production deployment
       - name: Find compile version
@@ -42,10 +42,10 @@ jobs:
       # Deploy to Vespa Cloud using Vespa CLI
       - name: Deploy to Vespa Cloud
         run: |
-          ./vespa config set target cloud
-          ./vespa config set application vespa-team.vespacloud-docsearch
+          vespa config set target cloud
+          vespa config set application vespa-team.vespacloud-docsearch
           export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
-          ./vespa prod deploy \
+          vespa prod deploy \
             --source-url "$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
 
     # Refer to https://github.com/vespa-cloud/cord-19-search/blob/main/.github/workflows/deploy-vespa-cord-19-search.yaml
