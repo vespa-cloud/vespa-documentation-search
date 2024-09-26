@@ -31,7 +31,6 @@
 
         </instance>
 
-        <!--
         <instance id="enclave" cloud-account="aws:396608785574,gcp:gcp-vespa-external-enclav-g4au">
 
             <test />
@@ -44,7 +43,6 @@
             </prod>
 
         </instance>
-    -->
 
     </parallel>
 </deployment>
