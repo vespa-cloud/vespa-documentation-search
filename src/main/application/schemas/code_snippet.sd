@@ -1,0 +1,112 @@
+schema code_snippet {
+    document code_snippet {
+        field path type string {
+            indexing: summary
+        }
+
+        field doc_id type string {
+            indexing: summary
+        }
+
+        field base_uri type string {
+            indexing: summary
+        }
+
+        field url type string {
+            indexing: summary
+        }
+
+        field title type string {
+            indexing: summary
+        }
+
+        field content type string {
+            indexing: summary
+        }
+
+        field namespace type string {
+            indexing: summary | attribute
+        }
+
+        field start_line type int {
+            indexing: summary
+        }
+
+        field end_line type int {
+            indexing: summary
+        }
+
+        field code type string {
+            indexing: index | summary
+            index: enable-bm25
+            stemming: best
+        }
+
+        field explanation type string {
+            indexing: index | summary
+            index: enable-bm25
+            stemming: best
+        }
+
+        field keywords type array<string> {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+    }
+
+    fieldset default {
+        fields: code, explanation, keywords
+    }
+
+    document-summary short-summary {
+        from-disk
+        summary title {}
+        summary content {}
+        summary path {}
+        summary doc_id {}
+    }
+
+    rank-profile hybrid2 {
+        inputs {
+            query(code_snippet_weight) double: 1.2
+            query(code_snippet_code_weight) double: 0.33
+            query(code_snippet_explanation_weight) double: 0.33
+            query(code_snippet_keywords_weight) double: 0.33
+        }
+
+        function scale(val) {
+            expression: 2*atan(val/4)/(3.14159)
+        }
+
+        function scaled_bm25_code() {
+            expression: scale(bm25(code))
+        }
+
+        function scaled_bm25_explanation() {
+            expression: scale(bm25(explanation))
+        }
+
+        function scaled_bm25_keywords() {
+            expression: scale(bm25(code))
+        }
+
+        first-phase {
+            expression {
+                query(code_snippet_weight) * (
+                    query(code_snippet_code_weight) * scaled_bm25_code +
+                    query(code_snippet_explanation_weight) * scaled_bm25_explanation +
+                    query(code_snippet_keywords_weight) * scaled_bm25_keywords
+                )
+            }
+            rank-score-drop-limit: 0.3
+        }
+
+        match-features {
+            queryTermCount
+            scaled_bm25_code
+            scaled_bm25_explanation
+            scaled_bm25_keywords
+        }
+    }
+}
