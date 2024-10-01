@@ -31,9 +31,13 @@ public class ThreadSearcher extends Searcher {
         Result result = slackMessageSearcher.search(query, execution);
         execution.fill(result);
         Group root = request.getResultGroup(result);
-        GroupList threadIdGroupList = root.getGroupList("thread_id");
 
         Result newResult = new Result(query);
+        if (root == null) {
+            return newResult;
+        }
+
+        GroupList threadIdGroupList = root.getGroupList("thread_id");
         for (Hit group : threadIdGroupList) {
             HitGroup hitGroup = new HitGroup(getThreadId((Group)group), group.getRelevance());
             for (Hit hitList : (HitGroup) group) {
