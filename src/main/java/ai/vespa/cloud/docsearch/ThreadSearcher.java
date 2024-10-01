@@ -39,12 +39,17 @@ public class ThreadSearcher extends Searcher {
 
         GroupList threadIdGroupList = root.getGroupList("thread_id");
         for (Hit group : threadIdGroupList) {
-            HitGroup hitGroup = new HitGroup(getThreadId((Group)group), group.getRelevance());
+            var threadId = getThreadId((Group)group);
+
+            HitGroup hitGroup = new HitGroup(threadId, group.getRelevance());
             for (Hit hitList : (HitGroup) group) {
                 for (Hit hit : (HitList) hitList) {
                     hitGroup.add(hit);
                 }
             }
+
+            hitGroup.setField("doc_id", threadId);
+
             newResult.hits().add(hitGroup);
         }
         return newResult;
