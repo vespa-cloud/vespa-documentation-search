@@ -28,7 +28,15 @@ schema slack_message {
         field feedback_negative type int {
             indexing: summary | attribute
         }
-    
+
+        field created_at type string {
+            indexing: summary
+        }
+
+        field first_message type bool {
+            indexing: summary
+        }
+
     }
 
     field text_embedding type tensor<float>(x[384]) {
