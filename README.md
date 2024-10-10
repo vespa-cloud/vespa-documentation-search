@@ -136,7 +136,7 @@ and an introduction to using _query rank features_ and _summary features_:
 With this it is easy to experiment with ranking by sending rank-properties in the query
 and observing the values in summary-features, like:
 
-[api.search.vespa.ai/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://api.search.vespa.ai/search/?yql=select%20*%20from%20doc%20where%20userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa%20ranking%20is%20great)
+[api.search.vespa.ai/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://api.search.vespa.ai/search/?yql=select+*+from+doc+where+userInput%28%40userinput%29&ranking=documentation&input.query%28pathWeight%29=10&userinput=vespa+ranking+is+great)
 
 See [approximate-nn-hnsw.md](https://raw.githubusercontent.com/vespa-engine/documentation/master/en/approximate-nn-hnsw.md)
 for use of (comma separated) keywords set in the frontmatter to rank higher for those, e.g.
