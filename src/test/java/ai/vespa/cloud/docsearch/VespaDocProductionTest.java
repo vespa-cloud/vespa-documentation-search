@@ -22,7 +22,7 @@ public class VespaDocProductionTest {
         // Here, ensure > 50 documents about ranking
         HttpRequest req = HttpRequest.newBuilder()
                                      .GET()
-                                     .uri(URI.create("https://doc-search.vespa.oath.cloud/search/?query=ranking&ranking=documentation&locale=en-US&hits=1"))
+                                     .uri(URI.create("https://api.search.vespa.ai/search/?query=ranking&ranking=documentation&locale=en-US&hits=1"))
                                      .build();
         HttpResponse<String> res = HttpClient.newBuilder().build()
                                              .send(req, HttpResponse.BodyHandlers.ofString());

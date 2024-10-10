@@ -33,22 +33,21 @@ Deployment status:
 
 
 ## Query API
-<!-- ToDo: consider new names in endpoints -->
 Open API endpoints:
-* https://doc-search.vespa.oath.cloud/document/v1/
-* https://doc-search.vespa.oath.cloud/search/
+* https://api.search.vespa.ai/document/v1/
+* https://api.search.vespa.ai/search/
 
 Example requests:
-* https://doc-search.vespa.oath.cloud/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html
-* https://doc-search.vespa.oath.cloud/search/?yql=select+*+from+doc+where+userInput(@userinput)%3B&userinput=vespa+ranking+is+great
+* https://api.search.vespa.ai/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html
+* https://api.search.vespa.ai/search/?yql=select+*+from+doc+where+userInput(@userinput)%3B&userinput=vespa+ranking+is+great
 
 <pre data-test="exec" data-test-assert-contains="namespace">
-$ curl "https://doc-search.vespa.oath.cloud/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html"
+$ curl "https://api.search.vespa.ai/document/v1/open/doc/docid/open%2Fen%2Freference%2Fquery-api-reference.html"
 </pre>
 <pre data-test="exec" data-test-assert-contains="the-great-search-engine-debate">
 $ curl --data-urlencode 'yql=select * from doc where userInput(@userinput)' \
   --data-urlencode 'userinput=vespa ranking is great' \
-  https://doc-search.vespa.oath.cloud/search/
+  https://api.search.vespa.ai/search/
 </pre>
 
 Using these endpoints is a good way to get started with Vespa -
@@ -137,7 +136,7 @@ and an introduction to using _query rank features_ and _summary features_:
 With this it is easy to experiment with ranking by sending rank-properties in the query
 and observing the values in summary-features, like:
 
-[doc-search.vespa.oath.cloud/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://doc-search.vespa.oath.cloud/search/?yql=select%20*%20from%20doc%20where%20userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa%20ranking%20is%20great)
+[api.search.vespa.ai/search/?yql=select * from doc where userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa ranking is great](https://api.search.vespa.ai/search/?yql=select%20*%20from%20doc%20where%20userInput(@userinput)&ranking=documentation&input.query(pathWeight)=10&userinput=vespa%20ranking%20is%20great)
 
 See [approximate-nn-hnsw.md](https://raw.githubusercontent.com/vespa-engine/documentation/master/en/approximate-nn-hnsw.md)
 for use of (comma separated) keywords set in the frontmatter to rank higher for those, e.g.
