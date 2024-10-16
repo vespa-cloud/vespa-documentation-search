@@ -69,7 +69,7 @@ schema code_snippet {
 
     rank-profile hybrid2 {
         inputs {
-            query(code_snippet_weight) double: 1.2
+            query(code_snippet_weight) double: 1.0
             query(code_snippet_code_weight) double: 0.33
             query(code_snippet_explanation_weight) double: 0.33
             query(code_snippet_keywords_weight) double: 0.33
@@ -99,7 +99,7 @@ schema code_snippet {
                     query(code_snippet_keywords_weight) * scaled_bm25_keywords
                 )
             }
-            rank-score-drop-limit: 0.3
+            rank-score-drop-limit: 0.25
         }
 
         match-features {
