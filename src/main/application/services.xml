@@ -10,6 +10,10 @@
         <component id="embedder" type="hugging-face-embedder">
             <transformer-model path="model/model.onnx"/>
             <tokenizer-model path="model/tokenizer.json"/>
+            <prepend>
+                <!--query>query:</query--> <!-- for now, this is added to queries elsewhere -->
+                <document>passage: </document>
+            </prepend>
         </component>
         <document-processing>
             <chain id="default">
