@@ -62,16 +62,17 @@ schema paragraph {
     }
 
     field embedding type tensor<float>(x[384]) {
-        indexing: "passage: " . (input title || "") . " " . (input content || "") | embed | attribute
+        indexing: (input title || "") . " " . (input content || "") | embed embedder | attribute
         attribute {
             distance-metric: angular
         }
     }
 
     field question_embedding type tensor<float>(q{}, x[384]) {
+         # the query config to be moved to services.xml
          indexing {
             input questions |
-                for_each { "query: " . _ } | embed | attribute
+                for_each { "query: " . _ } | embed embedder | attribute
          }
 
          attribute {
