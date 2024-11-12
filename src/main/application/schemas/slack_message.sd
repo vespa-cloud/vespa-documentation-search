@@ -37,6 +37,10 @@ schema slack_message {
             indexing: summary
         }
 
+        field user_id_hash type string {
+            indexing: summary
+        }
+
     }
 
     field text_embedding type tensor<float>(x[384]) {
