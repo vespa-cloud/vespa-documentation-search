@@ -37,7 +37,7 @@ schema slack_message {
             indexing: summary
         }
 
-        field user_id_hash type string {
+        field user_id type string {
             indexing: summary
         }
 
