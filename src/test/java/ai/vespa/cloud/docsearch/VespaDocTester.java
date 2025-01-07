@@ -117,7 +117,7 @@ class VespaDocTester {
         for (JsonNode jsonNode : mapper.readTree(result).get("root").get("children")) {
             resultIds.add(DocumentId.of(jsonNode.get("id").asText()));
         }
-        assertEquals(expectedIds, resultIds, "expected and actual ids should match");
+        assertEquals(expectedIds, resultIds, "expected and actual ids should match, result: " + result);
     }
 
     HttpResponse<String> feedTestDoc(JsonNode doc) {
