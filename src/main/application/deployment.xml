@@ -14,6 +14,7 @@
                 <test>aws-us-east-1c</test>
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
+                <region>gcp-us-central1-a</region>
             </prod>
 
             <endpoints>
@@ -21,11 +22,13 @@
                     <region>aws-us-east-1c</region>
                     <region>aws-eu-west-1a</region>
                     <region>gcp-us-central1-f</region>
+                    <region>gcp-us-central1-a</region>
                 </endpoint>
                 <endpoint id="playground" container-id="playground">
                     <region>aws-us-east-1c</region>
                     <region>aws-eu-west-1a</region>
                     <region>gcp-us-central1-f</region>
+                    <region>gcp-us-central1-a</region>
                 </endpoint>
             </endpoints>
 
