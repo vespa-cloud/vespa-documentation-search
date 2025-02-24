@@ -29,11 +29,6 @@ public class VespaDocStagingSetup {
         assertEquals(5, ids.size(), "test-documents.json should have 5 documents");
 
         String allQuery = "select * from sources * where sddocname contains \"doc\"";
-        int retries = 0;
-        while (tester.getNumSearchResults(allQuery) < 5 && retries < 10) {
-            Thread.sleep(1000);
-            retries++;
-        }
         tester.verifyQueryResults(ids, allQuery, "5s"); // Use a high timeout for first query
 
         String accessQuery = "select * from sources * where content contains \"access\"";
