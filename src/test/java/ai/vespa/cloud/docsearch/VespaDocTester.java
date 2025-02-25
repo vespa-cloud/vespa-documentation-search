@@ -110,6 +110,15 @@ class VespaDocTester {
         return ids;
     }
 
+    void waitUntilBackendUp(String query) throws IOException {
+        String result = search(query, "1s");
+        int retries = 0;
+        while (getNumSearchResults(result) < 5 && retries < 30) {
+            try { Thread.sleep(1000); } catch (InterruptedException e) { throw new RuntimeException(e); }
+            retries++;
+        }
+    }
+
     void verifyQueryResults(Collection<DocumentId> expectedIds, String query, String timeout) throws IOException {
         String result = search(query, timeout);
         assertEquals(expectedIds.size(), getNumSearchResults(result));
