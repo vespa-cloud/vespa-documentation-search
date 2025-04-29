@@ -110,6 +110,24 @@ class VespaDocTester {
         return ids;
     }
 
+    void waitUntilBackendUp(String query) throws IOException {
+        int retries = 0;
+        while (searchNoAssert(query, "1s").statusCode() != 200 && retries < 30) {
+            retries++;
+            sleep();
+        }
+
+        retries = 0;
+        while (getNumSearchResults(search(query, "1s")) < 5 && retries < 30) {
+            sleep();
+            retries++;
+        }
+    }
+
+    private static void sleep() {
+        try { Thread.sleep(1000); } catch (InterruptedException e) { throw new RuntimeException(e); }
+    }
+
     void verifyQueryResults(Collection<DocumentId> expectedIds, String query, String timeout) throws IOException {
         String result = search(query, timeout);
         assertEquals(expectedIds.size(), getNumSearchResults(result));
@@ -155,11 +173,15 @@ class VespaDocTester {
     }
 
     String search(String query, String timeout) {
-        HttpResponse<String> res = endpoint.send(endpoint.request("/search/",
-                                                                  Map.of("yql", query,
-                                                                                 "timeout", timeout)));
+        HttpResponse<String> res = searchNoAssert(query, timeout);
         assertEquals(200, res.statusCode(), "Status code for search");
         return res.body();
+    }
+
+    HttpResponse<String> searchNoAssert(String query, String timeout) {
+        return endpoint.send(endpoint.request("/search/",
+                                              Map.of("yql", query,
+                                                     "timeout", timeout)));
     }
 
     String visit(String continuation) {
