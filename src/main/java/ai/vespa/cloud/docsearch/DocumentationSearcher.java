@@ -4,6 +4,7 @@ package ai.vespa.cloud.docsearch;
 import com.yahoo.component.annotation.Inject;
 import com.yahoo.language.Language;
 import com.yahoo.language.Linguistics;
+import com.yahoo.language.process.LinguisticsParameters;
 import com.yahoo.language.process.StemMode;
 import com.yahoo.language.process.Token;
 import com.yahoo.prelude.query.PrefixItem;
@@ -39,7 +40,8 @@ public class DocumentationSearcher extends Searcher {
     private static final CompoundName SUGGEST_ONLY = new CompoundName("suggestions-only");
     private static final CompoundName SOURCE = new CompoundName("index-source");
 
-    private Linguistics linguistics;
+    private final Linguistics linguistics;
+
     @Inject
     public DocumentationSearcher(Linguistics linguistics) {
         this.linguistics = linguistics;
@@ -70,8 +72,8 @@ public class DocumentationSearcher extends Searcher {
 
     private List<String> tokenize(String userQuery) {
         List<String> result = new ArrayList<>(6);
-        Iterable<Token> tokens = this.linguistics.getTokenizer().
-                tokenize(userQuery, Language.fromLanguageTag("en"), StemMode.NONE,false);
+        var parameters = new LinguisticsParameters(Language.fromLanguageTag("en"), StemMode.NONE, false, true);
+        Iterable<Token> tokens = this.linguistics.getTokenizer().tokenize(userQuery, parameters);
         for(Token t: tokens) {
             if (t.isIndexable())
                 result.add(t.getTokenString());
