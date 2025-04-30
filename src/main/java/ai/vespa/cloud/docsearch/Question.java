@@ -2,6 +2,7 @@ package ai.vespa.cloud.docsearch;
 
 import com.yahoo.language.Language;
 import com.yahoo.language.Linguistics;
+import com.yahoo.language.process.LinguisticsParameters;
 import com.yahoo.language.process.StemMode;
 import com.yahoo.language.process.Token;
 
@@ -15,7 +16,7 @@ public class Question {
     public static boolean isStopWord(String word) {
         return QUESTION_WORDS.contains(word);
     }
-    public static final Set<String> QUESTION_WORDS = new HashSet<String>() {{
+    public static final Set<String> QUESTION_WORDS = new HashSet<>() {{
         add("what");
         add("when");
         add("where");
@@ -63,8 +64,8 @@ public class Question {
 
     public static List<String> tokenize(String userQuery, Linguistics linguistics) {
         List<String> result = new ArrayList<>(6);
-        Iterable<Token> tokens = linguistics.getTokenizer().
-                tokenize(userQuery, Language.fromLanguageTag("en"), StemMode.NONE,false);
+        var parameters = new LinguisticsParameters(Language.fromLanguageTag("en"), StemMode.NONE, false, true);
+        Iterable<Token> tokens = linguistics.getTokenizer().tokenize(userQuery, parameters);
         for(Token t: tokens) {
             if (t.isIndexable())
                 result.add(t.getTokenString());
