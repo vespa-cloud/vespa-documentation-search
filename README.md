@@ -8,18 +8,14 @@
 
 # Vespa Documentation Search
 Vespa Documentation Search is a Vespa Cloud instance for searching documents in:
-* [vespa.ai](https://vespa.ai/)
-  [![Vespa.ai Search Feed](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml)
-* [docs.vespa.ai](https://docs.vespa.ai/)
-  [![Vespa Documentation Search Feed](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml)
-* [cloud.vespa.ai](https://cloud.vespa.ai/)
-  [![Vespa Cloud Documentation Search Feed](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml)
-* [blog.vespa.ai](https://blog.vespa.ai/)
-  [![Vespa Blog Search Feed](https://github.com/vespa-engine/blog/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/blog/actions/workflows/feed.yml)
-* [Vespa Sample applications](https://github.com/vespa-engine/sample-apps)
-  [![Vespa Sample-Apps Search Feed](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml)
-* [pyvespa](https://pyvespa.readthedocs.io/en/latest/index.html)
-  [![pyvespa Search Feed](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml)
+| Website | Build Status |
+|---------|--------------|
+| [vespa.ai](https://vespa.ai/) | [![Vespa.ai Search Feed](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/frontpage/actions/workflows/feed.yml) |
+| [docs.vespa.ai](https://docs.vespa.ai/) | [![Vespa Documentation Search Feed](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/documentation/actions/workflows/feed.yml) |
+| [cloud.vespa.ai](https://cloud.vespa.ai/) | [![Vespa Cloud Documentation Search Feed](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/cloud/actions/workflows/feed.yml) |
+| [blog.vespa.ai](https://blog.vespa.ai/) | [![Vespa Blog Search Feed](https://github.com/vespa-engine/blog/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/blog/actions/workflows/feed.yml) |
+| [Vespa Sample applications](https://github.com/vespa-engine/sample-apps) | [![Vespa Sample-Apps Search Feed](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/sample-apps/actions/workflows/feed.yml) |
+| [pyvespa](https://pyvespa.readthedocs.io/en/latest/index.html) | [![pyvespa Search Feed](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml/badge.svg)](https://github.com/vespa-engine/pyvespa/actions/workflows/feed.yml) |
 
 This sample app is auto-deployed to Vespa Cloud,
 see [deploy-vespa-documentation-search.yaml](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml)
