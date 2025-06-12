@@ -119,6 +119,22 @@ public class ProtonExpressionEvaluator {
                     g.writeStringField("error", root.get(i).get("error").asText());
                 } else {
                     JsonNode result = root.get(i).get("result");
+
+                    // Check if the (normalized) result is the same as the original expression.
+                    // In other words, it's a literal value.
+                    // If it is, we don't need to show it twice in the UI.
+                    boolean same = false;
+                    try {
+                        var primitiveExpression = new RankingExpression(expression);
+                        var primitiveResult = new RankingExpression(result.asText());
+                        if( primitiveExpression.equals(primitiveResult))
+                            same = true;
+                    } catch (Exception e) {
+                        // One of them could not be parsed as a ranking expression, so ignore
+                    }
+
+                    g.writeBooleanField("same", same);
+
                     if (result.asText().startsWith("tensor")) {
                         writeTensorValueJson(g, Tensor.from(result.asText()));
                     } else {
