@@ -125,12 +125,12 @@ public class ProtonExpressionEvaluator {
                     // If it is, we don't need to show it twice in the UI.
                     boolean same = false;
                     try {
-                        var primitiveExpression = new RankingExpression(expression);
-                        var primitiveResult = new RankingExpression(result.asText());
+                        var primitiveExpression = Tensor.from(expression);
+                        var primitiveResult = Tensor.from(result.asText());
                         if( primitiveExpression.equals(primitiveResult))
                             same = true;
                     } catch (Exception e) {
-                        // One of them could not be parsed as a ranking expression, so ignore
+                        // One of them could not be parsed as a tensor, so ignore
                     }
 
                     g.writeBooleanField("same", same);
