@@ -81,7 +81,36 @@ public class ExpressionEvaluatorTest {
         assertEquals(expected.get("value").get("literal").asText(), result.get("value").get("literal").asText());
     }
 
+    @Test
+    public void requireThatUnpackBitsCanBeEvaluated() throws IOException {
+        String evaluateJson = String.join("\n",
+                "{",
+                "   \"expression\": \"unpack_bits(attribute(colbert))\",",
+                "   \"arguments\": [",
+                "       {",
+                "           \"name\": \"attribute(colbert)\",",
+                "           \"type\": \"tensor<int8>(dt{},x[1])\",",
+                "           \"value\": \"tensor<int8>(dt{}, x[1]):{0:[-83]}\"",
+                "       }",
+                "   ]",
+                "}");
+        String expectedJson = String.join("\n",
+                "{",
+                "   \"type\": \"tensor<float>(dt{},x[8])\",",
+                "   \"value\": {",
+                "       \"literal\": \"tensor<float>(dt{},x[8]):{0:[1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]}\",",
+                "       \"cells\": [\"whatever\"]",
+                "   }",
+                "}");
+
+        String resultJson = ExpressionEvaluator.evaluate(evaluateJson);
+
+        ObjectMapper m = new ObjectMapper();
+        JsonNode result = m.readTree(resultJson);
+        JsonNode expected = m.readTree(expectedJson);
+
+        assertEquals(expected.get("type").asText(), result.get("type").asText());
+        assertEquals(expected.get("value").get("literal").asText(), result.get("value").get("literal").asText());
+    }
+
 }
-
-
-
