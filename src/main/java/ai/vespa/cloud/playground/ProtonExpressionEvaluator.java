@@ -8,7 +8,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yahoo.searchlib.rankingexpression.RankingExpression;
+import com.yahoo.searchlib.rankingexpression.Reference;
+import com.yahoo.searchlib.rankingexpression.evaluation.MapTypeContext;
 import com.yahoo.searchlib.rankingexpression.parser.ParseException;
+import com.yahoo.searchlib.rankingexpression.rule.SerializationContext;
 import com.yahoo.tensor.Tensor;
 import com.yahoo.tensor.TensorAddress;
 
@@ -20,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ProtonExpressionEvaluator {
 
@@ -51,23 +55,44 @@ public class ProtonExpressionEvaluator {
     }
 
     private static String createJsonInput(List<JsonNode> cells) throws IOException {
+        var tc = new MapTypeContext();
+        var sc = new SerializationContext(List.of(), Optional.of(tc));
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         JsonGenerator g = new JsonFactory().createGenerator(out, JsonEncoding.UTF8);
         g.writeStartArray();
         for (JsonNode cell : cells) {
             g.writeStartObject();
-            g.writeStringField("name", cell.get("name").asText());
+            String name = cell.get("name").asText();
+            g.writeStringField("name", name);
             g.writeBooleanField("verbose", cell.get("verbose").asBoolean());
+            String inputExpr = cell.get("expr").asText();
             try {
-                g.writeStringField("expr", toPrimitive(cell.get("expr").asText()));
+                var expr = new RankingExpression(inputExpr);
+                g.writeStringField("expr", expr.getRoot().toString(sc).toString());
+                var optRef = makeRef(name);
+                optRef.ifPresent(r -> tc.setType(r, expr.type(tc)));
             } catch (ParseException e) {
-                g.writeStringField("expr", cell.get("expr").asText());  // error reporting is handled below
+                g.writeStringField("expr", inputExpr);  // error reporting is handled below
             }
             g.writeEndObject();
         }
         g.writeEndArray();
         g.close();
         return out.toString();
+    }
+
+    static Optional<Reference> makeRef(String name) {
+        try {
+            var simple = Reference.simple(name);
+            if (simple.isPresent()) {
+                return simple;
+            }
+            var ref = Reference.fromIdentifier(name);
+            return Optional.of(ref);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     private static String callVespaEvalExpr(String jsonInput) throws IOException, InterruptedException {
