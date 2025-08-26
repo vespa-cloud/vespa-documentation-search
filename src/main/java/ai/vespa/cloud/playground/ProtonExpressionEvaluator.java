@@ -71,7 +71,13 @@ public class ProtonExpressionEvaluator {
                 var expr = new RankingExpression(inputExpr);
                 g.writeStringField("expr", expr.getRoot().toString(sc).toString());
                 var optRef = makeRef(name);
-                optRef.ifPresent(r -> tc.setType(r, expr.type(tc)));
+                try {
+                    optRef.ifPresent(r -> tc.setType(r, expr.type(tc)));
+                } catch (IllegalArgumentException iae) {
+                    // error reporting is handled below, or we could do:
+                    // if (cell instanceof com.fasterxml.jackson.databind.node.ObjectNode obj)
+                    //     obj.put("error", iae.getMessage());
+                }
             } catch (ParseException e) {
                 g.writeStringField("expr", inputExpr);  // error reporting is handled below
             }
