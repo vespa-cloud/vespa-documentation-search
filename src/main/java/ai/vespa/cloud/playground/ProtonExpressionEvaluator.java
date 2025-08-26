@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.yahoo.searchlib.rankingexpression.RankingExpression;
 import com.yahoo.searchlib.rankingexpression.Reference;
 import com.yahoo.searchlib.rankingexpression.evaluation.MapTypeContext;
@@ -62,6 +63,7 @@ public class ProtonExpressionEvaluator {
         JsonGenerator g = new JsonFactory().createGenerator(out, JsonEncoding.UTF8);
         g.writeStartArray();
         for (JsonNode cell : cells) {
+            ObjectNode obj = (ObjectNode)cell;
             g.writeStartObject();
             String name = cell.get("name").asText();
             g.writeStringField("name", name);
@@ -69,9 +71,16 @@ public class ProtonExpressionEvaluator {
             String inputExpr = cell.get("expr").asText();
             try {
                 var expr = new RankingExpression(inputExpr);
-                g.writeStringField("expr", expr.getRoot().toString(sc).toString());
+                String primitive = expr.getRoot().toString(sc).toString();
+                obj.put("primitive", primitive);
+                g.writeStringField("expr", primitive);
                 var optRef = makeRef(name);
-                optRef.ifPresent(r -> tc.setType(r, expr.type(tc)));
+                try {
+                    optRef.ifPresent(r -> tc.setType(r, expr.type(tc)));
+                } catch (IllegalArgumentException iae) {
+                    // error reporting is handled below, or we could do:
+                    // obj.put("error", iae.getMessage());
+                }
             } catch (ParseException e) {
                 g.writeStringField("expr", inputExpr);  // error reporting is handled below
             }
@@ -132,18 +141,24 @@ public class ProtonExpressionEvaluator {
         g.writeStartArray();
 
         for (int i = 0; i < root.size(); ++i) {
-            int cellId = cells.get(i).get("cell").asInt();
+            var currentInput = cells.get(i);
+            var currentOutput = root.get(i);
+            int cellId = currentInput.get("cell").asInt();
 
             g.writeStartObject();
             g.writeNumberField("cell", cellId);
 
-            String expression = cells.get(i).get("expr").asText();
+            String expression = currentInput.get("expr").asText();
             try {
-                g.writeStringField("primitive", toPrimitive(expression));
-                if (root.get(i).has("error")) {
-                    g.writeStringField("error", root.get(i).get("error").asText());
+                if (currentInput.has("primitive")) {
+                    g.writeStringField("primitive", currentInput.get("primitive").asText());
                 } else {
-                    JsonNode result = root.get(i).get("result");
+                    g.writeStringField("primitive", toPrimitive(expression));
+                }
+                if (currentOutput.has("error")) {
+                    g.writeStringField("error", currentOutput.get("error").asText());
+                } else {
+                    JsonNode result = currentOutput.get("result");
 
                     // Check if the (normalized) result is the same as the original expression.
                     // In other words, it's a literal value.
@@ -166,7 +181,7 @@ public class ProtonExpressionEvaluator {
                         writeDoubleValueJson(g, result.asDouble());
                     }
                 }
-                String steps = root.get(i).has("steps") ? root.get(i).get("steps").toString() : "";
+                String steps = currentOutput.has("steps") ? currentOutput.get("steps").toString() : "";
                 g.writeStringField("steps", steps);
             } catch (ParseException e) {
                 g.writeStringField("error", "Unable to parse expression: '" + expression + "'");
