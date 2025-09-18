@@ -34,6 +34,12 @@ schema doc {
             stemming: best
         }
 
+        field author type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
         field content type string {
             indexing: summary | index
             summary: dynamic
