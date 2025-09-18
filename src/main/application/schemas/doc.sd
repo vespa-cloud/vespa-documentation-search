@@ -34,6 +34,12 @@ schema doc {
             stemming: best
         }
 
+        field authors type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
         field content type string {
             indexing: summary | index
             summary: dynamic
@@ -79,7 +85,7 @@ schema doc {
     }
 
     fieldset default {
-        fields: title, content, headers, path, keywords
+        fields: title, content, headers, path, keywords, authors
     }
 
     fieldset grams {
@@ -96,6 +102,7 @@ schema doc {
     rank-profile documentation inherits default {
         inputs {
             query(titleWeight) double: 2.0
+            query(authorsWeight) double: 3.0
             query(headersWeight) double: 1.0
             query(contentWeight) double: 1.0
             query(keywordsWeight) double: 10.0
@@ -104,6 +111,7 @@ schema doc {
         first-phase {
             expression {
                 query(titleWeight) * bm25(title)
+                + query(authorsWeight) * bm25(authors)
                 + query(headersWeight) * bm25(headers)
                 + query(contentWeight) * bm25(content)
                 + query(keywordsWeight) * bm25(keywords)
@@ -112,6 +120,7 @@ schema doc {
         }
         match-features {
             query(titleWeight)
+            query(authorsWeight)
             query(contentWeight)
             query(headersWeight)
             query(pathWeight)
@@ -131,6 +140,7 @@ schema doc {
     rank-profile weighted_doc_rank inherits default {
         rank-properties {
             query(titleWeight): 20.0
+            query(authorsWeight): 30.0
             query(contentWeight): 10.0
             query(gramTitleWeight): 2.0
             query(gramContentWeight): 1.0
@@ -138,6 +148,7 @@ schema doc {
         first-phase {
             expression {
                 query(titleWeight) * nativeRank(title)
+                + query(authorsWeight) * nativeRank(authors)
                 + query(contentWeight) * nativeRank(content)
                 + query(gramTitleWeight) * nativeRank(gram_title)
                 + query(gramContentWeight) * nativeRank(gram_content)
