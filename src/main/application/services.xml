@@ -16,11 +16,11 @@
             </prepend>
             <onnx-intraop-threads>2</onnx-intraop-threads>
         </component>
-        <document-maprocessing>
+        <document-processing>
             <chain id="default">
                 <documentprocessor id="ai.vespa.cloud.docsearch.OutLinksDocumentProcessor" bundle="vespacloud-docsearch"/>
             </chain>
-        </document-maprocessing>
+        </document-processing>
         <search>
             <chain id="default" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.DocumentationSearcher" bundle="vespacloud-docsearch"/>
