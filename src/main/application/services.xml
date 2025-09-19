@@ -14,12 +14,13 @@
                 <!--query>query:</query--> <!-- for now, this is added to queries elsewhere -->
                 <document>passage: </document>
             </prepend>
+            <onnx-intraop-threads>2</onnx-intraop-threads>
         </component>
-        <document-processing>
+        <document-maprocessing>
             <chain id="default">
                 <documentprocessor id="ai.vespa.cloud.docsearch.OutLinksDocumentProcessor" bundle="vespacloud-docsearch"/>
             </chain>
-        </document-processing>
+        </document-maprocessing>
         <search>
             <chain id="default" inherits="vespa">
                 <searcher id="ai.vespa.cloud.docsearch.DocumentationSearcher" bundle="vespacloud-docsearch"/>
@@ -111,4 +112,8 @@
         </nodes>
     </content>
 
+    <config name="ai.vespa.llm.clients.triton">
+        <target>triton:8001</target>
+        <modelRepositoryPath>/sidecars/triton/models</modelRepositoryPath>
+    </config>
 </services>
