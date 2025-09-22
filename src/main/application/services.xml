@@ -14,7 +14,7 @@
                 <!--query>query:</query--> <!-- for now, this is added to queries elsewhere -->
                 <document>passage: </document>
             </prepend>
-            <onnx-intraop-threads>4</onnx-intraop-threads>
+            <onnx-intraop-threads>2</onnx-intraop-threads>
         </component>
         <document-processing>
             <chain id="default">
