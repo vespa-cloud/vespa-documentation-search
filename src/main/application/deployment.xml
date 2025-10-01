@@ -47,6 +47,11 @@
                 <endpoint type="zone" container-id="default" enabled="false">
                     <region>aws-use1-az4</region>
                 </endpoint>
+
+                <endpoint type='private' container-id='default'>
+                    <region>aws-use1-az4</region>
+                    <allow with='aws-private-link' arn='arn:aws:iam::718905963332:root' />
+                </endpoint>
             </endpoints>
         </instance>
 
