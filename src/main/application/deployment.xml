@@ -43,11 +43,11 @@
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
             </prod>
-            <!--endpoints>
+            <endpoints>
                 <endpoint type="zone" container-id="default" enabled="false">
                     <region>aws-use1-az4</region>
                 </endpoint>
-            </endpoints-->
+            </endpoints>
         </instance>
 
     </parallel>
