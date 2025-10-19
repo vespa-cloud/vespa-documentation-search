@@ -26,6 +26,12 @@ schema paragraph {
             stemming: best
         }
 
+        field authors type string {
+            indexing: summary | index
+            index: enable-bm25
+            stemming: best
+        }
+
         field content type string {
             indexing: summary | index
             index: enable-bm25
@@ -89,12 +95,12 @@ schema paragraph {
     }
 
     fieldset default {
-        fields: title, content, path, questions
+        fields: title, content, path, questions, authors
     }
 
     rank-profile bm25 {
         first-phase {
-            expression: bm25(title) + bm25(content) + bm25(path)
+            expression: bm25(title) + bm25(content) + bm25(path) + bm25(authors)
         }
     }
 
@@ -121,12 +127,12 @@ schema paragraph {
             expression: max(cos(distance(field, question_embedding)), 0)
         }
         function keywords() {
-            expression: (nativeRank(title) + nativeRank(content) + 0.5*nativeRank(path) + query(ew)*elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
+            expression: (nativeRank(title) + nativeRank(content) + nativeRank(authors) + 0.5*nativeRank(path) + query(ew)*elementCompleteness(questions).completeness)/4 + elementCompleteness(questions_exact).completeness
         }
         first-phase {
             expression: query(sw)*(semantic_question + semantic) + (1 - query(sw))*keywords
         }
-        match-features: keywords semantic semantic_question nativeRank(title) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
+        match-features: keywords semantic semantic_question nativeRank(title) nativeRank(authors) nativeRank(content) nativeRank(path) elementCompleteness(questions).completeness elementCompleteness(questions_exact).completeness
     }
 
      rank-profile hybrid2 {
@@ -150,8 +156,12 @@ schema paragraph {
             expression: scale(bm25(path))
         }
 
+        function scaled_bm25_authors() {
+            expression: scale(bm25(authors))
+        }
+
         function combined_bm25() {
-            expression: 0.3*scale(bm25(title)) + 0.6*scale(bm25(content)) + 0.1*scale(bm25(path))
+            expression: 0.3*scale(bm25(title)) + 0.6*scale(bm25(content)) + 0.1*scale(bm25(path)) + 0.3*scale(bm25(authors))
         }
 
          function semantic_content() {
@@ -185,6 +195,8 @@ schema paragraph {
             scaled_bm25_content
             bm25(path)
             scaled_bm25_path
+            bm25(authors)
+            scaled_bm25_authors
             combined_bm25
             semantic_question
             semantic_content
