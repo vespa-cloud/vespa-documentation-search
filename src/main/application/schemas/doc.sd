@@ -20,15 +20,6 @@ schema doc {
         }
     }
 
-    field chunks type array<string> {
-        indexing: input content | chunk fixed-length 1024 | summary | index
-        index: enable-bm25
-    }
-
-    field chunk_embeddings type tensor<bfloat16>(chunk{}, x[768]) {
-        indexing: input content | chunk fixed-length 1024 | embed modernbert-embedder | attribute
-    }
-
     document doc {
 
         field path type string {
