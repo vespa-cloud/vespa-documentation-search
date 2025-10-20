@@ -16,6 +16,16 @@
             </prepend>
             <onnx-intraop-threads>2</onnx-intraop-threads>
         </component>
+        <component id="modernbert-embedder" type="hugging-face-embedder">
+            <transformer-model model-id="nomic-ai-modernbert"/>
+            <transformer-output>sentence_embedding</transformer-output>
+            <pooling-strategy>none</pooling-strategy>
+            <max-tokens>8192</max-tokens>
+            <prepend>
+                <query>search_query:</query>
+                <document>search_document:</document>
+            </prepend>
+        </component>
         <document-processing>
             <chain id="default">
                 <documentprocessor id="ai.vespa.cloud.docsearch.OutLinksDocumentProcessor" bundle="vespacloud-docsearch"/>
