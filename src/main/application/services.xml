@@ -18,7 +18,7 @@
         </component>
         <component id="modernbert-embedder" type="hugging-face-embedder">
             <transformer-model model-id="nomic-ai-modernbert"/>
-            <transformer-output>sentence_embedding</transformer-output>
+            <transformer-output>token_embeddings</transformer-output>
             <pooling-strategy>none</pooling-strategy>
             <max-tokens>8192</max-tokens>
             <prepend>
