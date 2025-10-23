@@ -80,11 +80,11 @@
         </search>
         <document-api/>
         <nodes count="2" exclusive="true">
-            <resources vcpu="2" memory="8Gb" disk="32Gb" />
+            <resources vcpu="2" memory="16Gb" disk="32Gb" />
             <resources vcpu="4" memory="16Gb" disk="125Gb" deploy:instance="default" deploy:environment="prod" deploy:region="aws-us-east-1c">
                 <gpu count="1" memory="16Gb"/>
             </resources>
-            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="2" memory="16Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
     </container>
 
