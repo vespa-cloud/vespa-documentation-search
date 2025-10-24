@@ -79,7 +79,7 @@
         </search>
         <document-api/>
         <nodes count="2" exclusive="true">
-            <resources vcpu="4" memory="32Gb" disk="32Gb" />
+            <resources vcpu="4" memory="32Gb" disk="225Gb" />
             <resources vcpu="8" memory="32Gb" disk="225Gb" deploy:instance="default" deploy:environment="prod" deploy:region="aws-us-east-1c">
                 <gpu count="1" memory="16Gb"/>
             </resources>
