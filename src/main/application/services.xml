@@ -14,7 +14,6 @@
                 <!--query>query:</query--> <!-- for now, this is added to queries elsewhere -->
                 <document>passage: </document>
             </prepend>
-            <onnx-intraop-threads>2</onnx-intraop-threads>
         </component>
         <component id="modernbert-embedder" type="hugging-face-embedder">
             <transformer-model model-id="nomic-ai-modernbert"/>
@@ -116,13 +115,8 @@
             <document mode="index" type="code_snippet"/>
         </documents>
         <nodes count="2">
-            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
-            <resources vcpu="2" memory="8Gb" disk="118Gb" storage-type="local" deploy:instance="cloud-enclave" deploy:cloud="aws"/>
+            <resources vcpu="4" memory="32Gb" disk="150Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="4" memory="32Gb" disk="150Gb" architecture="x86_64" storage-type="local" deploy:instance="cloud-enclave" deploy:cloud="aws"/>
         </nodes>
     </content>
-
-    <config name="ai.vespa.llm.clients.triton">
-        <target>triton:8001</target>
-        <modelRepositoryPath>/sidecars/triton/models</modelRepositoryPath>
-    </config>
 </services>
