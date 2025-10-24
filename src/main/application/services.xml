@@ -92,8 +92,8 @@
             <binding>http://*/playground/*</binding>
         </handler>
         <nodes count="2">
-            <resources vcpu="2" memory="8Gb" disk="32Gb" />
-            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="4" memory="16Gb" disk="32Gb" architecture="x86_64"/>
+            <resources vcpu="4" memory="16Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
         </nodes>
     </container>
 
@@ -115,8 +115,8 @@
             <document mode="index" type="code_snippet"/>
         </documents>
         <nodes count="2">
-            <resources vcpu="4" memory="32Gb" disk="150Gb" architecture="x86_64" deploy:instance="enclave" />
-            <resources vcpu="4" memory="32Gb" disk="150Gb" architecture="x86_64" storage-type="local" deploy:instance="cloud-enclave" deploy:cloud="aws"/>
+            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="2" memory="8Gb" disk="118Gb" storage-type="local" deploy:instance="cloud-enclave" deploy:cloud="aws"/>
         </nodes>
     </content>
 </services>
