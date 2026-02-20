@@ -27,10 +27,10 @@ import java.util.List;
  */
 public class LLMSearcher extends Searcher {
 
-    private Linguistics linguistics;
-    private Embedder embedder;
+    private final Linguistics linguistics;
+    private final Embedder embedder;
 
-    private TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
+    private final TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
 
     @Inject
     public LLMSearcher(Linguistics linguistics, ComponentRegistry<Embedder> embedders) {
@@ -51,18 +51,18 @@ public class LLMSearcher extends Searcher {
     }
 
     private void buildQuery(Tensor embedding, String queryStr, Query query) {
-        WeakAndItem weakAndItem = new WeakAndItem(100);
+        WeakAndItem weakAndItem = new WeakAndItem(Integer.valueOf(100));
         for(String term : Question.tokenize(queryStr, linguistics)) {
             if(!Question.isStopWord(term))
                 weakAndItem.addItem(new WordItem(term, true));
         }
 
         NearestNeighborItem paragraphQuery = new NearestNeighborItem("embedding", "q");
-        paragraphQuery.setTargetNumHits(100);
+        paragraphQuery.setTargetHits(100);
         query.getRanking().getFeatures().put("query(q)", embedding);
 
         NearestNeighborItem questionQuery = new NearestNeighborItem("question_embedding", "q");
-        questionQuery.setTargetNumHits(100);
+        questionQuery.setTargetHits(100);
         query.getRanking().getFeatures().put("query(q)", embedding);
 
         OrItem hybrid = new OrItem();
