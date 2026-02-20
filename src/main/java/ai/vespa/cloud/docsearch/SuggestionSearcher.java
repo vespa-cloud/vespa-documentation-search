@@ -32,11 +32,11 @@ public class SuggestionSearcher extends Searcher {
     private static final String SUGGESTION_SUMMARY = "suggestion";
     private static final String SUGGESTION_RANK_PROFILE = "term_rank";
 
-    private Embedder embedder;
+    private final Embedder embedder;
 
-    private TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
+    private final TensorType tensorType = TensorType.fromSpec("tensor<float>(x[384])");
 
-    private Linguistics linguistics;
+    private final Linguistics linguistics;
     @Inject
     public SuggestionSearcher(Linguistics linguistics,  ComponentRegistry<Embedder> embedders) {
         this.linguistics = linguistics;
@@ -90,7 +90,7 @@ public class SuggestionSearcher extends Searcher {
             Tensor embedding = embedder.embed("query: " + userQuery, context, tensorType);
             query.getRanking().getFeatures().put("query(q)",embedding);
             NearestNeighborItem nn = new NearestNeighborItem("embedding", "q");
-            nn.setTargetNumHits(100);
+            nn.setTargetHits(100);
             orItem.addItem(nn);
         }
         return orItem;
