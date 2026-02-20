@@ -44,7 +44,7 @@ public class SlackMessageSearcher extends Searcher {
     }
 
     private void buildQuery(Tensor embedding, String queryStr, Query query) {
-        WeakAndItem weakAndItem = new WeakAndItem(100);
+        WeakAndItem weakAndItem = new WeakAndItem(Integer.valueOf(100));
         for (String term : Question.tokenize(queryStr, linguistics)) {
             if (!Question.isStopWord(term)) {
                 weakAndItem.addItem(new WordItem(term, true));
@@ -52,7 +52,7 @@ public class SlackMessageSearcher extends Searcher {
         }
 
         NearestNeighborItem nearestNeighborItem = new NearestNeighborItem("text_embedding", "q");
-        nearestNeighborItem.setTargetNumHits(100);
+        nearestNeighborItem.setTargetHits(100);
         query.getRanking().getFeatures().put("query(q)", embedding);
 
         OrItem hybrid = new OrItem();
