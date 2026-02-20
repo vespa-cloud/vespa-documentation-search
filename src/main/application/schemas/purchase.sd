@@ -24,6 +24,10 @@ schema purchase {
             indexing: summary | attribute
         }
 
+        field is_paid type bool {
+            indexing: summary | attribute
+        }
+
         field attributes type map<string, string> {
             indexing: summary
             struct-field key   { indexing: attribute }
