@@ -66,13 +66,9 @@ jobs:
 
       - name: Feed purchase data
         run: |
+          export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
           export VESPA_CLI_DATA_PLANE_CERT
           export VESPA_CLI_DATA_PLANE_KEY
-          for endpoint in \
-            "https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud" \
-            "https://vespacloud-docsearch.vespa-team.aws-eu-west-1a.z.vespa-app.cloud" \
-            "https://vespacloud-docsearch.vespa-team.gcp-us-central1-f.z.vespa-app.cloud"
-          do
-            echo "Feeding to ${endpoint}"
-            vespa feed -a vespa-team.vespacloud-docsearch -t "${endpoint}" ext/purchase.json
-          done
+          vespa config set target cloud
+          vespa config set application vespa-team.vespacloud-docsearch
+          vespa feed ext/purchase.json --cluster default
