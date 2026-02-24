@@ -13,6 +13,8 @@ on:
 
 env:
   VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY: ${{ secrets.VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY }}
+  VESPA_CLI_DATA_PLANE_CERT: ${{ secrets.VESPA_TEAM_VESPA_CLI_DATA_PLANE_CERT }}
+  VESPA_CLI_DATA_PLANE_KEY: ${{ secrets.VESPA_TEAM_VESPA_CLI_DATA_PLANE_KEY }}
 
 jobs:
   build:
@@ -52,3 +54,25 @@ jobs:
           --application-root target/application/ \
           --max-wait 3600 \
           --source-url "$(git config --get remote.origin.url | sed 's+git@\(.\):\(.\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
+
+  feed:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vespa CLI
+        uses: vespa-engine/setup-vespa-cli-action@v1
+
+      - name: Feed purchase data
+        run: |
+          export VESPA_CLI_DATA_PLANE_CERT
+          export VESPA_CLI_DATA_PLANE_KEY
+          for endpoint in \
+            "https://vespacloud-docsearch.vespa-team.aws-us-east-1c.z.vespa-app.cloud" \
+            "https://vespacloud-docsearch.vespa-team.aws-eu-west-1a.z.vespa-app.cloud" \
+            "https://vespacloud-docsearch.vespa-team.gcp-us-central1-f.z.vespa-app.cloud"
+          do
+            echo "Feeding to ${endpoint}"
+            vespa feed -a vespa-team.vespacloud-docsearch -t "${endpoint}" ext/purchase.json
+          done
