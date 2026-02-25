@@ -71,4 +71,5 @@ jobs:
           export VESPA_CLI_DATA_PLANE_KEY
           vespa config set target cloud
           vespa config set application vespa-team.vespacloud-docsearch
+          vespa config set zone prod.aws-us-east-1c
           vespa feed ext/purchase.json --cluster default
