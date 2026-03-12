@@ -34,13 +34,13 @@
 
         <instance id="cloud-enclave" cloud-account="aws:396608785574,gcp:gcp-vespa-external-enclav-g4au">
 
-            <test />
+            <test cloud-account="aws:396608785574" />
             <staging />
 
             <prod>
                 <region>aws-us-east-1c</region>
-                <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
+                <region>aws-eu-west-1a</region>
             </prod>
         </instance>
 
