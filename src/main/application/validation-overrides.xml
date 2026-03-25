@@ -1,4 +1,7 @@
 <validation-overrides>
     <allow until="2025-10-04">deployment-removal</allow>
     <allow until="2025-10-04">certificate-removal</allow>
+    <allow until="2026-04-01" comment="Removing enclave GCP region">
+        deployment-removal
+    </allow>
 </validation-overrides>
