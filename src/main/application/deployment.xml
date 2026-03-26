@@ -32,7 +32,7 @@
 
         </instance>
 
-        <instance id="cloud-enclave" cloud-account="aws:396608785574,gcp:gcp-vespa-external-enclav-g4au">
+        <instance id="cloud-enclave" cloud-account="aws:396608785574">
 
             <test />
             <staging />
@@ -40,7 +40,7 @@
             <prod>
                 <region>aws-us-east-1c</region>
                 <region>aws-eu-west-1a</region>
-                <region>gcp-us-central1-f</region>
+                <!-- <region>gcp-us-central1-f</region> -->
             </prod>
         </instance>
 
