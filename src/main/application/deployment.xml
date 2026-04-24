@@ -42,6 +42,7 @@
                 <region>aws-eu-west-1a</region>
                 <region>gcp-us-central1-f</region>
             </prod>
+            <backup frequency="1d" />
         </instance>
 
     </parallel>
