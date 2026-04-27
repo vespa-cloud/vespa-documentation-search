@@ -47,7 +47,7 @@
             <resources vcpu="8" memory="32Gb" disk="225Gb" deploy:instance="default" deploy:environment="prod" deploy:region="aws-us-east-1c">
                 <gpu count="1" memory="16Gb"/>
             </resources>
-            <resources vcpu="4" memory="32Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="4" memory="32Gb" disk="32Gb" architecture="x86_64" deploy:instance="cloud-enclave" />
         </nodes>
     </container>
 
@@ -57,7 +57,7 @@
         </handler>
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64"/>
-            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
+            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="cloud-enclave" />
         </nodes>
     </container>
 
@@ -78,8 +78,10 @@
             <document mode="index" type="code_snippet"/>
         </documents>
         <nodes count="2">
-            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="enclave" />
-            <resources vcpu="2" memory="8Gb" disk="118Gb" storage-type="local" deploy:instance="cloud-enclave" deploy:cloud="aws"/>
+            <resources vcpu="2" memory="8Gb" disk="32Gb" architecture="x86_64" deploy:instance="cloud-enclave" />
+        </nodes>
+        <nodes groups="2" group-size="2" deploy:instance="cloud-enclave" deploy:cloud="aws">
+            <resources vcpu="2" memory="8Gb" disk="118Gb" storage-type="local" />
         </nodes>
     </content>
 </services>
