@@ -31,21 +31,6 @@
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
             </chain>
 
-            <chain id="slackmessage" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.SlackMessageSearcher" bundle="vespacloud-docsearch"/>
-            </chain>
-            <chain id="thread" inherits="vespa">
-                <searcher id="ai.vespa.cloud.docsearch.ThreadSearcher" bundle="vespacloud-docsearch"/>
-            </chain>
-
-            <chain id="combinedllmsearch" inherits="vespa">
-                <federation id="combination">
-                    <source idref="thread"/>
-                    <source idref="llmsearch" />
-                </federation>
-            </chain>
-
-
             <chain id="ragsearch" inherits="vespa">
                 <searcher id="ai.vespa.search.llm.RAGSearcher">
                     <config name="ai.vespa.search.llm.llm-searcher">
@@ -54,18 +39,6 @@
                     </config>
                 </searcher>
                 <searcher id="ai.vespa.cloud.docsearch.LLMSearcher" bundle="vespacloud-docsearch"/>
-            </chain>
-            <chain id="combinedragsearch" inherits="vespa">
-                <searcher id="ai.vespa.search.llm.RAGSearcher">
-                    <config name="ai.vespa.search.llm.llm-searcher">
-                        <providerId>openai</providerId>
-                        <promptTemplate>files/prompt_combined.txt</promptTemplate>
-                    </config>
-                </searcher>
-                <federation id="combinedragsearchsource">
-                    <source idref="thread"/>
-                    <source idref="llmsearch" />
-                </federation>
             </chain>
         </search>
         <document-api/>
@@ -102,7 +75,6 @@
             <document mode="index" type="paragraph"/>
             <document mode="index" type="term"/>
             <document mode="index" type="purchase"/>
-            <document mode="index" type="slack_message"/>
             <document mode="index" type="code_snippet"/>
         </documents>
         <nodes count="2">
