@@ -2,5 +2,5 @@
     <allow until="2025-10-04">deployment-removal</allow>
     <allow until="2025-10-04">certificate-removal</allow>
     <allow until="2026-04-01">deployment-removal</allow>
-    <allow until="2026-05-27">schema-removal</allow>
+    <allow until="2026-04-28">schema-removal</allow>
 </validation-overrides>
