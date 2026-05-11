@@ -36,7 +36,7 @@
 
             <test />
             <staging />
-            <backup frequency="1d" />
+            <backup frequency="1d" granularity="group" />
             <prod>
                 <region>aws-us-east-1c</region>
                 <region>aws-eu-west-1a</region>
