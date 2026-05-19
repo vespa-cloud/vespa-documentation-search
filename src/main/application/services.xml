@@ -75,6 +75,7 @@
             <document mode="index" type="purchase"/>
             <document mode="index" type="code_snippet"/>
         </documents>
+	<document-processing cluster="default"/>
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="100Gb" storage-type="remote"/>
         </nodes>
