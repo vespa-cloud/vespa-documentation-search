@@ -81,7 +81,6 @@
             <pseudo-row-column-mode>true</pseudo-row-column-mode>
           </distribution>
         </tuning>
-
         <nodes count="2">
             <resources vcpu="2" memory="8Gb" disk="100Gb" storage-type="remote"/>
         </nodes>
