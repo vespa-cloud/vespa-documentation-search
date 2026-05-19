@@ -75,7 +75,6 @@
             <document mode="index" type="purchase"/>
             <document mode="index" type="code_snippet"/>
         </documents>
-        <document-processing cluster="default"/>
         <tuning deploy:region="aws-euc1-az1">
           <distribution>
             <pseudo-row-column-mode>true</pseudo-row-column-mode>
