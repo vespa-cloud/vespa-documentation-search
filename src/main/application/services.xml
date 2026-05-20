@@ -74,7 +74,7 @@
             <document mode="index" type="term"/>
             <document mode="index" type="purchase"/>
             <document mode="index" type="code_snippet"/>
-	     <document-processing cluster="default"/>
+            <document-processing cluster="default"/>
         </documents>
         <tuning deploy:region="aws-euc1-az1">
           <distribution>
