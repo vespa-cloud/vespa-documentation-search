@@ -74,6 +74,7 @@ jobs:
           for zone in \
             prod.aws-us-east-1c \
             prod.aws-eu-west-1a \
+            prod.aws-us-east-1 \
             prod.gcp-us-central1-f \
             prod.gcp-us-central1-a
           do
