@@ -17,8 +17,8 @@
                 <region>gcp-us-central1-f</region>
                 <region>gcp-us-central1-a</region>
                 <region name="aws-us-east-1">
-                    <availability-zone>use1-az4</availability-zone>
-                    <availability-zone>use1-az6</availability-zone>
+                    <availability-zone>use1-az1</availability-zone>
+                    <availability-zone>use1-az2</availability-zone>
                 </region>
             </prod>
 
