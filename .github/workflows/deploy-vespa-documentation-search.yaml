@@ -19,6 +19,8 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      deploy-start: ${{ steps.deploy.outputs.deploy-start }}
     steps:
       # Check out the source code from the repository
       - uses: actions/checkout@v3
@@ -44,12 +46,55 @@ jobs:
 
       # Deploy to Vespa Cloud using Vespa CLI
       - name: Deploy to Vespa Cloud
+        id: deploy
         run: |
           vespa config set target cloud
           vespa config set application vespa-team.vespacloud-docsearch
           export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+          # Read by the verify-logs job, which only looks at logs written after this point
+          echo "deploy-start=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
           vespa prod deploy \
             --source-url "$(git config --get remote.origin.url | sed 's+git@\(.*\):\(.*\)\.git+https://\1/\2+')/commit/$(git rev-parse HEAD)"
 
     # Refer to https://github.com/vespa-cloud/cord-19-search/blob/main/.github/workflows/deploy-vespa-cord-19-search.yaml
     # for an example using mvn vespa:submit
+
+  # The production tests in src/test/java gate the rollout on metrics, but the log server is only
+  # reachable through the control plane - so logs are verified from here instead.
+  #
+  # Only the canary zone is checked: src/main/application/deployment.xml
+  verify-canary-logs:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ZONE: prod.aws-us-east-1c
+    steps:
+      - name: Get Vespa CLI
+        uses: vespa-engine/setup-vespa-cli-action@releases/v1
+
+      - name: Configure Vespa CLI
+        run: |
+          vespa config set target cloud
+          vespa config set application vespa-team.vespacloud-docsearch.default
+
+      - name: Wait for the canary zone to converge on the new version
+        run: |
+          export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+          vespa status deployment -z "$ZONE" --wait 3600
+
+      - name: Verify no errors were logged since the deployment started
+        run: |
+          set -o pipefail
+          export VESPA_CLI_API_KEY="${VESPA_TEAM_VESPACLOUD_DOCSEARCH_API_KEY}"
+          mkdir -p logs
+
+          vespa log -z "$ZONE" --level error --from "${{ needs.deploy.outputs.deploy-start }}" \
+            | tee logs/canary.errors
+
+          echo "$(wc -l < logs/canary.errors) error or worse in $ZONE since the deployment started"
+          if [ -s logs/canary.errors ]; then
+            echo "::error::$ZONE logged errors since the deployment started"
+            cat logs/canary.errors
+            exit 1
+          fi
