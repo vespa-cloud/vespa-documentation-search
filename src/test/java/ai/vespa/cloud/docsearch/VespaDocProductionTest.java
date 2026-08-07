@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class VespaDocProductionTest {
 
     /** Fail if any node is busier than this. */
-    private static final double MAX_CPU_UTIL_PERCENT = 85.0;
+    private static final double MAX_CPU_UTIL_FRACTION = 0.85;
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final Endpoint endpoint = TestRuntime.get().deploymentToTest().endpoint("default");
@@ -60,9 +60,9 @@ public class VespaDocProductionTest {
     @Test
     void noServerErrors() throws IOException {
         JsonNode metrics = metrics();
-        assertEquals(0.0, sumAllNodes(metrics, "http.status.5xx.count"), 0.0,
+        assertEquals(0.0, sumAllNodes(metrics, "http.status.5xx.rate"), 0.0,
                      "No requests should fail with a server error");
-        assertEquals(0.0, sumAllNodes(metrics, "failed_queries.count"), 0.0,
+        assertEquals(0.0, sumAllNodes(metrics, "failed_queries.rate"), 0.0,
                      "No queries should fail");
     }
 
@@ -71,9 +71,10 @@ public class VespaDocProductionTest {
         JsonNode metrics = metrics();
         Optional<Sample> worst = worstNode(metrics, List.of("content.proton.resource_usage.cpu_util.other.max"), Unit.PERCENT);
 
+        assertTrue(worst.isPresent(), "content.proton.resource_usage.cpu_util.other.max should be reported by some node");
         report.publishEntry("max content.proton.resource_usage.cpu_util.other", worst.get().toString());
-        assertTrue(worst.get().value() < MAX_CPU_UTIL_PERCENT,
-                   "CPU utilization should be below " + MAX_CPU_UTIL_PERCENT + "%, but " + worst.get());
+        assertTrue(worst.get().value() < MAX_CPU_UTIL_FRACTION,
+                   "CPU utilization should be below " + MAX_CPU_UTIL_FRACTION * 100.0 + "%, but " + worst.get());
     }
 
     private JsonNode metrics() throws IOException {
