@@ -20,6 +20,10 @@
                     <availability-zone>use1-az1</availability-zone>
                     <availability-zone>use1-az2</availability-zone>
                 </region>
+                <region name="gcp-us-central1">
+                    <availability-zone>us-central1-a</availability-zone>
+                    <availability-zone>us-central1-b</availability-zone>
+                </region>
             </prod>
 
             <endpoints>

@@ -93,5 +93,8 @@
         <nodes count="4" groups="2" deploy:region="aws-us-east-1">
             <resources vcpu="2" memory="8Gb" disk="100Gb" storage-type="remote"/>
         </nodes>
+        <nodes count="2" groups="2" deploy:region="gcp-us-central1">
+            <resources vcpu="2" memory="8Gb" disk="100Gb" storage-type="remote"/>
+        </nodes>
     </content>
 </services>
