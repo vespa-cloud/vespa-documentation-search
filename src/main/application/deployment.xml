@@ -23,7 +23,6 @@
                 <region name="gcp-us-central1">
                     <availability-zone>us-central1-a</availability-zone>
                     <availability-zone>us-central1-b</availability-zone>
-                    <availability-zone>us-central1-c</availability-zone>
                 </region>
             </prod>
 
@@ -51,8 +50,7 @@
             <backup frequency="1d" />
             <prod>
                 <region name="gcp-us-central1">
-                    <availability-zone>us-central1-a</availability-zone>
-                    <availability-zone>us-central1-b</availability-zone>
+                    <availability-zone>us-central1-c</availability-zone>
                     <availability-zone>us-central1-f</availability-zone>
                 </region>
                 <region>aws-us-east-1c</region>
