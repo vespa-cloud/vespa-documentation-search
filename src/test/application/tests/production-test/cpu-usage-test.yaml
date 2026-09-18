@@ -1,0 +1,10 @@
+tests:
+  - name: container cpu check
+    metric: cpu-utilization-container
+    duration: 5m
+    max: 35
+
+  - name: content cpu check
+    metric: cpu-utilization-content
+    duration: 5m
+    max: 85
