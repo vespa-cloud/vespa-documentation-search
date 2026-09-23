@@ -29,15 +29,19 @@
             <endpoints>
                 <endpoint container-id="default">
                     <region>aws-us-east-1c</region>
-                    <region>aws-euc1-az1</region>
                     <region>aws-eu-west-1a</region>
                     <region>gcp-us-central1-f</region>
+                    <region>gcp-us-central1-a</region>
+                    <region>aws-us-east-1</region>
+                    <region>gcp-us-central1</region>
                 </endpoint>
                 <endpoint id="playground" container-id="playground">
                     <region>aws-us-east-1c</region>
-                    <region>aws-euc1-az1</region>
                     <region>aws-eu-west-1a</region>
                     <region>gcp-us-central1-f</region>
+                    <region>gcp-us-central1-a</region>
+                    <region>aws-us-east-1</region>
+                    <region>gcp-us-central1</region>
                 </endpoint>
             </endpoints>
 
