@@ -3,4 +3,8 @@
     <allow until="2025-10-04">certificate-removal</allow>
     <allow until="2026-04-01">deployment-removal</allow>
     <allow until="2026-04-28">schema-removal</allow>
+    <allow until="2026-09-30"
+           comment="Drop aws-euc1-az1 and route the three new prod zones.">global-endpoint-change</allow>
+    <allow until="2026-09-30"
+           comment="Remove the aws-euc1-az1 pseudo-row-column test deployment.">deployment-removal</allow>
 </validation-overrides>
