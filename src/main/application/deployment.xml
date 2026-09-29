@@ -63,6 +63,7 @@
                     <availability-zone>use1-az2</availability-zone>
                     <availability-zone>use1-az4</availability-zone>
                 </region>
+                <region>aws-use1-az2</region>
             </prod>
         </instance>
 
