@@ -7,4 +7,6 @@
            comment="Drop aws-euc1-az1 and route the three new prod zones.">global-endpoint-change</allow>
     <allow until="2026-09-30"
            comment="Remove the aws-euc1-az1 pseudo-row-column test deployment.">deployment-removal</allow>
+    <allow until="2026-10-07"
+           comment="Remove the aws-use1-az2 zone verification deployment.">deployment-removal</allow>
 </validation-overrides>
