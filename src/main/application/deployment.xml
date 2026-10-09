@@ -48,8 +48,11 @@
 
         <instance id="cloud-enclave" cloud-account="aws:396608785574,gcp:gcp-vespa-external-enclav-g4au">
 
-            <test empty-host-ttl="24h" />
-            <staging empty-host-ttl="24h" />
+            <!-- Keep hosts from Wednesday (if none on Thursday) until Tuesday (if none on Monday).
+                 2026-10-09: Would be great to avoid long empty-host-ttl once GCP gets back enough capacity,
+                 to ensure we test provisioning with this canary app. -->
+            <test empty-host-ttl="7d" />
+            <staging empty-host-ttl="7d" />
             <backup frequency="1d" />
             <prod>
                 <region name="gcp-us-central1">
