@@ -48,6 +48,10 @@
                 <gpu count="1" memory="16Gb"/>
             </resources>
         </nodes>
+        <!-- Avoids the n4d-highmem-4 flavor in GCP test and staging, since it is often out of stock in us-central1-f (2026-10-09) -->
+        <nodes count="1" deploy:environment="test staging">
+            <resources vcpu="2" memory="8Gb" disk="32Gb" />
+        </nodes>
     </container>
 
     <container id="playground" version="1.0">
