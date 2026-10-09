@@ -48,8 +48,9 @@
                 <gpu count="1" memory="16Gb"/>
             </resources>
         </nodes>
-        <!-- Avoids the n4d-highmem-4 flavor in GCP test and staging, since it is often out of stock in us-central1-f (2026-10-09) -->
-        <nodes count="1" deploy:environment="test staging">
+        <!-- 1. Avoids the n4d-highmem-4 flavor in GCP test and staging, since it is often out of stock in us-central1-f (2026-10-09)
+             2. Require exclusivity to avoid Triton sidecar issue on shared hosts. -->
+        <nodes count="1" deploy:environment="test staging" exclusive="true">
             <resources vcpu="2" memory="8Gb" disk="32Gb" />
         </nodes>
     </container>
