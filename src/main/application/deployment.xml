@@ -48,8 +48,8 @@
 
         <instance id="cloud-enclave" cloud-account="aws:396608785574,gcp:gcp-vespa-external-enclav-g4au">
 
-            <test />
-            <staging />
+            <test empty-host-ttl="24h" />
+            <staging empty-host-ttl="24h" />
             <backup frequency="1d" />
             <prod>
                 <region name="gcp-us-central1">
