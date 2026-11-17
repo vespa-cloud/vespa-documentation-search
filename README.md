@@ -20,8 +20,6 @@ Vespa Documentation Search is a Vespa Cloud instance for searching documents in:
 This sample app is auto-deployed to Vespa Cloud,
 see [deploy-vespa-documentation-search.yaml](https://github.com/vespa-cloud/vespa-documentation-search/actions/workflows/deploy-vespa-documentation-search.yaml).
 
-Frontend: [vespa-search](https://github.com/vespa-engine/vespa-search).
-
 ![Vespa-Documentation-Search-Architecture](img/Vespa-Documentation-Search-Architecture.svg)
 
 Deployment status:
